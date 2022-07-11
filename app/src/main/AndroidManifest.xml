@@ -17,9 +17,6 @@
         android:theme="@style/Theme.MovieMatchV2"
         tools:targetApi="31">
 
-        <meta-data
-            android:name="com.example.moviematchv2"
-            android:value="${RAPID_API_KEY}" />
         <activity
             android:name=".LobbyAccount"
             android:exported="false" />
@@ -39,7 +36,7 @@
             android:name=".Swipe"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LandingPage"
             android:exported="false" />
         <activity
             android:name=".AccountPage"
@@ -48,7 +45,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".LandingPage"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

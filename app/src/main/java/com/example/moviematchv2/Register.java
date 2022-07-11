@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
 public class Register extends AppCompatActivity {
 
     private EditText nameET, emailET, phoneET, passwordET, confirmPasswordET;
-    private Button registerBtn;
+    private ImageButton registerBtn;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -59,7 +60,7 @@ public class Register extends AppCompatActivity {
         passwordET = (EditText) findViewById(R.id.registerPassword);
         confirmPasswordET = (EditText) findViewById(R.id.confirmPassword);
 
-        registerBtn = (Button) findViewById(R.id.registerButton);
+        registerBtn = (ImageButton) findViewById(R.id.registerButton);
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +109,6 @@ public class Register extends AppCompatActivity {
                     });
                 }
             }
-
         });
     }
 

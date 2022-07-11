@@ -1,0 +1,5 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/WelcomePage" android:title="Welcome Page"/>
+    <item android:id="@+id/LandingPage" android:title="Landing Page"/>
+    <item android:id="@+id/Lobby" android:title="Lobby"/>
+</menu>
