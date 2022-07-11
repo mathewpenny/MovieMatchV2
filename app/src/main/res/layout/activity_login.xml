@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".Login">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="104dp" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

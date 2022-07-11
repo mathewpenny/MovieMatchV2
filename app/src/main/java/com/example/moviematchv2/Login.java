@@ -37,7 +37,7 @@ public class Login extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) { // means user is logged in so we can move on in the app
-                    Intent intent = new Intent(Login.this, Swipe.class);
+                    Intent intent = new Intent(Login.this, AccountPage.class);
                     startActivity(intent);
                     finish();
                 }
