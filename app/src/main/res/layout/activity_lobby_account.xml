@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LobbyAccount">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="104dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="50sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="45dp"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        android:layout_weight="2"
+        android:text="Welcome" />
+
+    <Button
+        android:id="@+id/HostButton"
+        android:layout_width="150dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="Review" />
+
+    <Button
+        android:id="@+id/JoinButton"
+        android:layout_width="150dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/AccountButton"
+        android:layout_marginBottom="50dp"
+        android:layout_width="150dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:text="Delete" />
+</LinearLayout>

@@ -72,7 +72,7 @@ public class Swipe extends AppCompatActivity {
 
     private Integer generateRandomPage() {
         int min = 1;
-        int max = 84;
+        int max = 200;
         final int randomPage = new Random().nextInt((max - min ) + 1);
         return randomPage;
     }
@@ -82,6 +82,7 @@ public class Swipe extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
+
     private void enableSwipe(){
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             int count = 0;
