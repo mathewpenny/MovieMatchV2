@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     private EditText emailET, passwordET;
-    private Button loginBtn;
+    private ImageButton loginBtn;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
@@ -47,7 +48,7 @@ public class Login extends AppCompatActivity {
         emailET = (EditText) findViewById(R.id.loginEmail);
         passwordET = (EditText) findViewById(R.id.loginPassword);
 
-        loginBtn = (Button) findViewById(R.id.loginButton);
+        loginBtn = (ImageButton) findViewById(R.id.loginButton);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

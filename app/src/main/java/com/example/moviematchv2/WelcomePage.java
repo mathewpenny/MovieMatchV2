@@ -6,21 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class WelcomePage extends AppCompatActivity {
 
-    Button host;
-    Button join;
-    Button account;
+    ImageButton host, join, account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
 
-        host = (Button) findViewById(R.id.HostButton);
-        join = (Button) findViewById(R.id.JoinButton);
-        account = (Button) findViewById(R.id.AccountButton);
+        host = (ImageButton) findViewById(R.id.hostButton);
+        join = (ImageButton) findViewById(R.id.joinButton);
+        account = (ImageButton) findViewById(R.id.accountButton);
 
         host.setOnClickListener(new View.OnClickListener() {
             @Override

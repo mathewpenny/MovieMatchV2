@@ -38,7 +38,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/HostButton"
+                android:id="@+id/hostButton"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -60,7 +60,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/JoinButton"
+                android:id="@+id/joinButton"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -82,7 +82,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/AccountButton"
+                android:id="@+id/accountButton"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"

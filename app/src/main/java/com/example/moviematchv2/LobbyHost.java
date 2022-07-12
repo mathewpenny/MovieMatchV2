@@ -4,17 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class LobbyHost extends AppCompatActivity {
 
-    Button createLobby;
+    ImageButton createLobby;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_host);
 
-        createLobby = (Button) findViewById(R.id.createLobby);
+        createLobby = (ImageButton) findViewById(R.id.createLobby);
 
         createLobby.setOnClickListener(new View.OnClickListener() {
             @Override

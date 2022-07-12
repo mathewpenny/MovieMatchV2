@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         //Hides action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
+
+
             Intent intent = new Intent(MainActivity.this, LandingPage.class);
             startActivity(intent);
             finish();
