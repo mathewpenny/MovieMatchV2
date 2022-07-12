@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -53,21 +56,30 @@ public class Login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // Need to create some validation here for email, password check if password is same
                 final String email = emailET.getText().toString();
                 final String password = passwordET.getText().toString();
 
-                // Create the user here with onCompleteListener to check if task is successful
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //this will only be triggered if the registration was not successful.
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
-                        }
+                if(email.equals("")) {
+                    Toast.makeText(Login.this, "Email cannot be blank", Toast.LENGTH_SHORT).show();
+                    emailET.requestFocus();
+                }
+
+                if(password.equals("")) {
+                    Toast.makeText(Login.this, "Password cannot be blank", Toast.LENGTH_SHORT).show();
+                    passwordET.requestFocus();
                     }
-                });
+                else {
+                    // Create the user here with onCompleteListener to check if task is successful
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //this will only be triggered if the registration was not successful.
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
         });
     }

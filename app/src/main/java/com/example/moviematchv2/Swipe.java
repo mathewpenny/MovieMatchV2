@@ -13,10 +13,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -27,13 +31,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Swipe extends AppCompatActivity {
 
+    // Variables for API call and Swipeable RecyclerView
     private Paint p = new Paint();
-
     RecyclerView recyclerView;
     List<Movie> moviesList;
     Retrofit retrofit;
     MovieApi movieApi;
     MovieAdapter adapter;
+
+    // Variables for Database and Saving Matches
+    FirebaseAuth mAuth;
+    DatabaseReference movieDb;
+    String currentUid;
+
 
 
     @Override
@@ -41,17 +51,20 @@ public class Swipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
 
+        // Set up for saving matches
+        mAuth = FirebaseAuth.getInstance();
+        currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        movieDb = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
         recyclerView = findViewById(R.id.recyclerView);
-
         moviesList = new ArrayList<>();
-
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://streaming-availability.p.rapidapi.com/search/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         movieApi = retrofit.create(MovieApi.class);
+
 
         Call<JSONResponse> call = movieApi.getMovies(generateRandomPage());
         call.enqueue(new Callback<JSONResponse>() {
@@ -70,11 +83,12 @@ public class Swipe extends AppCompatActivity {
         });
     }
 
+    // generates a random page number. Will have to test the endpoints and use a switch case to
+    // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
         int min = 1;
         int max = 200;
-        final int randomPage = new Random().nextInt((max - min ) + 1);
-        return randomPage;
+        return new Random().nextInt(max - min + 1);
     }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
@@ -111,6 +125,15 @@ public class Swipe extends AppCompatActivity {
                     snackbar.show();
                 } else {
                     final Movie deletedModel = moviesList.get(position);
+
+                    // Create a Movie object, save an ID and title into Database,
+                    // Save the current UID so that we can compare with invited user(?)
+                    Movie movieObj = new Movie();
+                    String movieId = movieObj.getTmdbID();
+                    String title = movieObj.getTitle();
+
+
+
                     final int deletedPosition = position;
                     adapter.removeItem(position);
                     // showing snack bar with Undo option

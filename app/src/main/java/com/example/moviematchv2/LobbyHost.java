@@ -8,15 +8,15 @@ import android.widget.ImageButton;
 
 public class LobbyHost extends AppCompatActivity {
 
-    ImageButton createLobby;
+    ImageButton createApiCall;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_host);
 
-        createLobby = (ImageButton) findViewById(R.id.createLobby);
+        createApiCall = (ImageButton) findViewById(R.id.createApiLink);
 
-        createLobby.setOnClickListener(new View.OnClickListener() {
+        createApiCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SetupFragment setupFragment = new SetupFragment();
