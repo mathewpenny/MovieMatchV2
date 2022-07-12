@@ -9,10 +9,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WelcomePage extends AppCompatActivity {
 
@@ -39,6 +45,29 @@ public class WelcomePage extends AppCompatActivity {
             String userName = account.getDisplayName();
             name.setText(userName);
         }
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        try {
+                            String fullName = object.getString("name");
+                            name.setText(fullName);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // Application code
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link");
+        request.setParameters(parameters);
+        request.executeAsync();
+
 
         hostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
