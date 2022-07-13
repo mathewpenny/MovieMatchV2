@@ -1,11 +1,8 @@
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".LobbyHost">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,21 +13,36 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            app:srcCompat="@drawable/logo"
-            tools:layout_editor_absoluteX="58dp"
-            tools:layout_editor_absoluteY="104dp"/>
+            android:src="@drawable/logo"
+            android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:id="@+id/textView"
+        <Spinner
+            android:id="@+id/streamingSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/streamingPlatform"/>
+
+        <Spinner
+            android:id="@+id/genreSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/genre"/>
+
+        <EditText android:id="@+id/phoneNumber"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="45dp"
-            android:layout_marginBottom="50dp"
-            android:textColor="#8A8585"
-            android:textSize="45sp"
-            android:textStyle="bold"
-            android:text="Host Lobby"/>
+            android:layout_height="wrap_content"
+            android:hint="Enter Friend's Phone Number"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/white"
+            android:layout_marginBottom="20dp"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -38,7 +50,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/createApiLink"
+                android:id="@+id/sendRequestButton"
                 android:layout_width="250dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -55,22 +67,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30sp"
                     android:textColor="@color/white"
-                    android:text="Create"
-                    android:textSize="20sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30sp"
-                    android:textColor="@color/white"
-                    android:text="Lobby"
+                    android:text="Send"
                     android:textSize="20sp"/>
             </LinearLayout>
         </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/setupFrag"/>
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_view"

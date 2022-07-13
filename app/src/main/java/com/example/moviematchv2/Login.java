@@ -41,7 +41,7 @@ public class Login extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) { // means user is logged in so we can move on in the app
-                    Intent intent = new Intent(Login.this, AccountPage.class);
+                    Intent intent = new Intent(Login.this, WelcomePage.class);
                     startActivity(intent);
                     finish();
                 }
@@ -93,5 +93,12 @@ public class Login extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(firebaseAuthStateListener);
+    }
+    //new method
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(Login.this, LandingPage.class);
+        startActivity(intent);
+        finish();
     }
 }

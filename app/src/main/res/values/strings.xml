@@ -7,4 +7,34 @@
     <string name="fb_login_protocol_scheme">fb396185682520701</string>
     <string name="facebook_client_token">90109a96807419b7ebc1b7f9662135a0</string>
 
+
+    <!-- Spinner Strings -->
+    <string-array name="streamingPlatform">
+        <item>Choose Platform</item>
+        <item>netflix</item>
+        <item>prime</item>
+        <item>disney</item>
+    </string-array>
+    <string-array name="genre">
+        <item>Choose Genre</item>
+        <item>No preference</item>
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Animation</item>
+        <item>Biography</item>
+        <item>Comedy</item>
+        <item>Crime</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Family</item>
+        <item>Fantasy</item>
+        <item>History</item>
+        <item>Horror</item>
+        <item>Musical</item>
+        <item>Reality</item>
+        <item>Romance</item>
+        <item>Science Fiction</item>
+        <item>Thriller</item>
+        <item>Western</item>
+    </string-array>
 </resources>

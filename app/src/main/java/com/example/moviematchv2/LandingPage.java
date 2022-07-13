@@ -64,12 +64,10 @@ public class LandingPage extends AppCompatActivity {
 
                         @Override
                         public void onCancel() {
-                            // App code
                         }
 
                         @Override
                         public void onError(FacebookException exception) {
-                            // App code
                         }
                     });
 

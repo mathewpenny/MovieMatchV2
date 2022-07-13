@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -33,16 +34,18 @@ public class Swipe extends AppCompatActivity {
 
     // Variables for API call and Swipeable RecyclerView
     private Paint p = new Paint();
-    RecyclerView recyclerView;
-    List<Movie> moviesList;
-    Retrofit retrofit;
-    MovieApi movieApi;
-    MovieAdapter adapter;
+    private RecyclerView recyclerView;
+    private List<Movie> moviesList;
+    private Retrofit retrofit;
+    private MovieApi movieApi;
+    private MovieAdapter adapter;
+    private String chosenStreaming;
+    private int chosenGenre;
 
     // Variables for Database and Saving Matches
-    FirebaseAuth mAuth;
-    DatabaseReference movieDb;
-    String currentUid;
+    private FirebaseAuth mAuth;
+    private DatabaseReference movieDb;
+    private String currentUid;
 
 
 
@@ -50,39 +53,49 @@ public class Swipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
+        // Hides action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
 
-        // Set up for saving matches
-        mAuth = FirebaseAuth.getInstance();
-        currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        movieDb = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-        recyclerView = findViewById(R.id.recyclerView);
-        moviesList = new ArrayList<>();
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://streaming-availability.p.rapidapi.com/search/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        movieApi = retrofit.create(MovieApi.class);
+            // Set up for saving matches
+            mAuth = FirebaseAuth.getInstance();
+            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+            movieDb = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage());
-        call.enqueue(new Callback<JSONResponse>() {
-            @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                JSONResponse jsonResponse = response.body();
-                moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
-                PutDataIntoRecyclerView(moviesList);
-                enableSwipe();
-            }
+            // Get intent from HostActivity to set up API call by choice of streaming service and genre
+            Intent intent = getIntent();
+            chosenStreaming = intent.getStringExtra("streaming");
+            chosenGenre = intent.getIntExtra("genre", 28);
 
-            @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
 
-            }
-        });
+            // Set up for showing movies in recyclerview
+            recyclerView = findViewById(R.id.recyclerView);
+            moviesList = new ArrayList<>();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("https://streaming-availability.p.rapidapi.com/search/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            movieApi = retrofit.create(MovieApi.class);
+
+
+            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenGenre);
+            call.enqueue(new Callback<JSONResponse>() {
+                @Override
+                public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                    JSONResponse jsonResponse = response.body();
+                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
+                    PutDataIntoRecyclerView(moviesList);
+                    enableSwipe();
+                }
+
+                @Override
+                public void onFailure(Call<JSONResponse> call, Throwable t) {
+
+                }
+            });
+        }
     }
-
     // generates a random page number. Will have to test the endpoints and use a switch case to
     // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
@@ -110,6 +123,15 @@ public class Swipe extends AppCompatActivity {
                 int position = viewHolder.getBindingAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT){
                     final Movie deletedModel = moviesList.get(position);
+
+                    // Create a Movie object, save an ID and title into Database,
+                    // Save the current UID so that we can compare with invited user(?)
+                    String id = deletedModel.getTmdbID();
+                    String title = deletedModel.getTitle();
+
+                    movieDb.child(id).child(title).child("matches").child("nope").child(currentUid).setValue(true);
+
+
                     final int deletedPosition = position;
                     adapter.removeItem(position);
                     // showing snack bar with Undo option
@@ -128,10 +150,10 @@ public class Swipe extends AppCompatActivity {
 
                     // Create a Movie object, save an ID and title into Database,
                     // Save the current UID so that we can compare with invited user(?)
-                    Movie movieObj = new Movie();
-                    String movieId = movieObj.getTmdbID();
-                    String title = movieObj.getTitle();
+                    String id = deletedModel.getTmdbID();
+                    String title = deletedModel.getTitle();
 
+                    movieDb.child(id).child(title).child("matches").child("yup").child(currentUid).setValue(true);
 
 
                     final int deletedPosition = position;
@@ -150,7 +172,7 @@ public class Swipe extends AppCompatActivity {
                 }
                 count++;
                 if (count == 8) {
-                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage());
+                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenGenre);
                     call.enqueue(new Callback<JSONResponse>() {
                         @Override
                         public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -188,5 +210,11 @@ public class Swipe extends AppCompatActivity {
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(Swipe.this, WelcomePage.class);
+        startActivity(intent);
+        finish();
     }
 }

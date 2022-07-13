@@ -46,6 +46,7 @@ public class WelcomePage extends AppCompatActivity {
             name.setText(userName);
         }
 
+     /*   // This is where the app gets hung up. Null object Reference on fullName
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
@@ -60,14 +61,13 @@ public class WelcomePage extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        // Application code
                     }
                 });
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,link");
         request.setParameters(parameters);
         request.executeAsync();
-
+*/
 
         hostBtn.setOnClickListener(new View.OnClickListener() {
             @Override

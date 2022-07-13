@@ -39,7 +39,7 @@ public class Register extends AppCompatActivity {
         // StateListener will be listening for the state of login of the user
         mAuth = FirebaseAuth.getInstance();
 
-        // for returning users (aka most people using the app on their phone,
+        // for returning users (aka most people using the app on their phone),
         // this will check and if logged in from before, will go direct to
         //landing page, else will stay on login until user is logged in.
         firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -47,7 +47,7 @@ public class Register extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) { // means user is logged in so we can move on in the app
-                    Intent intent = new Intent(Register.this, LandingPage.class);
+                    Intent intent = new Intent(Register.this, WelcomePage.class);
                     startActivity(intent);
                     finish();
                 }
@@ -66,14 +66,12 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // Need to create some validation here for email, password check if password is same
+
                 final String name = nameET.getText().toString();
                 final String email = emailET.getText().toString();
                 final String password = passwordET.getText().toString();
                 final String confirmPass = confirmPasswordET.getText().toString();
 
-                // Here will check for regex of password and length, as well as matching passwords.
-                // Should check for valid email as will.
                 if (passwordET.getText().toString().equals("")){
                     Toast.makeText(Register.this, "Enter a password...", Toast.LENGTH_LONG).show();
                     passwordET.requestFocus();
@@ -101,7 +99,7 @@ public class Register extends AppCompatActivity {
                                 Toast.makeText(Register.this, "Registration Error", Toast.LENGTH_SHORT).show();
                             } else if(task.isSuccessful()){
                                 Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Register.this, LandingPage.class);
+                                Intent intent = new Intent(Register.this, WelcomePage.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -122,5 +120,11 @@ public class Register extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(firebaseAuthStateListener);
+    }
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(Register.this, LandingPage.class);
+        startActivity(intent);
+        finish();
     }
 }
