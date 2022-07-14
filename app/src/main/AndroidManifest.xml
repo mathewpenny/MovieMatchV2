@@ -16,9 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieMatchV2"
         tools:targetApi="31">
+        <activity
+            android:name=".Account"
+            android:exported="false" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
 
         <activity
             android:name=".LobbyAccount"
@@ -39,7 +46,7 @@
             android:name=".Swipe"
             android:exported="false" />
         <activity
-            android:name=".LandingPage"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".AccountPage"
@@ -48,7 +55,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LandingPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

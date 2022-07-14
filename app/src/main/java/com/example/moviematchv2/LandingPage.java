@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -22,6 +24,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 
@@ -32,8 +37,12 @@ public class LandingPage extends AppCompatActivity {
     private ImageButton loginBtn, registerBtn;
     private ImageButton googleSignIn, metaSignIn;
 
+    private ImageView image;
+    private TextView logoText;
+
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    FirebaseAuth mAuth;
 
     CallbackManager callbackManager;
 
@@ -42,11 +51,16 @@ public class LandingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
-        // Button and TextView Variables
         loginBtn = (ImageButton) findViewById(R.id.loginButton);
         registerBtn = (ImageButton) findViewById(R.id.registerButton);
         googleSignIn = (ImageButton) findViewById(R.id.googleSignIn);
         metaSignIn = (ImageButton) findViewById(R.id.metaSignIn);
+
+        image = findViewById(R.id.imageView);
+        logoText = findViewById(R.id.textView);
+
+
+        mAuth = FirebaseAuth.getInstance();
 
         //Hides action bar
         if (getSupportActionBar() != null) {
@@ -72,14 +86,17 @@ public class LandingPage extends AppCompatActivity {
                     });
 
 
-            // Google Sign
-            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            // Google Login
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail().build();
             gsc = GoogleSignIn.getClient(this, gso);
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
             // allows user to not have to login each time they open the app
             if(account != null) {
                 navigateToSecondActivity();
             }
+
 
             loginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,12 +138,6 @@ public class LandingPage extends AppCompatActivity {
         startActivityForResult(signInIntent, 1000);
     }
 
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,13 +146,21 @@ public class LandingPage extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
             try {
-                task.getResult(ApiException.class);
-                navigateToSecondActivity();
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             }
 
         }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential).addOnSuccessListener(this, authResult -> {
+            navigateToSecondActivity();
+            finish();
+        });
     }
 
     private void navigateToSecondActivity() {

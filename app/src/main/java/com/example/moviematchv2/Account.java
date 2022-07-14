@@ -2,21 +2,17 @@ package com.example.moviematchv2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
-
-public class AccountPage extends AppCompatActivity {
+public class Account extends AppCompatActivity {
 
     private ImageButton updateBtn, deleteBtn, reviewBtn, logoutBtn;
     GoogleSignInOptions gso;
@@ -26,7 +22,7 @@ public class AccountPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_page);
+        setContentView(R.layout.activity_account);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -39,7 +35,7 @@ public class AccountPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //mAuth.signOut();
-                Intent intent = new Intent(AccountPage.this, Login.class);
+                Intent intent = new Intent(Account.this, Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -50,7 +46,7 @@ public class AccountPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //mAuth.signOut();
-                Intent intent = new Intent(AccountPage.this, Login.class);
+                Intent intent = new Intent(Account.this, Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -58,7 +54,7 @@ public class AccountPage extends AppCompatActivity {
     }
     @Override
     public void onBackPressed () {
-        Intent intent = new Intent(AccountPage.this, WelcomePage.class);
+        Intent intent = new Intent(Account.this, WelcomePage.class);
         startActivity(intent);
         finish();
     }

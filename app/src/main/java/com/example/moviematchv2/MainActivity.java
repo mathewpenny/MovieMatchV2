@@ -15,7 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    private static int SPLASH_SCREEN = 3000;
 
+    Animation topAnim, bottomAnim;
+    ImageView image;
+    TextView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +31,29 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
 
+            //animations
+            topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+            bottomAnim = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
 
-            Intent intent = new Intent(MainActivity.this, LandingPage.class);
-            startActivity(intent);
-            finish();
+            //Hooks
+            image = findViewById(R.id.imageView);
+            logo = findViewById(R.id.textView);
+
+            image.setAnimation(topAnim);
+            logo.setAnimation(bottomAnim);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, LandingPage.class);
+                    Pair[] pairs = new Pair[2];
+                    pairs[0] = new Pair<View, String>(image, "logo_image");
+                    pairs[1] = new Pair<View, String>(logo, "logo_text");
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pairs);
+                    startActivity(intent, options.toBundle());
+                }
+            }, SPLASH_SCREEN);
+
         }
     }
 }

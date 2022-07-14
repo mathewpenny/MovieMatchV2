@@ -18,6 +18,12 @@
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="104dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            />
+
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

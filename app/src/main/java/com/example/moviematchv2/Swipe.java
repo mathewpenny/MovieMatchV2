@@ -45,7 +45,7 @@ public class Swipe extends AppCompatActivity {
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
-    private String currentUid;
+    private String uid;
 
 
 
@@ -59,14 +59,14 @@ public class Swipe extends AppCompatActivity {
 
             // Set up for saving matches
             mAuth = FirebaseAuth.getInstance();
-            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            movieDb = FirebaseDatabase.getInstance().getReference().child("Users");
+            uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+            movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
 
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
             Intent intent = getIntent();
             chosenStreaming = intent.getStringExtra("streaming");
-            chosenGenre = intent.getIntExtra("genre", 28);
+            chosenGenre = intent.getIntExtra("genre", 0);
 
 
             // Set up for showing movies in recyclerview
@@ -124,12 +124,14 @@ public class Swipe extends AppCompatActivity {
                 if (direction == ItemTouchHelper.LEFT){
                     final Movie deletedModel = moviesList.get(position);
 
-                    // Create a Movie object, save an ID and title into Database,
-                    // Save the current UID so that we can compare with invited user(?)
+                    // Take the deletedModel object, save an ID and title into Database
+                    // under the current UID so that we can compare with other users(?)
+                    // when comparing matches, will need the uid of movie object as well
+                    // as the user class
                     String id = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
 
-                    movieDb.child(id).child(title).child("matches").child("nope").child(currentUid).setValue(true);
+                    movieDb.child("nopes").child(id).child(title).child(uid).setValue(true);
 
 
                     final int deletedPosition = position;
@@ -150,10 +152,10 @@ public class Swipe extends AppCompatActivity {
 
                     // Create a Movie object, save an ID and title into Database,
                     // Save the current UID so that we can compare with invited user(?)
-                    String id = deletedModel.getTmdbID();
+                    String movieId = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
 
-                    movieDb.child(id).child(title).child("matches").child("yup").child(currentUid).setValue(true);
+                    movieDb.child("yups").child(movieId).child(title).child(uid).setValue(true);
 
 
                     final int deletedPosition = position;
