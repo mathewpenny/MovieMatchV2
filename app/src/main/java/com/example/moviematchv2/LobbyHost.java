@@ -1,129 +1,159 @@
 package com.example.moviematchv2;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class LobbyHost extends AppCompatActivity {
-    Spinner streaming;
-    Spinner genre;
-    EditText phoneNumber;
-    ImageButton send;
-    String friendNumber;
-    int chosenGenre;
-    String chosenStreaming;
+    private Spinner streamingSpn;
+    private Spinner genreSpn;
+    private EditText phoneNumber;
+    private ImageButton sendBtn;
+    private String friendNumber;
+    private int chosenGenre;
+    private String chosenStreaming;
+
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_host);
 
-        streaming = (Spinner) findViewById(R.id.streamingSpinner);
-        genre = (Spinner) findViewById(R.id.genreSpinner);
-        phoneNumber = (EditText) findViewById(R.id.phoneNumber);
-        send = (ImageButton) findViewById(R.id.sendRequestButton);
+            streamingSpn = (Spinner) findViewById(R.id.streamingSpinner);
+            genreSpn = (Spinner) findViewById(R.id.genreSpinner);
+            phoneNumber = (EditText) findViewById(R.id.phoneNumber);
+            sendBtn = (ImageButton) findViewById(R.id.sendRequestButton);
 
-        if(genre.getSelectedItem().toString() != null){
+            drawerLayout = findViewById(R.id.drawer_view);
+            actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
-            switch (genre.getSelectedItem().toString()){
-                case "Adventure":
-                    chosenGenre = 12 ;
-                    break;
-                case "Action":
-                    chosenGenre = 28;
-                    break;
-                case "Animation":
-                    chosenGenre = 16 ;
-                    break;
-                case "Biography":
-                    chosenGenre = 1 ;
-                    break;
-                case "Comedy":
-                    chosenGenre = 35 ;
-                    break;
-                case "Crime":
-                    chosenGenre = 80;
-                    break;
-                case "Documentary":
-                    chosenGenre = 99;
-                    break;
-                case "Drama":
-                    chosenGenre = 18;
-                    break;
-                case "Family":
-                    chosenGenre = 10751;
-                    break;
-                case "Fantasy":
-                    chosenGenre = 14;
-                    break;
-                case "Musical":
-                    chosenGenre = 4;
-                    break;
-                case "Reality":
-                    chosenGenre = 10764;
-                    break;
-                case "Romance":
-                    chosenGenre = 10749;
-                    break;
-                case "Science Fiction":
-                    chosenGenre = 878;
-                    break;
-                case "Thriller":
-                    chosenGenre = 53;
-                    break;
-                case "Western":
-                    chosenGenre = 37;
-                    break;
-                default:
-                    chosenGenre = 28; //can change the default to set no genre
+            drawerLayout.addDrawerListener(actionBarDrawerToggle);
+            actionBarDrawerToggle.syncState();
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+            if (genreSpn.getSelectedItem().toString() != null) {
+                switch (genreSpn.getSelectedItem().toString()) {
+                    case "Action":
+                        chosenGenre = 28;
+                        break;
+                    case "Adventure":
+                        chosenGenre = 12;
+                        break;
+                    case "Adult Animation":
+                        chosenGenre = 7;
+                        break;
+                    case "Animation":
+                        chosenGenre = 16;
+                        break;
+                    case "Biography":
+                        chosenGenre = 1;
+                        break;
+                    case "Comedy":
+                        chosenGenre = 35;
+                        break;
+                    case "Crime":
+                        chosenGenre = 80;
+                        break;
+                    case "Documentary":
+                        chosenGenre = 99;
+                        break;
+                    case "Drama":
+                        chosenGenre = 18;
+                        break;
+                    case "Family":
+                        chosenGenre = 10751;
+                        break;
+                    case "Fantasy":
+                        chosenGenre = 14;
+                        break;
+                    case "Horror":
+                        chosenGenre = 27;
+                        break;
+                    case "Musical":
+                        chosenGenre = 4;
+                        break;
+                    case "Reality":
+                        chosenGenre = 10764;
+                        break;
+                    case "Romance":
+                        chosenGenre = 10749;
+                        break;
+                    case "Science Fiction":
+                        chosenGenre = 878;
+                        break;
+                    case "Thriller":
+                        chosenGenre = 53;
+                        break;
+                    case "Western":
+                        chosenGenre = 37;
+                        break;
+                    default:
+                        chosenGenre = 0; //can change the default to set no genre
+                }
             }
+            friendNumber = phoneNumber.getEditableText().toString();
+
+            streamingSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    chosenStreaming = streamingSpn.getSelectedItem().toString();
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    Toast.makeText(LobbyHost.this, "Please choose a service.", Toast.LENGTH_SHORT).show();
+                    streamingSpn.requestFocus();
+                }
+            });
+
+
+            genreSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Log.isLoggable("test", chosenGenre);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    Toast.makeText(LobbyHost.this, "Please choose a genre.", Toast.LENGTH_SHORT).show();
+                    genreSpn.requestFocus();
+                }
+            });
+
+            //Must both send an SMS and forward data to swipe for API call
+            sendBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), Swipe.class);
+                    intent.putExtra("streaming", chosenStreaming);
+                    intent.putExtra("genre", chosenGenre);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
-
-        friendNumber = phoneNumber.getEditableText().toString();
-
-        streaming.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                chosenStreaming = streaming.getSelectedItem().toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        genre.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Log.isLoggable("test", chosenGenre);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        //Must both send an SMS and forward data to swipe for API call
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Swipe.class);
-                intent.putExtra("streaming", chosenStreaming);
-                intent.putExtra("genre", chosenGenre);
-                startActivity(intent);
-                finish();
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

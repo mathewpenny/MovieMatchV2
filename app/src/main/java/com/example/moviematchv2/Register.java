@@ -35,81 +35,88 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        //Hides action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
 
-        // StateListener will be listening for the state of login of the user
-        mAuth = FirebaseAuth.getInstance();
+            // StateListener will be listening for the state of login of the user
+            mAuth = FirebaseAuth.getInstance();
 
-        // for returning users (aka most people using the app on their phone),
-        // this will check and if logged in from before, will go direct to
-        //landing page, else will stay on login until user is logged in.
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) { // means user is logged in so we can move on in the app
-                    Intent intent = new Intent(Register.this, WelcomePage.class);
-                    startActivity(intent);
-                    finish();
+            // for returning users (aka most people using the app on their phone),
+            // this will check and if logged in from before, will go direct to
+            //landing page, else will stay on login until user is logged in.
+            firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) { // means user is logged in so we can move on in the app
+                        Intent intent = new Intent(Register.this, WelcomePage.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
-            }
-        };
+            };
 
-        nameET = (EditText) findViewById(R.id.registerName);
-        emailET = (EditText) findViewById(R.id.registerEmail);
-        phoneET = (EditText) findViewById(R.id.registerPhone);
-        passwordET = (EditText) findViewById(R.id.registerPassword);
-        confirmPasswordET = (EditText) findViewById(R.id.confirmPassword);
+            nameET = (EditText) findViewById(R.id.registerName);
+            emailET = (EditText) findViewById(R.id.registerEmail);
+            phoneET = (EditText) findViewById(R.id.registerPhone);
+            passwordET = (EditText) findViewById(R.id.registerPassword);
+            confirmPasswordET = (EditText) findViewById(R.id.confirmPassword);
 
-        registerBtn = (ImageButton) findViewById(R.id.registerButton);
+            registerBtn = (ImageButton) findViewById(R.id.registerButton);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            registerBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
 
-                final String name = nameET.getText().toString();
-                final String email = emailET.getText().toString();
-                final String password = passwordET.getText().toString();
-                final String confirmPass = confirmPasswordET.getText().toString();
+                    final String name = nameET.getText().toString();
+                    final String email = emailET.getText().toString();
+                    final String password = passwordET.getText().toString();
+                    final String confirmPass = confirmPasswordET.getText().toString();
 
-                if (passwordET.getText().toString().equals("")){
-                    Toast.makeText(Register.this, "Enter a password...", Toast.LENGTH_LONG).show();
-                    passwordET.requestFocus();
-                } if (passwordET.getText().toString().length() <= 7) {
-                    Toast.makeText(Register.this, "Enter a password...", Toast.LENGTH_LONG).show();
-                    passwordET.requestFocus();
-                } if (!confirmPasswordET.getText().toString().equals(passwordET.getText().toString())) {
-                    Toast.makeText(Register.this, "Passwords must match", Toast.LENGTH_LONG).show();
-                    confirmPasswordET.requestFocus();
-                } if(!android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.getText().toString()).matches()) {
-                    Toast.makeText(Register.this, "Enter a valid email address...", Toast.LENGTH_LONG).show();
-                    emailET.requestFocus();
-                } if(emailET.getText().toString().equals("")) {
-                    Toast.makeText(Register.this, "Enter an email address...", Toast.LENGTH_LONG).show();
-                    emailET.requestFocus();
-                }
+                    if (passwordET.getText().toString().equals("")) {
+                        Toast.makeText(Register.this, "Enter a password...", Toast.LENGTH_LONG).show();
+                        passwordET.requestFocus();
+                    }
+                    if (passwordET.getText().toString().length() <= 7) {
+                        Toast.makeText(Register.this, "Enter a password...", Toast.LENGTH_LONG).show();
+                        passwordET.requestFocus();
+                    }
+                    if (!confirmPasswordET.getText().toString().equals(passwordET.getText().toString())) {
+                        Toast.makeText(Register.this, "Passwords must match", Toast.LENGTH_LONG).show();
+                        confirmPasswordET.requestFocus();
+                    }
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailET.getText().toString()).matches()) {
+                        Toast.makeText(Register.this, "Enter a valid email address...", Toast.LENGTH_LONG).show();
+                        emailET.requestFocus();
+                    }
+                    if (emailET.getText().toString().equals("")) {
+                        Toast.makeText(Register.this, "Enter an email address...", Toast.LENGTH_LONG).show();
+                        emailET.requestFocus();
+                    }
 
-                if(password.length() > 7 && password.equals(confirmPass)) {
-                    // Create the user here with onCompleteListener to check if task is successful
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            //this will only be triggered if the registration was not successful.
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(Register.this, "Registration Error", Toast.LENGTH_SHORT).show();
-                            } else if(task.isSuccessful()){
-                                Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Register.this, WelcomePage.class);
-                                startActivity(intent);
-                                finish();
+                    if (password.length() > 7 && password.equals(confirmPass)) {
+                        // Create the user here with onCompleteListener to check if task is successful
+                        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                //this will only be triggered if the registration was not successful.
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(Register.this, "Registration Error", Toast.LENGTH_SHORT).show();
+                                } else if (task.isSuccessful()) {
+                                    Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(Register.this, WelcomePage.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-
     @Override
     protected void onStart() {
         super.onStart();

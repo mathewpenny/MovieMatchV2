@@ -59,7 +59,6 @@ public class LandingPage extends AppCompatActivity {
         image = findViewById(R.id.imageView);
         logoText = findViewById(R.id.textView);
 
-
         mAuth = FirebaseAuth.getInstance();
 
         //Hides action bar
@@ -96,7 +95,6 @@ public class LandingPage extends AppCompatActivity {
             if(account != null) {
                 navigateToSecondActivity();
             }
-
 
             loginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -168,5 +166,4 @@ public class LandingPage extends AppCompatActivity {
         Intent intent = new Intent(LandingPage.this, WelcomePage.class);
         startActivity(intent);
     }
-
 }

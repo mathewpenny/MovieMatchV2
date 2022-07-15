@@ -11,7 +11,11 @@ public class LobbyGuest extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_guest);
+        //Hides action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
 
+        }
     }
         @Override
         public void onBackPressed () {

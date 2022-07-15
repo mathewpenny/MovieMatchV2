@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MovieMatchV2</string>
+    <string name="app_name">Movie Match</string>
 
 
     <!--Required Strings for Facebook sign in -->
@@ -15,11 +15,13 @@
         <item>prime</item>
         <item>disney</item>
     </string-array>
+
     <string-array name="genre">
         <item>Choose Genre</item>
         <item>No preference</item>
         <item>Action</item>
         <item>Adventure</item>
+        <item>Adult Animation</item>
         <item>Animation</item>
         <item>Biography</item>
         <item>Comedy</item>
@@ -27,14 +29,18 @@
         <item>Documentary</item>
         <item>Drama</item>
         <item>Family</item>
-        <item>Fantasy</item>
         <item>History</item>
         <item>Horror</item>
         <item>Musical</item>
         <item>Reality</item>
         <item>Romance</item>
-        <item>Science Fiction</item>
+        <item>SciFi &amp; Fantasy</item>
         <item>Thriller</item>
         <item>Western</item>
     </string-array>
+
+    <!--Strings for Navigation Drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
 </resources>

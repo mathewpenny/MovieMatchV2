@@ -15,16 +15,16 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/logo"
             tools:layout_editor_absoluteX="58dp"
-            android:layout_marginTop="20dp"
-            tools:layout_editor_absoluteY="104dp"/>
+            tools:layout_editor_absoluteY="104dp" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="70sp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="#8C8989"
@@ -35,7 +35,7 @@
         <TextView
             android:id="@+id/nameText"
             android:layout_width="wrap_content"
-            android:layout_height="70sp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:textColor="#8C8989"

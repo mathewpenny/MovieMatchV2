@@ -25,40 +25,43 @@ public class LobbyAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_account);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
+        //Hides action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
 
-        logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
-        updateBtn = (ImageButton) findViewById(R.id.updateButton);
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            gsc = GoogleSignIn.getClient(this, gso);
+            mAuth = FirebaseAuth.getInstance();
 
-        updateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
+            updateBtn = (ImageButton) findViewById(R.id.updateButton);
 
-                Intent intent = new Intent(LobbyAccount.this, Login.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            updateBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Firebase Sign Out
-                mAuth.signOut();
-                // Google Sign out
-                gsc.signOut();
-                // Facebook Sign Out
-                LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(LobbyAccount.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-                Intent intent = new Intent(LobbyAccount.this, Login.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            logoutBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Firebase Sign Out
+                    mAuth.signOut();
+                    // Google Sign out
+                    gsc.signOut();
+                    // Facebook Sign Out
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(LobbyAccount.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
     }
-
         @Override
         public void onBackPressed () {
             Intent intent = new Intent(LobbyAccount.this, WelcomePage.class);

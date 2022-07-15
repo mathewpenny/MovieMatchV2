@@ -31,20 +31,23 @@ public class WelcomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
+        //Hides action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
 
-        hostBtn = (ImageButton) findViewById(R.id.hostButton);
-        joinBtn = (ImageButton) findViewById(R.id.joinButton);
-        accountBtn = (ImageButton) findViewById(R.id.accountButton);
-        name = (TextView) findViewById(R.id.nameText);
+            hostBtn = (ImageButton) findViewById(R.id.hostButton);
+            joinBtn = (ImageButton) findViewById(R.id.joinButton);
+            accountBtn = (ImageButton) findViewById(R.id.accountButton);
+            name = (TextView) findViewById(R.id.nameText);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this, gso);
+            gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            gsc = GoogleSignIn.getClient(this, gso);
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null) {
-            String userName = account.getDisplayName();
-            name.setText(userName);
-        }
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+            if (account != null) {
+                String userName = account.getDisplayName();
+                name.setText(userName);
+            }
 
      /*   // This is where the app gets hung up. Null object Reference on fullName
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -69,31 +72,38 @@ public class WelcomePage extends AppCompatActivity {
         request.executeAsync();
 */
 
-        hostBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent (getApplicationContext(), LobbyHost.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            hostBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent (getApplicationContext(), LobbyGuest.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            joinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), LobbyGuest.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-        accountBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent (getApplicationContext(), LobbyAccount.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+            accountBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+    }
+        @Override
+        public void onBackPressed () {
+            Intent intent = new Intent(WelcomePage.this, LandingPage.class);
+            startActivity(intent);
+            finish();
     }
 }
