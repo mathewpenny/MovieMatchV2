@@ -11,5 +11,5 @@ public interface MovieApi {
     @GET("basic?country=ca&type=movie")
     Call<JSONResponse> getMovies(@Query("page") Integer page,
                                  @Query("service") String service,
-                                 @Query("genres") Integer genre); //New added genres
+                                 @Query("genre") Integer genre); //New added genres
 }

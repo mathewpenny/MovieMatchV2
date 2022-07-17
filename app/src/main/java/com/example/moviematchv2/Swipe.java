@@ -1,5 +1,6 @@
 package com.example.moviematchv2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,12 +12,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,12 +47,14 @@ public class Swipe extends AppCompatActivity {
     private MovieAdapter adapter;
     private String chosenStreaming;
     private int chosenGenre;
+    Intent intent;
+
 
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private String uid;
-
+    private User user;
 
 
     @Override
@@ -61,10 +69,10 @@ public class Swipe extends AppCompatActivity {
 
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
-            Intent intent = getIntent();
+            intent = getIntent();
             chosenStreaming = intent.getStringExtra("streaming");
-            chosenGenre = intent.getIntExtra("genre", 0);
-
+            chosenGenre = intent.getIntExtra("genre", 0); // need to find put why genre spinner doesn't work
+            Log.e("test", "" + chosenGenre);
 
             // Set up for showing movies in recyclerview
             recyclerView = findViewById(R.id.recyclerView);
@@ -96,7 +104,7 @@ public class Swipe extends AppCompatActivity {
     // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
         int min = 1;
-        int max = 200;
+        int max = 2;
         return new Random().nextInt(max - min + 1);
     }
 
@@ -124,10 +132,13 @@ public class Swipe extends AppCompatActivity {
                     // under the current UID so that we can compare with other users(?)
                     // when comparing matches, will need the uid of movie object as well
                     // as the user class
-                    String id = deletedModel.getTmdbID();
+                    String movieId = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
+                    String userId = mAuth.getCurrentUser().getUid();
 
-                    movieDb.child("nopes").child(id).child(uid).setValue(true);
+
+                    movieDb.child("nopes").child(movieId).child(userId).setValue(true);
+
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -149,8 +160,11 @@ public class Swipe extends AppCompatActivity {
                     // Save the current UID so that we can compare with invited user(?)
                     String movieId = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
+                    String userId = mAuth.getCurrentUser().getUid();
 
-                    movieDb.child("yups").child(movieId).child(uid).setValue(true);
+                    // movieDb stands for  movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
+                    movieDb.child("yups").child(movieId).child(userId).setValue(true);
+                    matchMade(movieId);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -207,6 +221,32 @@ public class Swipe extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
+    private void matchMade(String movieId) {
+        // Will check the current user who is making the swipes for its own child...??
+        // going to check if the movie swiped on has any yups attached and will
+        // show that there is a match
+        String userId = mAuth.getCurrentUser().getUid();
+        // movieDb stands for  movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
+        DatabaseReference currentUserMatchesDb = movieDb.child("yups").child(movieId).child(userId);
+        currentUserMatchesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    Toast.makeText(Swipe.this, "Someone else likes this too!", Toast.LENGTH_LONG).show();
+                    movieDb.child(snapshot.getKey()).child("yups").child(userId).setValue(true);
+                    movieDb.child(userId).child("yups").setValue(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     @Override
     public void onBackPressed () {
         Intent intent = new Intent(Swipe.this, WelcomePage.class);

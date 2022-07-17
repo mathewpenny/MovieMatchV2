@@ -23,8 +23,9 @@ public class LobbyHost extends AppCompatActivity {
     private EditText phoneNumber;
     private ImageButton sendBtn;
     private String friendNumber;
-    private int chosenGenre;
+    private Integer chosenGenre;
     private String chosenStreaming;
+    private int genreToSend;
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -48,66 +49,6 @@ public class LobbyHost extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-            if (genreSpn.getSelectedItem().toString() != null) {
-                switch (genreSpn.getSelectedItem().toString()) {
-                    case "Action":
-                        chosenGenre = 28;
-                        break;
-                    case "Adventure":
-                        chosenGenre = 12;
-                        break;
-                    case "Adult Animation":
-                        chosenGenre = 7;
-                        break;
-                    case "Animation":
-                        chosenGenre = 16;
-                        break;
-                    case "Biography":
-                        chosenGenre = 1;
-                        break;
-                    case "Comedy":
-                        chosenGenre = 35;
-                        break;
-                    case "Crime":
-                        chosenGenre = 80;
-                        break;
-                    case "Documentary":
-                        chosenGenre = 99;
-                        break;
-                    case "Drama":
-                        chosenGenre = 18;
-                        break;
-                    case "Family":
-                        chosenGenre = 10751;
-                        break;
-                    case "Fantasy":
-                        chosenGenre = 14;
-                        break;
-                    case "Horror":
-                        chosenGenre = 27;
-                        break;
-                    case "Musical":
-                        chosenGenre = 4;
-                        break;
-                    case "Reality":
-                        chosenGenre = 10764;
-                        break;
-                    case "Romance":
-                        chosenGenre = 10749;
-                        break;
-                    case "Science Fiction":
-                        chosenGenre = 878;
-                        break;
-                    case "Thriller":
-                        chosenGenre = 53;
-                        break;
-                    case "Western":
-                        chosenGenre = 37;
-                        break;
-                    default:
-                        chosenGenre = 0; //can change the default to set no genre
-                }
-            }
             friendNumber = phoneNumber.getEditableText().toString();
 
             streamingSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -125,7 +66,65 @@ public class LobbyHost extends AppCompatActivity {
             genreSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Log.isLoggable("test", chosenGenre);
+                    switch (genreSpn.getSelectedItem().toString()) {
+                        case "Action":
+                            chosenGenre = 28;
+                            break;
+                        case "Adventure":
+                            chosenGenre = 12;
+                            break;
+                        case "Adult Animation":
+                            chosenGenre = 7;
+                            break;
+                        case "Animation":
+                            chosenGenre = 16;
+                            break;
+                        case "Biography":
+                            chosenGenre = 1;
+                            break;
+                        case "Comedy":
+                            chosenGenre = 35;
+                            break;
+                        case "Crime":
+                            chosenGenre = 80;
+                            break;
+                        case "Documentary":
+                            chosenGenre = 99;
+                            break;
+                        case "Drama":
+                            chosenGenre = 18;
+                            break;
+                        case "Family":
+                            chosenGenre = 10751;
+                            break;
+                        case "Fantasy":
+                            chosenGenre = 14;
+                            break;
+                        case "Horror":
+                            chosenGenre = 27;
+                            break;
+                        case "Musical":
+                            chosenGenre = 4;
+                            break;
+                        case "Reality":
+                            chosenGenre = 10764;
+                            break;
+                        case "Romance":
+                            chosenGenre = 10749;
+                            break;
+                        case "Science Fiction":
+                            chosenGenre = 878;
+                            break;
+                        case "Thriller":
+                            chosenGenre = 53;
+                            break;
+                        case "Western":
+                            chosenGenre = 37;
+                            break;
+                        default:
+                        chosenGenre = 0; //can change the default to set no genre
+                            break;
+                    }
                 }
 
                 @Override
