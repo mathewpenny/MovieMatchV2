@@ -39,12 +39,12 @@ public class Register extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
 
-            // StateListener will be listening for the state of login of the user
             mAuth = FirebaseAuth.getInstance();
 
+            // StateListener will be listening for the state of login of the user
             // for returning users (aka most people using the app on their phone),
             // this will check and if logged in from before, will go direct to
-            //landing page, else will stay on login until user is logged in.
+            // landing page, else will stay on login until user is logged in.
             firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -68,10 +68,9 @@ public class Register extends AppCompatActivity {
             registerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
                     final String name = nameET.getText().toString();
                     final String email = emailET.getText().toString();
+                    final String phone = phoneET.getText().toString();
                     final String password = passwordET.getText().toString();
                     final String confirmPass = confirmPasswordET.getText().toString();
 
@@ -98,18 +97,23 @@ public class Register extends AppCompatActivity {
 
                     if (password.length() > 7 && password.equals(confirmPass)) {
                         // Create the user here with onCompleteListener to check if task is successful
-                        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                //this will only be triggered if the registration was not successful.
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Registration Error", Toast.LENGTH_SHORT).show();
-                                } else if (task.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Register.this, WelcomePage.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
+                        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register.this, task -> {
+                            //this will only be triggered if the registration was not successful.
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(Register.this, "Registration Error", Toast.LENGTH_SHORT).show();
+                            } else if (task.isSuccessful()) {
+                                Toast.makeText(Register.this, "Registration Complete!", Toast.LENGTH_SHORT).show();
+                                String userId = mAuth.getCurrentUser().getUid();
+                                DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("email");
+                                currentUserDb.setValue(email);
+                                currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("name");
+                                currentUserDb.setValue(name);
+                                currentUserDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("phone");
+                                currentUserDb.setValue(phone);
+
+                                Intent intent = new Intent(Register.this, WelcomePage.class);
+                                startActivity(intent);
+                                finish();
                             }
                         });
                     }

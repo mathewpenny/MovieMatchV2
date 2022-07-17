@@ -53,9 +53,6 @@ public class Swipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
-        // Hides action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
 
             // Set up for saving matches
             mAuth = FirebaseAuth.getInstance();
@@ -95,7 +92,6 @@ public class Swipe extends AppCompatActivity {
                 }
             });
         }
-    }
     // generates a random page number. Will have to test the endpoints and use a switch case to
     // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
@@ -131,8 +127,7 @@ public class Swipe extends AppCompatActivity {
                     String id = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
 
-                    movieDb.child("nopes").child(id).child(title).child(uid).setValue(true);
-
+                    movieDb.child("nopes").child(id).child(uid).setValue(true);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -155,8 +150,7 @@ public class Swipe extends AppCompatActivity {
                     String movieId = deletedModel.getTmdbID();
                     String title = deletedModel.getTitle();
 
-                    movieDb.child("yups").child(movieId).child(title).child(uid).setValue(true);
-
+                    movieDb.child("yups").child(movieId).child(uid).setValue(true);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
