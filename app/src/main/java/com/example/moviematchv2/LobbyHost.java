@@ -25,7 +25,6 @@ public class LobbyHost extends AppCompatActivity {
     private String friendNumber;
     private Integer chosenGenre;
     private String chosenStreaming;
-    private int genreToSend;
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -47,7 +46,6 @@ public class LobbyHost extends AppCompatActivity {
             actionBarDrawerToggle.syncState();
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 
             friendNumber = phoneNumber.getEditableText().toString();
 
@@ -129,8 +127,7 @@ public class LobbyHost extends AppCompatActivity {
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    Toast.makeText(LobbyHost.this, "Please choose a genre.", Toast.LENGTH_SHORT).show();
-                    genreSpn.requestFocus();
+
                 }
             });
 
@@ -138,14 +135,22 @@ public class LobbyHost extends AppCompatActivity {
             sendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), Swipe.class);
-                    intent.putExtra("streaming", chosenStreaming);
-                    intent.putExtra("genre", chosenGenre);
-                    startActivity(intent);
-                    finish();
+                    if (streamingSpn.getSelectedItem().toString().equals("Choose Platform")) {
+                        Toast.makeText(LobbyHost.this, "Please choose a service", Toast.LENGTH_SHORT).show();
+                        streamingSpn.requestFocus();
+                    }if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
+                        Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show();
+                        genreSpn.requestFocus();
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), Swipe.class);
+                        intent.putExtra("streaming", chosenStreaming);
+                        intent.putExtra("genre", chosenGenre);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             });
-        }
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {

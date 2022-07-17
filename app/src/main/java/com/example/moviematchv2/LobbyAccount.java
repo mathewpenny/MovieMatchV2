@@ -15,6 +15,7 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LobbyAccount extends AppCompatActivity {
@@ -26,6 +27,8 @@ public class LobbyAccount extends AppCompatActivity {
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class LobbyAccount extends AppCompatActivity {
             logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
             updateBtn = (ImageButton) findViewById(R.id.updateButton);
 
-            drawerLayout = findViewById(R.id.drawer_view);
+            drawerLayout = findViewById(R.id.drawer_view2);
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
             drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -47,6 +50,31 @@ public class LobbyAccount extends AppCompatActivity {
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+            navigationView = findViewById(R.id.drawer_view);
+            navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
+                int id = item.getItemId();
+
+                if (id == R.id.AccountLobby) {
+                    intent = new Intent(getApplicationContext(), Login.class);
+                    startActivity(intent);
+                    finish();
+                }else if(id == R.id.Instructions){
+                    intent = new Intent(getApplicationContext(), FAQ.class);
+                    startActivity(intent);
+                    finish();
+                }else if(id == R.id.Logout){
+                    // Firebase Sign Out
+                    mAuth.signOut();
+                    // Google Sign out
+                    gsc.signOut();
+                    // Facebook Sign Out
+                    LoginManager.getInstance().logOut();
+                    Intent intent = new Intent(LobbyAccount.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+                return false;
+            });
             updateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

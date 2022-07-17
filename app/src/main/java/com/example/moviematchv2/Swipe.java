@@ -1,7 +1,9 @@
 package com.example.moviematchv2;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +15,15 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +55,12 @@ public class Swipe extends AppCompatActivity {
     private MovieAdapter adapter;
     private String chosenStreaming;
     private int chosenGenre;
-    Intent intent;
-
+    private Intent intent;
+    NavigationView navigationView;
+    GoogleSignInClient gsc;
+    GoogleSignInOptions gso;
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
 
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
@@ -61,6 +73,48 @@ public class Swipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
+        drawerLayout = findViewById(R.id.linearLayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        navigationView = findViewById(R.id.drawer_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) { //this is the item in the menu that was selected
+                int id = item.getItemId();
+
+                if (id == R.id.AccountLobby) {
+                    intent = new Intent(getApplicationContext(), Login.class);
+                    startActivity(intent);
+                    finish();
+                }else if(id == R.id.Instructions){
+                    intent = new Intent(getApplicationContext(), FAQ.class);
+                    startActivity(intent);
+                    finish();
+                }else if(id == R.id.Logout){
+                    // Firebase Sign Out
+                    mAuth.signOut();
+                    // Google Sign out
+                    gsc.signOut();
+                    // Facebook Sign Out
+                    LoginManager.getInstance().logOut();
+
+                    Intent intent = new Intent(Swipe.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+                return false;
+            }
+        });
 
             // Set up for saving matches
             mAuth = FirebaseAuth.getInstance();
@@ -234,7 +288,7 @@ public class Swipe extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     Toast.makeText(Swipe.this, "Someone else likes this too!", Toast.LENGTH_LONG).show();
-                    movieDb.child(snapshot.getKey()).child("yups").child(userId).setValue(true);
+                    movieDb.child(snapshot.getKey()).child("yups").child("movieID").child(userId).setValue(true);
                     movieDb.child(userId).child("yups").setValue(true);
                 }
             }
@@ -244,9 +298,15 @@ public class Swipe extends AppCompatActivity {
 
             }
         });
-
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     @Override
     public void onBackPressed () {
         Intent intent = new Intent(Swipe.this, WelcomePage.class);
