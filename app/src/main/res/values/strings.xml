@@ -5,7 +5,7 @@
     <!--Required Strings for Facebook sign in -->
     <string name="facebook_app_id">396185682520701</string>
     <string name="fb_login_protocol_scheme">fb396185682520701</string>
-    <string name="facebook_client_token">90109a96807419b7ebc1b7f9662135a0</string>
+    <string name="facebook_client_token">17d461661ccdc9cfbb5e434c86d1971c</string>
 
 
     <!-- Spinner Strings -->

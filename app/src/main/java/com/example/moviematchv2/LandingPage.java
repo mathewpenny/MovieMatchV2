@@ -1,15 +1,18 @@
 package com.example.moviematchv2;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -25,7 +28,10 @@ import com.google.android.gms.common.api.ApiException;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
@@ -44,7 +50,7 @@ public class LandingPage extends AppCompatActivity {
     GoogleSignInClient gsc;
     FirebaseAuth mAuth;
 
-    CallbackManager callbackManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +67,16 @@ public class LandingPage extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //Hides action bar
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
 
-            // Facebook Login
-            callbackManager = CallbackManager.Factory.create();
-            LoginManager.getInstance().registerCallback(callbackManager,
-                    new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-                            navigateToSecondActivity();
-                            finish();
-                        }
 
-                        @Override
-                        public void onCancel() {
-                        }
-
-                        @Override
-                        public void onError(FacebookException exception) {
-                        }
-                    });
-
+            metaSignIn.setOnClickListener(view -> {
+                Intent intent = new Intent(LandingPage.this, FacebookSignIn.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            });
 
             // Google Login
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id))
@@ -96,6 +89,16 @@ public class LandingPage extends AppCompatActivity {
                 navigateToSecondActivity();
             }
 
+            googleSignIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    signIn();
+                }
+            });
+
+
+            // Navigation Logic here
+            // Navigate to Login page for regular Email/Password Firebase
             loginBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,7 +107,7 @@ public class LandingPage extends AppCompatActivity {
                     finish();
                 }
             });
-
+            // Navigate to Register Page for regular Email/Password Firebase
             registerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -113,24 +116,10 @@ public class LandingPage extends AppCompatActivity {
                     finish();
                 }
             });
-
-
-            googleSignIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
-
-            metaSignIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    LoginManager.getInstance().logInWithReadPermissions(LandingPage.this, Arrays.asList("public_profile"));
-                }
-            });
         }
     }
 
+    // End of onCreate method here
     private void signIn() {
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent, 1000);
@@ -140,6 +129,7 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == 1000) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
@@ -149,9 +139,13 @@ public class LandingPage extends AppCompatActivity {
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
+
+
+
+
+
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -160,7 +154,6 @@ public class LandingPage extends AppCompatActivity {
             finish();
         });
     }
-
     private void navigateToSecondActivity() {
         finish();
         Intent intent = new Intent(LandingPage.this, WelcomePage.class);
