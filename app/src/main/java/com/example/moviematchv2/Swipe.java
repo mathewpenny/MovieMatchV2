@@ -66,7 +66,6 @@ public class Swipe extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private String uid;
-    private User user;
 
 
     @Override
@@ -80,16 +79,15 @@ public class Swipe extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) { //this is the item in the menu that was selected
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
                 if (id == R.id.AccountLobby) {
@@ -247,10 +245,8 @@ public class Swipe extends AppCompatActivity {
                             enableSwipe();
                             count = 0;
                         }
-
                         @Override
                         public void onFailure(Call<JSONResponse> call, Throwable t) {
-
                         }
                     });
                 }
@@ -304,11 +300,9 @@ public class Swipe extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int clickedItemPosition = item.getOrder();
-
         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), Details.class);
         startActivity(intent);
-
         return true;
     }
 
@@ -319,6 +313,7 @@ public class Swipe extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed () {
         Intent intent = new Intent(Swipe.this, WelcomePage.class);

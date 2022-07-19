@@ -1,13 +1,13 @@
 package com.example.moviematchv2;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,8 +23,8 @@ import java.util.Map;
 public class UpdateAccount extends AppCompatActivity {
 
     private EditText nameET, phoneET, passwordET;
-    private ImageView profile;
-    private ImageButton updateAccnt;
+    private ImageView profilePic;
+    private ImageButton updateAccount;
 
     private FirebaseAuth mAuth;
     private DatabaseReference userDb;
@@ -42,8 +42,8 @@ public class UpdateAccount extends AppCompatActivity {
         nameET = findViewById(R.id.updateName);
         phoneET = findViewById(R.id.updatePhone);
         passwordET = findViewById(R.id.updatePassword);
-        updateAccnt = findViewById(R.id.sendRequestButton);
-        profile = findViewById(R.id.profileImage);
+        updateAccount = findViewById(R.id.sendRequestButton);
+        profilePic = findViewById(R.id.profileImage);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -51,22 +51,41 @@ public class UpdateAccount extends AppCompatActivity {
         userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
 
 
+        profilePic.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, 1);
+        });
 
-        updateAccnt.setOnClickListener(view -> {
+        updateAccount.setOnClickListener(view -> {
             saveUserInformation();
             Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
             startActivity(intent);
         });
-
     }
 
     // Update user information from Users who do not use Google or Facebook
     private void saveUserInformation() {
-        name = nameET.getText().toString();
-        phone = phoneET.getText().toString();
-        password = passwordET.getText().toString();
+        if(!nameET.equals("")) {
+            name = nameET.getText().toString();
+        } else {
+            Toast.makeText(UpdateAccount.this, "Must enter new name.", Toast.LENGTH_SHORT).show();
+            nameET.requestFocus();
+        }
+        if(!phoneET.equals("")) {
+            phone = phoneET.getText().toString();
+        } else {
+            Toast.makeText(UpdateAccount.this, "Must enter new phone number.", Toast.LENGTH_SHORT).show();
+            nameET.requestFocus();
+        }
+        if(!passwordET.equals("")) {
+            password = passwordET.getText().toString();
+        } else {
+            Toast.makeText(UpdateAccount.this, "Must enter new password", Toast.LENGTH_SHORT).show();
+            passwordET.requestFocus();
+        }
 
-        Map userInfo = new HashMap();
+        Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("name", name);
         userInfo.put("phone", phone);
         userInfo.put("password", password);
@@ -74,5 +93,16 @@ public class UpdateAccount extends AppCompatActivity {
         userDb.updateChildren(userInfo);
 
         Toast.makeText(UpdateAccount.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            final Uri imageUri = data.getData();
+            resultUri = imageUri;
+            profilePic.setImageURI(resultUri);
+
+        }
     }
 }

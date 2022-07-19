@@ -44,7 +44,7 @@ public class WelcomePage extends AppCompatActivity {
     private GoogleSignInClient gsc;
 
     private FirebaseUser user;
-    private String userName;
+    private String userName, userId;
     Intent intent;
     NavigationView navigationView;
     private FirebaseAuth mAuth;
@@ -61,7 +61,8 @@ public class WelcomePage extends AppCompatActivity {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
-        userDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        userId = mAuth.getCurrentUser().getUid();
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
         drawerLayout = findViewById(R.id.drawer_view);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
@@ -169,9 +170,6 @@ public class WelcomePage extends AppCompatActivity {
             });
         }
 
-
-
-
     // Outside of onCreate() starts here
     private void getUserName() {
         userDb.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -185,13 +183,12 @@ public class WelcomePage extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
+
         @Override
         public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -199,6 +196,7 @@ public class WelcomePage extends AppCompatActivity {
             }
             return super.onOptionsItemSelected(item);
     }
+
         @Override
         public void onBackPressed () {
             Intent intent = new Intent(WelcomePage.this, LandingPage.class);
