@@ -15,16 +15,29 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="150sp"
             app:srcCompat="@drawable/logo"
             android:layout_marginTop="10dp"
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="104dp"/>
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:fontFamily="@font/bangers"
+            android:text="Login Account"
+            android:textColor="#CDC300"
+            android:textSize="24sp" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:layout_marginStart="12sp"
+            android:layout_marginTop="12sp"
             android:textColor="#8A8585"
             android:textColorHint="#8A8585"
             android:inputType="textEmailAddress"
@@ -34,11 +47,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:layout_marginStart="12sp"
+            android:layout_marginTop="12sp"
             android:id="@+id/loginPassword"
             android:textColor="#8A8585"
             android:textColorHint="#8A8585"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="15sp"
             android:inputType="textPassword"/>
+
+        <TextView
+            android:id="@+id/forgotPassLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:fontFamily="@font/bangers"
+            android:text="Forgot Password?"
+            android:textColor="#CDC300"
+            android:textSize="24sp" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -59,6 +85,28 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Login"
+                android:textSize="20sp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_theaters_24"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:text="Back"
                 android:textSize="20sp"/>
         </FrameLayout>
     </LinearLayout>

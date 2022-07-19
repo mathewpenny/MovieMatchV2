@@ -1,11 +1,16 @@
 package com.example.moviematchv2;
 
 import android.content.Context;
+import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +25,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     private Context context;
     public List<Movie> moviesList;
+    private int position; //new
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public MovieAdapter(Context context, List<Movie> moviesList) {
         this.context = context;
@@ -31,6 +45,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, moviesList.size());
     }
+
     public void restoreItem(Movie movie, int position) {
         moviesList.add(position, movie);
         // notify item added by position
@@ -54,21 +69,43 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                 load(moviesList.get(position)
                         .getPosterURLs().getOriginal())
                 .into(holder.poster);
+
+        holder.title.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setPosition(holder.getPosition());
+                return true;
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return moviesList.size();
     }
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         TextView title;
         ImageView poster;
 
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnCreateContextMenuListener(this); //new
             title = itemView.findViewById(R.id.textView);
             poster = itemView.findViewById(R.id.imageView);
         }
+
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo MenuInfo) {
+            menu.setHeaderTitle("Select Action");
+            menu.add(0, Menu.NONE,getAdapterPosition(),"Details");
+        }
     }
 }
+
+
+

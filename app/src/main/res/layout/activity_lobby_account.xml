@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="150sp"
             app:srcCompat="@drawable/logo"
             android:layout_marginTop="10dp"
             tools:layout_editor_absoluteX="58dp"
@@ -26,10 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Account Page"
-            android:textColor="@color/white"
-            android:textSize="24sp"
             android:textAlignment="center"
-            android:fontFamily="@font/bangers"/>
+            android:fontFamily="@font/bangers"
+            android:textColor="#CDC300"
+            android:textSize="24sp"/>
 
         <FrameLayout
             android:layout_width="wrap_content"

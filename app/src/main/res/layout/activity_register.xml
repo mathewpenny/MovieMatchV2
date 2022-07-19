@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="150dp"
             app:srcCompat="@drawable/logo"
             android:layout_marginTop="10dp"
             tools:layout_editor_absoluteX="58dp"
@@ -24,6 +24,9 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp"
             android:hint="Name"
             android:textColor="#8A8585"
             android:textColorHint="#8A8585"
@@ -32,6 +35,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:textColor="#8A8585"
@@ -41,6 +46,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:hint="Phone"
             android:textColor="#8A8585"
             android:textColorHint="#8A8585"
@@ -49,6 +56,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:hint="Password"
             android:inputType="textPassword"
             android:textColorHint="#8A8585"
@@ -58,6 +67,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:hint="Confirm Password"
             android:inputType="textPassword"
             android:textColor="#8A8585"

@@ -153,6 +153,7 @@ public class Swipe extends AppCompatActivity {
 
                 }
             });
+            registerForContextMenu(recyclerView);
         }
     // generates a random page number. Will have to test the endpoints and use a switch case to
     // set the maximum page depending on service, genre etc.
@@ -298,6 +299,17 @@ public class Swipe extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int clickedItemPosition = item.getOrder();
+
+        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), Details.class);
+        startActivity(intent);
+
+        return true;
     }
 
     @Override

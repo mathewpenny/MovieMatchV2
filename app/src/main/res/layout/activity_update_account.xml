@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="210dp"
+            android:layout_height="150sp"
             android:layout_marginTop="20dp"
             app:srcCompat="@drawable/logo"
             tools:layout_editor_absoluteX="58dp"
@@ -27,22 +27,82 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:textColor="#8C8989"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            android:text="Account Update"/>
+            android:fontFamily="@font/bangers"
+            android:text="Account Update"
+            android:textColor="#CDC300"
+            android:textSize="24sp" />
 
-
-            <ImageView
-                android:id="@+id/photo"
-                android:layout_width="125sp"
-                android:layout_height="125sp"
+        <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:layout_marginStart="12sp"
+            android:layout_marginTop="12sp"
+            android:layout_marginEnd="12sp"
+            android:textColor="#8A8585"
+            android:textColorHint="#8A8585"
+            android:id="@+id/updateName"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone"
+            android:layout_marginStart="12sp"
+            android:layout_marginEnd="12sp"
+            android:layout_marginTop="12sp"
+            android:id="@+id/updatePhone"
+            android:textColor="#8A8585"
+            android:textColorHint="#8A8585"
+            android:inputType="phone"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:layout_marginStart="12sp"
+            android:layout_marginEnd="12sp"
+            android:layout_marginTop="12sp"
+            android:id="@+id/updatePassword"
+            android:textColor="#8A8585"
+            android:textColorHint="#8A8585"
+            android:layout_marginBottom="15sp"
+            android:inputType="textPassword"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/sendRequestButton"
+                android:layout_width="250dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_theaters_24"
                 android:scaleType="centerCrop"/>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
 
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30sp"
+                    android:textColor="@color/white"
+                    android:text="Update"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
