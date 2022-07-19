@@ -83,7 +83,6 @@ public class Swipe extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -189,9 +188,7 @@ public class Swipe extends AppCompatActivity {
                     String title = deletedModel.getTitle();
                     String userId = mAuth.getCurrentUser().getUid();
 
-
                     movieDb.child("nopes").child(movieId).child(userId).setValue(true);
-
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -217,7 +214,6 @@ public class Swipe extends AppCompatActivity {
 
                     // movieDb stands for  movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
                     movieDb.child("yups").child(movieId).child(userId).setValue(true);
-                    matchMade(movieId);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -250,7 +246,6 @@ public class Swipe extends AppCompatActivity {
                         }
                     });
                 }
-
             }
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -273,29 +268,6 @@ public class Swipe extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void matchMade(String movieId) {
-        // Will check the current user who is making the swipes for its own child...??
-        // going to check if the movie swiped on has any yups attached and will
-        // show that there is a match
-        String userId = mAuth.getCurrentUser().getUid();
-        // movieDb stands for  movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
-        DatabaseReference currentUserMatchesDb = movieDb.child("yups").child(movieId).child(userId);
-        currentUserMatchesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    Toast.makeText(Swipe.this, "Someone else likes this too!", Toast.LENGTH_LONG).show();
-                    movieDb.child(snapshot.getKey()).child("yups").child("movieID").child(userId).setValue(true);
-                    movieDb.child(userId).child("yups").setValue(true);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
