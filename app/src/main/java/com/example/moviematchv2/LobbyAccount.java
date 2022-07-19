@@ -75,11 +75,11 @@ public class LobbyAccount extends AppCompatActivity {
                 }
                 return false;
             });
+
             updateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Intent intent = new Intent(LobbyAccount.this, Login.class);
+                    Intent intent = new Intent(LobbyAccount.this, UpdateAccount.class);
                     startActivity(intent);
                     finish();
                 }

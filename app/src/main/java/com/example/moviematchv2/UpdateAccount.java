@@ -2,6 +2,7 @@ package com.example.moviematchv2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -40,20 +42,25 @@ public class UpdateAccount extends AppCompatActivity {
         nameET = findViewById(R.id.updateName);
         phoneET = findViewById(R.id.updatePhone);
         passwordET = findViewById(R.id.updatePassword);
-        updateAccnt = findViewById(R.id.updateButton);
+        updateAccnt = findViewById(R.id.sendRequestButton);
         profile = findViewById(R.id.profileImage);
-        updateAccnt = findViewById(R.id.updateButton);
+
 
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
-        userDb = FirebaseDatabase.getInstance().getReference().child("users").child("Uid");
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+
+
 
         updateAccnt.setOnClickListener(view -> {
             saveUserInformation();
+            Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
+            startActivity(intent);
         });
 
     }
 
+    // Update user information from Users who do not use Google or Facebook
     private void saveUserInformation() {
         name = nameET.getText().toString();
         phone = phoneET.getText().toString();
@@ -64,5 +71,8 @@ public class UpdateAccount extends AppCompatActivity {
         userInfo.put("phone", phone);
         userInfo.put("password", password);
 
+        userDb.updateChildren(userInfo);
+
+        Toast.makeText(UpdateAccount.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();
     }
 }

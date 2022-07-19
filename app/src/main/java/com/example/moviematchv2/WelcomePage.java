@@ -24,26 +24,31 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
 import java.util.Objects;
 
 public class WelcomePage extends AppCompatActivity {
 
     private ImageButton hostBtn, joinBtn, accountBtn;
     private TextView name;
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
 
-    FirebaseUser user;
+    private FirebaseUser user;
     private String userName;
     Intent intent;
     NavigationView navigationView;
     private FirebaseAuth mAuth;
+    private DatabaseReference userDb;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -56,7 +61,7 @@ public class WelcomePage extends AppCompatActivity {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
-
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users");
         drawerLayout = findViewById(R.id.drawer_view);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
 
@@ -104,13 +109,14 @@ public class WelcomePage extends AppCompatActivity {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             gsc = GoogleSignIn.getClient(this, gso);
 
+
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
             if (account != null) {
                 userName = account.getDisplayName();
                 name.setText(userName);
             } else if (user != null) {
-                name.setText(user.getDisplayName());
-        }
+                getUserName();
+            }
 
      /*   // This is where the app gets hung up. Null object Reference on fullName
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -162,6 +168,30 @@ public class WelcomePage extends AppCompatActivity {
                 }
             });
         }
+
+
+
+
+    // Outside of onCreate() starts here
+    private void getUserName() {
+        userDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists() && snapshot.getChildrenCount() > 0) {
+                    Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                    if(map.get("name") != null) {
+                        userName = map.get("name").toString();
+                        name.setText(userName);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
         @Override
         public boolean onOptionsItemSelected(@NonNull MenuItem item) {
             if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
