@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class WelcomePage extends AppCompatActivity {
 
-    private ImageButton hostBtn, joinBtn, accountBtn;
+    private ImageButton matchesBtn, searchBtn, accountBtn;
     private TextView name;
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
@@ -100,8 +100,8 @@ public class WelcomePage extends AppCompatActivity {
             }
         });
 
-            hostBtn = (ImageButton) findViewById(R.id.hostButton);
-            joinBtn = (ImageButton) findViewById(R.id.joinButton);
+            searchBtn = (ImageButton) findViewById(R.id.hostButton);
+            matchesBtn = (ImageButton) findViewById(R.id.joinButton);
             accountBtn = (ImageButton) findViewById(R.id.accountButton);
             name = (TextView) findViewById(R.id.nameText);
 
@@ -142,7 +142,7 @@ public class WelcomePage extends AppCompatActivity {
         request.executeAsync();
 */
 
-            hostBtn.setOnClickListener(new View.OnClickListener() {
+            searchBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
@@ -151,7 +151,7 @@ public class WelcomePage extends AppCompatActivity {
                 }
             });
 
-            joinBtn.setOnClickListener(new View.OnClickListener() {
+            matchesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), LobbyGuest.class);

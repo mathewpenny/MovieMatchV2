@@ -136,7 +136,6 @@ public class Swipe extends AppCompatActivity {
                     .build();
             movieApi = retrofit.create(MovieApi.class);
 
-
             Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenGenre);
             call.enqueue(new Callback<JSONResponse>() {
                 @Override
@@ -182,16 +181,6 @@ public class Swipe extends AppCompatActivity {
                 if (direction == ItemTouchHelper.LEFT){
                     final Movie deletedModel = moviesList.get(position);
 
-                    // Take the deletedModel object, save an ID and title into Database
-                    // under the current UID so that we can compare with other users(?)
-                    // when comparing matches, will need the uid of movie object as well
-                    // as the user class
-                    String movieId = deletedModel.getTmdbID();
-                    String title = deletedModel.getTitle();
-                    String userId = mAuth.getCurrentUser().getUid();
-
-                    movieDb.child("nopes").child(movieId).child(userId).setValue(true);
-
                     final int deletedPosition = position;
                     adapter.removeItem(position);
                     // showing snack bar with Undo option
@@ -217,8 +206,6 @@ public class Swipe extends AppCompatActivity {
 
                         movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
                         userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
-
-                        isThereAMatch(movieId);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -253,12 +240,6 @@ public class Swipe extends AppCompatActivity {
                 }
             }
 
-            private void isThereAMatch(String movieId) {
-
-
-
-            }
-
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
@@ -279,7 +260,6 @@ public class Swipe extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
-
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
