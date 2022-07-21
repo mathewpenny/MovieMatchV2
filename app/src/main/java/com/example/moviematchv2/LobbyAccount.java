@@ -41,6 +41,7 @@ public class LobbyAccount extends AppCompatActivity {
 
             logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
             updateBtn = (ImageButton) findViewById(R.id.updateButton);
+            deleteBtn = (ImageButton) findViewById(R.id.deleteButton);
 
             drawerLayout = findViewById(R.id.drawer_view2);
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -85,6 +86,14 @@ public class LobbyAccount extends AppCompatActivity {
                 }
             });
 
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LobbyAccount.this, DeleteAccount.class);
+                startActivity(intent);
+                finish();
+            }
+        });
             logoutBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

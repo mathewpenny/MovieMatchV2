@@ -152,33 +152,6 @@ public class UpdateAccount extends AppCompatActivity {
         userInfo.put("password", password);
         userDb.updateChildren(userInfo);
 
-    /*    if(resultUri != null) {
-            StorageReference filepath = FirebaseStorage.getInstance().getReference().child("profileImages").child(userId);
-            Bitmap bitmap = null;
-
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), resultUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
-            byte[] data = baos.toByteArray();
-            UploadTask uploadTask = filepath.putBytes(data);
-            uploadTask.addOnFailureListener(e -> { finish(); });
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //  Uri downloadUrl = taskSnapshot.getDownloadUrl(); // this is red and doesn't work for some reason.
-                    Map userInfo = new HashMap();
-                    userInfo.put("profileImageUrl",filepath);
-                    userDb.updateChildren(userInfo);
-                    finish();
-                }
-            });
-        } else {
-            finish();
-        }*/
         Toast.makeText(UpdateAccount.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();
     }
 

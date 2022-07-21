@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,8 +25,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     private EditText emailET, passwordET;
-    private ImageButton loginBtn;
-
+    private ImageButton loginBtn, backBtn;
+    private TextView forgotPassword;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
 
@@ -56,33 +58,47 @@ public class Login extends AppCompatActivity {
             passwordET = (EditText) findViewById(R.id.loginPassword);
 
             loginBtn = (ImageButton) findViewById(R.id.loginButton);
+            backBtn = (ImageButton) findViewById(R.id.backButton);
 
-            loginBtn.setOnClickListener(new View.OnClickListener() {
+            forgotPassword = (TextView) findViewById(R.id.forgotPassLink);
+
+            forgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final String email = emailET.getText().toString();
-                    final String password = passwordET.getText().toString();
+                    Intent intent = new Intent(Login.this, ForgotPassword.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-                    if (email.equals("")) {
-                        Toast.makeText(Login.this, "Email cannot be blank", Toast.LENGTH_SHORT).show();
-                        emailET.requestFocus();
-                    }
+            backBtn.setOnClickListener(view -> {
+                    Intent intent = new Intent(getApplicationContext(), LandingPage.class);
+                    startActivity(intent);
+                });
 
-                    if (password.equals("")) {
-                        Toast.makeText(Login.this, "Password cannot be blank", Toast.LENGTH_SHORT).show();
-                        passwordET.requestFocus();
-                    } else {
-                        // Create the user here with onCompleteListener to check if task is successful
-                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                //this will only be triggered if the registration was not successful.
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
-                                }
+            loginBtn.setOnClickListener(view -> {
+                final String email = emailET.getText().toString();
+                final String password = passwordET.getText().toString();
+
+                if (email.equals("")) {
+                    Toast.makeText(Login.this, "Email cannot be blank", Toast.LENGTH_SHORT).show();
+                    emailET.requestFocus();
+                }
+
+                if (password.equals("")) {
+                    Toast.makeText(Login.this, "Password cannot be blank", Toast.LENGTH_SHORT).show();
+                    passwordET.requestFocus();
+                } else {
+                    // Create the user here with onCompleteListener to check if task is successful
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //this will only be triggered if the registration was not successful.
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             });
         }

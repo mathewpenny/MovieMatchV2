@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:src="@drawable/logo"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="25dp"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -21,11 +21,22 @@
         android:textColor="@color/white"
         android:text="How to use"/>
 
-    <TextView android:id="@+id/textView3"
+    <TextView
+        android:id="@+id/howToText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Blablabla"/>
+        android:text="Once you have created an account, head to the Host section. Here you can choose a service
+(Netflix, Disney+ or Prime Video) and choose a genre. Enter your friends number and press
+the SEND button. Movies will start to appear and you can swipe left for NO or right for
+YES. Once a match is made, you have the movie or series that you will watch tonight!!"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text=""/>
 
     <TextView
         android:id="@+id/textView4"

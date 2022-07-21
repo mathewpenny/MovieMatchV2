@@ -65,7 +65,9 @@ public class Swipe extends AppCompatActivity {
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
-    private String uid;
+    private DatabaseReference userDb;
+    private String currentUid;
+
 
 
     @Override
@@ -115,14 +117,14 @@ public class Swipe extends AppCompatActivity {
 
             // Set up for saving matches
             mAuth = FirebaseAuth.getInstance();
-            uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
-
+            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+            movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
+            userDb = FirebaseDatabase.getInstance().getReference().child("Users");
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
             intent = getIntent();
             chosenStreaming = intent.getStringExtra("streaming");
-            chosenGenre = intent.getIntExtra("genre", 0); // need to find put why genre spinner doesn't work
+            chosenGenre = intent.getIntExtra("genre", 0);
             Log.e("test", "" + chosenGenre);
 
             // Set up for showing movies in recyclerview
@@ -140,9 +142,9 @@ public class Swipe extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                     JSONResponse jsonResponse = response.body();
-                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
-                    PutDataIntoRecyclerView(moviesList);
-                    enableSwipe();
+                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
+                        PutDataIntoRecyclerView(moviesList);
+                        enableSwipe();
                 }
 
                 @Override
@@ -206,14 +208,17 @@ public class Swipe extends AppCompatActivity {
                 } else {
                     final Movie deletedModel = moviesList.get(position);
 
-                    // Create a Movie object, save an ID and title into Database,
-                    // Save the current UID so that we can compare with invited user(?)
+                    // save the movie and the userId
                     String movieId = deletedModel.getTmdbID();
-                    String title = deletedModel.getTitle();
-                    String userId = mAuth.getCurrentUser().getUid();
+                    String movieTitle = deletedModel.getTitle();
+                    String userId = mAuth.getCurrentUser().getUid();  // current user, same as current Uid
+                    Log.e("MOVIE", ""+movieId);
+                    Log.e("USER", ""+userId);
 
-                    // movieDb stands for  movieDb = FirebaseDatabase.getInstance().getReference().child("Matches");
-                    movieDb.child("yups").child(movieId).child(userId).setValue(true);
+                        movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
+                        userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
+
+                        isThereAMatch(movieId);
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
@@ -247,6 +252,13 @@ public class Swipe extends AppCompatActivity {
                     });
                 }
             }
+
+            private void isThereAMatch(String movieId) {
+
+
+
+            }
+
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
