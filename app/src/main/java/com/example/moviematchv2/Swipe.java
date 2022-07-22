@@ -203,14 +203,14 @@ public class Swipe extends AppCompatActivity {
                     String movieTitle = deletedModel.getTitle();
                     String userId = mAuth.getCurrentUser().getUid();  // current user, same as current Uid
                     Log.e("MOVIE", ""+movieId);
-                    Log.e("USER", ""+userId);
+                    Log.e("CURRENTUSER", ""+userId);
 
                         movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
                         userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
 
                         // getChildrenCount to check for more than 1 child, if yes, there is a match!
-                    DatabaseReference userDeepDive = userDb.child(currentUid).child("connections").child("services").child("netflix").child("yup").child("movieId");
+                    DatabaseReference userDeepDive = userDb.child("ZW0wxUpuTRaPjLZQlXFOfLRYrxj1").child("connections").child("services").child(chosenStreaming).child("yup").child("movieId");
 
                     DatabaseReference movieDeepDive = movieDb.child("services").child("netflix").child("yup").child(movieId);
                     movieDeepDive.addValueEventListener(new ValueEventListener() {
@@ -221,9 +221,9 @@ public class Swipe extends AppCompatActivity {
                                     // maybe look at USERSNAP tag and find a way to compare it to
                                     // the movieIds in movieDeepDive??
                                     compareUserIds = "" + movieSnapshot.getValue();
-                                    Log.e("MOVIESNAP", "" + compareUserIds);
-                                    if(movieSnapshot.getChildrenCount() > 1 )
-                                    Toast.makeText(Swipe.this, "Mathc Made!", Toast.LENGTH_SHORT).show();
+                                    Log.e("USERIDSNAP", "" + compareUserIds);
+                                    if(movieSnapshot.getChildrenCount() > 1)
+                                    Toast.makeText(Swipe.this, "Match Made!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
