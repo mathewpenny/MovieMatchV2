@@ -49,7 +49,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/hostButton"
+                android:id="@+id/swipeButton"
                 android:layout_width="250dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 android:layout_height="30sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
-                android:text="Host?"
+                android:text="Swipe"
                 android:textSize="20sp"/>
         </FrameLayout>
 
@@ -71,7 +71,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/joinButton"
+                android:id="@+id/matchButton"
                 android:layout_width="250dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
@@ -83,7 +83,7 @@
                 android:layout_height="30sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
-                android:text="Join?"
+                android:text="Matches"
                 android:textSize="20sp"/>
         </FrameLayout>
 

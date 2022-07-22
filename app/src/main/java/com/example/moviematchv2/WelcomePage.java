@@ -100,8 +100,8 @@ public class WelcomePage extends AppCompatActivity {
             }
         });
 
-            searchBtn = (ImageButton) findViewById(R.id.hostButton);
-            matchesBtn = (ImageButton) findViewById(R.id.joinButton);
+            searchBtn = (ImageButton) findViewById(R.id.swipeButton);
+            matchesBtn = (ImageButton) findViewById(R.id.matchButton);
             accountBtn = (ImageButton) findViewById(R.id.accountButton);
             name = (TextView) findViewById(R.id.nameText);
 

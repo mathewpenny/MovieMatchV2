@@ -68,7 +68,8 @@ public class Swipe extends AppCompatActivity {
     private DatabaseReference userDb;
     private String currentUid;
 
-
+    private String currentUserMoviesYupped;
+    private String compareUserIds, finalAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +207,31 @@ public class Swipe extends AppCompatActivity {
 
                         movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
                         userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
+
+
+                        // getChildrenCount to check for more than 1 child, if yes, there is a match!
+                    DatabaseReference userDeepDive = userDb.child(currentUid).child("connections").child("services").child("netflix").child("yup").child("movieId");
+
+                    DatabaseReference movieDeepDive = movieDb.child("services").child("netflix").child("yup").child(movieId);
+                    movieDeepDive.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.getValue() != null) {
+                                for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
+                                    // maybe look at USERSNAP tag and find a way to compare it to
+                                    // the movieIds in movieDeepDive??
+                                    compareUserIds = "" + movieSnapshot.getValue();
+                                    Log.e("MOVIESNAP", "" + compareUserIds);
+                                    if(movieSnapshot.getChildrenCount() > 1 )
+                                    Toast.makeText(Swipe.this, "Mathc Made!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
