@@ -5,42 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@id/drawer_view2"
-    android:background="@drawable/accountbg"
+    android:background="@drawable/landingbg"
     tools:context=".LobbyAccount">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/logoImg"
             android:layout_width="139dp"
             android:layout_height="100dp"
             android:layout_marginTop="25dp"
             app:srcCompat="@drawable/logo"
             tools:layout_editor_absoluteX="58dp"
-            tools:layout_editor_absoluteY="104dp"/>
+            tools:layout_editor_absoluteY="104dp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account Page"
-            android:textAlignment="center"
-            android:fontFamily="@font/bangers"
-            android:textColor="#CDC300"
-            android:textSize="32sp"/>
-
-
-
-        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="55dp"
+            android:layout_marginEnd="85dp"
+            android:fontFamily="@font/bangers"
+            android:text="Account Page"
+            android:textAlignment="center"
+            android:textColor="#CDC300"
+            android:textSize="32sp" />
+
+        <FrameLayout
+            android:id="@+id/updateFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logoImg"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="95dp">
 
             <ImageButton
                 android:id="@+id/updateButton"
@@ -53,17 +54,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30sp"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Update"
-                android:textSize="20sp"/>
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_below="@+id/logoImg"
+            android:layout_gravity="center"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="95dp">
 
             <ImageButton
                 android:id="@+id/deleteButton"
@@ -71,75 +75,76 @@
                 android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30sp"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Delete"
-                android:textSize="20sp"/>
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_below="@+id/updateFrame"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="75dp">
 
-            <ImageButton android:id="@+id/reviewButton"
+            <ImageButton
+                android:id="@+id/reviewButton"
                 android:layout_width="175dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30sp"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Review"
-                android:textSize="20sp"/>
+                android:textColor="@color/white"
+                android:textSize="20sp" />
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_below="@+id/updateFrame"
+            android:layout_gravity="center"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="75dp">
 
-            <ImageButton android:id="@+id/logoutButton"
+            <ImageButton
+                android:id="@+id/logoutButton"
                 android:layout_width="175dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30sp"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Logout"
-                android:textSize="20sp"/>
+                android:textColor="@color/white"
+                android:textSize="20sp" />
         </FrameLayout>
 
-
-
-
-    </LinearLayout>
-
-
-</RelativeLayout>
-
+    </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/drawer_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/header_layout"
-        app:menu="@menu/drawer_menu"/>
+            android:id="@+id/drawer_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/header_layout"
+            app:menu="@menu/drawer_menu"/>
 
-</androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>

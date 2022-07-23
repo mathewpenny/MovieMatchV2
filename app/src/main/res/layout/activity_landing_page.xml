@@ -1,4 +1,4 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,28 +9,28 @@
     tools:context=".LandingPage">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/logoImg"
         android:layout_width="139dp"
         android:layout_height="100dp"
         android:layout_marginTop="25dp"
+        android:layout_alignParentLeft="true"
         app:srcCompat="@drawable/logo"
         tools:layout_editor_absoluteX="58dp"
         tools:layout_editor_absoluteY="104dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView" />
 
         <FrameLayout
+            android:id="@+id/loginFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:layout_gravity="center">
+            android:layout_marginTop="85dp"
+            android:layout_gravity="center"
+            android:layout_below="@+id/logoImg"
+            android:layout_marginStart="110dp">
 
             <ImageButton
                 android:id="@+id/loginButton"
-                android:layout_width="175dp"
+                android:layout_width="200dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_baseline_theaters_24"
@@ -42,18 +42,21 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Login"
-                android:textSize="20sp"/>
+                android:textSize="18sp"/>
 
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/registerFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_below="@+id/loginFrame"
+            android:layout_marginStart="110dp">
 
             <ImageButton
                 android:id="@+id/registerButton"
-                android:layout_width="175dp"
+                android:layout_width="200dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_baseline_theaters_24"
@@ -65,49 +68,50 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Register"
-                android:textSize="20sp"/>
+                android:textSize="18sp"/>
         </FrameLayout>
 
     <FrameLayout
         android:layout_marginTop="75dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Or Register with:"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+        android:layout_gravity="center"
+        android:layout_below="@+id/registerFrame">
 
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/regText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="bottom"
-        android:orientation="horizontal">
+        android:layout_below="@+id/registerFrame"
+        android:layout_marginTop="10dp"
+        android:text="Or Register with:"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp" />
 
-        <ImageButton
-            android:id="@+id/googleSignIn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_google" />
+    <ImageButton
+        android:id="@+id/metaSignIn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/regText"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="15dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icons8_facebook" />
 
-        <ImageButton
-            android:id="@+id/metaSignIn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="40dp"
-            android:padding="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icons8_facebook" />
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/googleSignIn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/regText"
+        android:layout_marginStart="230dp"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icons8_google" />
 
-</LinearLayout>
+</RelativeLayout>
