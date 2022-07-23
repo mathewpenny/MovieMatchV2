@@ -173,4 +173,10 @@ public class UpdateAccount extends AppCompatActivity {
                 }
             }
         }
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(UpdateAccount.this, LobbyAccount.class);
+        startActivity(intent);
+        finish();
+    }
     }
