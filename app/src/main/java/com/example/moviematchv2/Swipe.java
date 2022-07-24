@@ -73,6 +73,7 @@ public class Swipe extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private DatabaseReference userDb;
+    private DatabaseReference matchedUserDb;
     private String currentUid;
 
     private String currentUserMoviesYupped;
@@ -129,6 +130,7 @@ public class Swipe extends AppCompatActivity {
             currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
             movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
             userDb = FirebaseDatabase.getInstance().getReference().child("Users");
+            matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
             intent = getIntent();
@@ -214,6 +216,7 @@ public class Swipe extends AppCompatActivity {
                         movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
                         userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
+
                     DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
                     movieDeepDive.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -221,21 +224,20 @@ public class Swipe extends AppCompatActivity {
                             if(snapshot.getValue() != null) {
                                 for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
                                     compareUserIds = "" + movieSnapshot.getValue();
-                                    Map<String, Object> neededUserId = new HashMap<>();
-                                    neededUserId.put("key", compareUserIds);
-                                    movieDb.updateChildren(neededUserId);
 
                                     Log.e("USERIDS", ""+ compareUserIds);
 
-                                    if(movieSnapshot.getChildrenCount() > 1 && !Objects.equals(currentUid, compareUserIds)) {
-                                        Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_LONG).show();
+                                    if(movieSnapshot.getChildrenCount() > 1) {
+                                        Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
                                         matchMovies.add(movieTitle);
                                         if(movieSnapshot.hasChildren()) {
                                             Iterator<DataSnapshot> iterator = movieSnapshot.getChildren().iterator();
                                             while(iterator.hasNext()) {
+                                                matchedUserDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("userId");
                                                 movieSnapshot = iterator.next();
                                                 String userNodeId = movieSnapshot.getKey();
                                                 String matchedIds = (String) movieSnapshot.getValue();
+                                                Toast.makeText(Swipe.this, "We can watch " + movieTitle + " with " + matchedIds, Toast.LENGTH_SHORT).show();
                                                 Log.e("MATCHEDIDS", "" + matchedIds + " with key " + userNodeId);
                                             }
                                         }

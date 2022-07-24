@@ -33,6 +33,7 @@ import java.util.Objects;
 
 
 public class LobbyGuest extends AppCompatActivity {
+
     Intent intent;
     NavigationView navigationView;
     GoogleSignInClient gsc;
@@ -46,7 +47,7 @@ public class LobbyGuest extends AppCompatActivity {
     private DatabaseReference userDb;
     private String currentUid;
     private String currentUserMoviesYupped;
-    private String compareUserIds, finalAnswer;
+    private String compareUserIds, movieIds;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -99,54 +100,16 @@ public class LobbyGuest extends AppCompatActivity {
             }
         });
 
+
         // Set up for checking matches
         mAuth = FirebaseAuth.getInstance();
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid(); // current User
-        movieDb = FirebaseDatabase.getInstance().getReference().child("Movies"); // movie reference for other userIds
+        movieDb = FirebaseDatabase.getInstance().getReference().child("Movies").child("services").child("netflix").child("yup").child("userId"); // movie reference for other userIds
         userDb = FirebaseDatabase.getInstance().getReference().child("Users"); // user reference to get other users and current user movie swipes
-        DatabaseReference userDeepDive = userDb.child(currentUid).child("connections").child("services").child("netflix").child("yup").child("movieId");
-       // DatabaseReference movieDeepDive = movieDb.child("services").child("netflix").child("yup").child(currentUserMoviesYupped);
 
-
-        userDeepDive.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue() != null) {
-                    for(DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        currentUserMoviesYupped = "" + userSnapshot.getValue();
-                        Log.e("USERSNAP", "" + currentUserMoviesYupped);
-                        Log.e("CURRENTUSERID", ""+ currentUid);
-                      // Log.e("MOVIEDEEPDIVE", ""+ movieDeepDive);
-                    }
-
-                    DatabaseReference movieDeepDive = movieDb.child("services").child("netflix").child("yup").child(currentUserMoviesYupped);
-                    movieDeepDive.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.getValue() != null) {
-                                for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
-                                    // maybe look at USERSNAP tag and find a way to compare it to
-                                    // the movieIds in movieDeepDive??
-                                        compareUserIds = "" + movieSnapshot.getValue();
-                                        Log.e("MOVIESNAP", "" + compareUserIds);
-
-                                }
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        
     }
+
 
 
     @Override

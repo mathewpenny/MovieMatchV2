@@ -25,7 +25,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     private Context context;
     public List<Movie> moviesList;
-    private int position; //new
+    private int position;
 
     public int getPosition() {
         return position;
@@ -90,10 +90,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         TextView title;
         ImageView poster;
 
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.setOnCreateContextMenuListener(this); //new
+            itemView.setOnCreateContextMenuListener(this);
             title = itemView.findViewById(R.id.textView);
             poster = itemView.findViewById(R.id.imageView);
         }
