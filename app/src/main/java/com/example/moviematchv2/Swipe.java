@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.internal.Utility;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,10 +32,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -131,7 +134,7 @@ public class Swipe extends AppCompatActivity {
             intent = getIntent();
             chosenStreaming = intent.getStringExtra("streaming");
             chosenGenre = intent.getIntExtra("genre", 0);
-            Log.e("test", "" + chosenGenre);
+            Log.e("CHOSENGENRE", "" + chosenGenre);
 
             // Set up for showing movies in recyclerview
             recyclerView = findViewById(R.id.recyclerView);
@@ -147,14 +150,12 @@ public class Swipe extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                     JSONResponse jsonResponse = response.body();
-                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
+                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
                         PutDataIntoRecyclerView(moviesList);
                         enableSwipe();
                 }
-
                 @Override
                 public void onFailure(Call<JSONResponse> call, Throwable t) {
-
                 }
             });
             registerForContextMenu(recyclerView);
@@ -189,74 +190,72 @@ public class Swipe extends AppCompatActivity {
 
                     final int deletedPosition = position;
                     adapter.removeItem(position);
-                    // showing snack bar with Undo option
+
                     Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Not today!", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // undo is selected, restore the deleted item
                             adapter.restoreItem(deletedModel, deletedPosition);
                         }
                     });
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
                 } else {
+                    // if swiped yes
                     final Movie deletedModel = moviesList.get(position);
 
-                    // save the movie and the userId
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
-                    String userId = mAuth.getCurrentUser().getUid();  // current user, same as current Uid
+                    String userId = mAuth.getCurrentUser().getUid();
+
                     Log.e("MOVIE", ""+movieId);
                     Log.e("CURRENTUSER", ""+userId);
-
 
                         movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
                         userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
-
-                        // getChildrenCount to check for more than 1 child, if yes, there is a match!
-                    DatabaseReference userDeepDive = userDb.child("ZW0wxUpuTRaPjLZQlXFOfLRYrxj1").child("connections").child("services").child(chosenStreaming).child("yup").child("movieId");
-
-
-                    DatabaseReference movieDeepDive = movieDb.child("services").child("netflix").child("yup").child(movieId);
+                    DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
                     movieDeepDive.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.getValue() != null) {
                                 for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
-                                    // maybe look at USERSNAP tag and find a way to compare it to
-                                    // the movieIds in movieDeepDive??
-
                                     compareUserIds = "" + movieSnapshot.getValue();
                                     Map<String, Object> neededUserId = new HashMap<>();
                                     neededUserId.put("key", compareUserIds);
                                     movieDb.updateChildren(neededUserId);
 
-                                    Log.e("USERIDSNAP", "" + compareUserIds);
-                                    if(movieSnapshot.getChildrenCount() > 1) {
-                                        Toast.makeText(Swipe.this, "Match Made! On movie " + movieTitle, Toast.LENGTH_LONG).show();
+                                    Log.e("USERIDS", ""+ compareUserIds);
+
+                                    if(movieSnapshot.getChildrenCount() > 1 && !Objects.equals(currentUid, compareUserIds)) {
+                                        Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_LONG).show();
                                         matchMovies.add(movieTitle);
+                                        if(movieSnapshot.hasChildren()) {
+                                            Iterator<DataSnapshot> iterator = movieSnapshot.getChildren().iterator();
+                                            while(iterator.hasNext()) {
+                                                movieSnapshot = iterator.next();
+                                                String userNodeId = movieSnapshot.getKey();
+                                                String matchedIds = (String) movieSnapshot.getValue();
+                                                Log.e("MATCHEDIDS", "" + matchedIds + " with key " + userNodeId);
+                                            }
+                                        }
                                         Log.e("Matched", "" + matchMovies);
+
                                     }
                                 }
                             }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                     Log.e("Matched", "" + matchMovies);
                     final int deletedPosition = position;
                     adapter.removeItem(position);
-                    // showing snack bar with Undo option
                     Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Hope we get a match!", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // undo is selected, restore the deleted item
                             adapter.restoreItem(deletedModel, deletedPosition);
                         }
                     });
@@ -270,7 +269,7 @@ public class Swipe extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                             JSONResponse jsonResponse = response.body();
-                            moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
+                            moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
                             PutDataIntoRecyclerView(moviesList);
                             enableSwipe();
                             count = 0;
@@ -322,6 +321,7 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public void onBackPressed () {
+        moviesList.clear();
         Intent intent = new Intent(Swipe.this, WelcomePage.class);
         startActivity(intent);
         finish();
