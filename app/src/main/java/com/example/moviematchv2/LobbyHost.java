@@ -1,30 +1,30 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 public class LobbyHost extends AppCompatActivity {
     private Spinner streamingSpn;
     private Spinner genreSpn;
+    private Spinner typeSpn;
     private EditText phoneNumber;
     private ImageButton sendBtn;
     private String friendNumber;
     private Integer chosenGenre;
     private String chosenStreaming;
+    private String chosenType;
 
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -58,6 +58,19 @@ public class LobbyHost extends AppCompatActivity {
                 public void onNothingSelected(AdapterView<?> adapterView) {
                     Toast.makeText(LobbyHost.this, "Please choose a service.", Toast.LENGTH_SHORT).show();
                     streamingSpn.requestFocus();
+                }
+            });
+
+            typeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    chosenType = typeSpn.getSelectedItem().toString();
+                }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(LobbyHost.this, "Please choose a type.", Toast.LENGTH_SHORT).show();
+                streamingSpn.requestFocus();
                 }
             });
 
@@ -140,6 +153,9 @@ public class LobbyHost extends AppCompatActivity {
                         streamingSpn.requestFocus();
                     }if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
                         Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show();
+                        genreSpn.requestFocus();
+                    }if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
+                        Toast.makeText(LobbyHost.this, "Please choose a Type", Toast.LENGTH_SHORT).show();
                         genreSpn.requestFocus();
                     } else {
                         Intent intent = new Intent(getApplicationContext(), Swipe.class);

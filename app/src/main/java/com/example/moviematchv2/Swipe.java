@@ -58,6 +58,7 @@ public class Swipe extends AppCompatActivity {
     private String chosenStreaming;
     private Button seeMatches;
     private int chosenGenre;
+    private String chosenType;
     private Intent intent;
     NavigationView navigationView;
     GoogleSignInClient gsc;
@@ -141,6 +142,7 @@ public class Swipe extends AppCompatActivity {
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
             intent = getIntent();
+            chosenType = intent.getStringExtra("type");
             chosenStreaming = intent.getStringExtra("streaming");
             chosenGenre = intent.getIntExtra("genre", 0);
             Log.e("CHOSENGENRE", "" + chosenGenre);
@@ -154,7 +156,7 @@ public class Swipe extends AppCompatActivity {
                     .build();
             movieApi = retrofit.create(MovieApi.class);
 
-            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenGenre);
+            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
             call.enqueue(new Callback<JSONResponse>() {
                 @Override
                 public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -268,7 +270,7 @@ public class Swipe extends AppCompatActivity {
                 }
                 count++;
                 if (count == 8) {
-                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenGenre);
+                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
                     call.enqueue(new Callback<JSONResponse>() {
                         @Override
                         public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

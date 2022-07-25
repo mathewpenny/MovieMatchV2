@@ -18,8 +18,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class LobbyGuest extends AppCompatActivity {
@@ -87,6 +89,13 @@ public class LobbyGuest extends AppCompatActivity {
                 return false;
             }
         });
+
+            // get a reference of the userDB holding the movieIds so we have a key and a movie id. then reference the moviesDb, compare the ids and
+            // return all other userIds and then display the names and phone numbers in the recyclerView on Matches activity
+            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+            userDb = FirebaseDatabase.getInstance().getReference(); //.child("Users"); //.child(currentUid).child("connections").child("services").child("netflix").child("movieId");
+
+
 
     }
 

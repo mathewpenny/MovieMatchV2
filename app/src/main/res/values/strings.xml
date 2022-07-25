@@ -16,6 +16,12 @@
         <item>disney</item>
     </string-array>
 
+    <string-array name="type">
+        <item>Choose Type</item>
+        <item>movie</item>
+        <item>series</item>
+    </string-array>
+
     <string-array name="genre">
         <item>Choose Genre</item>
         <item>No preference</item>

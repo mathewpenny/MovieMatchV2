@@ -26,6 +26,14 @@
             android:entries="@array/streamingPlatform"/>
 
         <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/type"/>
+
+        <Spinner
             android:id="@+id/genreSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
