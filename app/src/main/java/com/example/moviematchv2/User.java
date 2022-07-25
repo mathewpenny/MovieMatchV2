@@ -7,12 +7,24 @@ public class User {
     private String userPhone;
     private String userEmail;
 
+/*    public User() {
+    }
+
+    public User(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+    }
+
+    public User(String userId) {
+        this.userId = userId;
+    }
+
     public User(String userId, String userName, String userPhone, String userEmail) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
-    }
+    }*/
 
     public String getUserId() {
         return userId;

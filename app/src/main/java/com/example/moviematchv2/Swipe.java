@@ -1,13 +1,5 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,9 +9,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.internal.Utility;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -32,14 +32,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Tag;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -59,6 +56,7 @@ public class Swipe extends AppCompatActivity {
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
+    private Button seeMatches;
     private int chosenGenre;
     private Intent intent;
     NavigationView navigationView;
@@ -66,7 +64,7 @@ public class Swipe extends AppCompatActivity {
     GoogleSignInOptions gso;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    List<String> matchMovies;
+    ArrayList<String> matchMovies;
 
 
     // Variables for Database and Saving Matches
@@ -75,9 +73,7 @@ public class Swipe extends AppCompatActivity {
     private DatabaseReference userDb;
     private DatabaseReference matchedUserDb;
     private String currentUid;
-
-    private String currentUserMoviesYupped;
-    private String compareUserIds, finalAnswer;
+    private String compareUserIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +85,21 @@ public class Swipe extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         matchMovies = new ArrayList<>();
 
+        seeMatches = findViewById(R.id.seeMatches);
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //MAyBE NEED THIS< MAYBE NOT
+        seeMatches.setOnClickListener(view -> {
+            intent = new Intent(Swipe.this, LobbyGuest.class);
+            intent.putStringArrayListExtra("matches", matchMovies);
+            startActivity(intent);
+            finish();
+        });
+
 
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -131,6 +137,7 @@ public class Swipe extends AppCompatActivity {
             movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
             userDb = FirebaseDatabase.getInstance().getReference().child("Users");
             matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
+
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
             intent = getIntent();
@@ -194,12 +201,8 @@ public class Swipe extends AppCompatActivity {
                     adapter.removeItem(position);
 
                     Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Not today!", Snackbar.LENGTH_LONG);
-                    snackbar.setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            adapter.restoreItem(deletedModel, deletedPosition);
-                        }
-                    });
+                    snackbar.setAction("UNDO", view ->
+                            adapter.restoreItem(deletedModel, deletedPosition));
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
                 } else {
@@ -242,7 +245,6 @@ public class Swipe extends AppCompatActivity {
                                             }
                                         }
                                         Log.e("Matched", "" + matchMovies);
-
                                     }
                                 }
                             }

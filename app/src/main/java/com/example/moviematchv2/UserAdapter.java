@@ -1,7 +1,7 @@
 package com.example.moviematchv2;
 
+
 import android.content.Context;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolder> {
+
 
     private Context context;
     public List<User> usersList;
@@ -37,7 +34,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
     }
 
 
-
     @NonNull
     @Override
     public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,15 +45,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
-        holder.movieTitle.setText(moviesList.get(position).getTitle());
 
-        Glide.with(context).
+      //  holder.movieTitle.setText(usersList.get(position).getUserName());
+
+/*
+     Glide.with(context).
                 load(moviesList.get(position)
                         .getPosterURLs().getOriginal())
                 .into(holder.poster);
+*/
 
-        holder.userName.setText(usersList.get(position).getUserName());
-        holder.userPhone.setText(usersList.get(position).getUserPhone());
+
+        holder.userName.setText(usersList.get(position).getUserId());
+    //    holder.userPhone.setText(usersList.get(position).getUserPhone());
     }
 
     @Override
@@ -81,4 +81,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
         }
 
     }
-}
+    }
+
+
