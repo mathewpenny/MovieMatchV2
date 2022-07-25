@@ -4,12 +4,51 @@ public class Movie {
 
     private String title, tmdbID;
     private PosterURLs posterURLs;
+    private int year;
+    private int runtime;
+    private String overview;
+    private String originalLanguage;
 
-
-    public Movie(String title, String tmdbID, PosterURLs posterURLS) {
+    public Movie(String title, String tmdbID, int year, int runtime, String overview, PosterURLs posterURLS, String originalLanguage) {
         this.title = title;
         this.tmdbID = tmdbID;
+        this.year = year;
+        this.runtime = runtime;
+        this.overview = overview;
         this.posterURLs = posterURLS;
+        this.originalLanguage = originalLanguage;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
     public Movie() {

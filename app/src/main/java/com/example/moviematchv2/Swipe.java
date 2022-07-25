@@ -51,13 +51,13 @@ public class Swipe extends AppCompatActivity {
     // Variables for API call and Swipeable RecyclerView
     private Paint p = new Paint();
     private RecyclerView recyclerView;
-    private List<Movie> moviesList;
+    public static List<Movie> moviesList;
     private Retrofit retrofit;
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
     private Button seeMatches;
-    private int chosenGenre;
+    private int chosenGenre, position;
     private String chosenType;
     private Intent intent;
     NavigationView navigationView;
@@ -161,9 +161,14 @@ public class Swipe extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                     JSONResponse jsonResponse = response.body();
+                    if(jsonResponse != null) {
                         moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
                         PutDataIntoRecyclerView(moviesList);
                         enableSwipe();
+                    } else {
+                        Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+                    }
+
                 }
                 @Override
                 public void onFailure(Call<JSONResponse> call, Throwable t) {
@@ -275,9 +280,13 @@ public class Swipe extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                             JSONResponse jsonResponse = response.body();
-                            moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                            PutDataIntoRecyclerView(moviesList);
-                            enableSwipe();
+                            if(jsonResponse != null) {
+                                moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                                PutDataIntoRecyclerView(moviesList);
+                                enableSwipe();
+                            } else {
+                                Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+                            }
                             count = 0;
                         }
                         @Override
@@ -310,19 +319,41 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        int clickedItemPosition = item.getOrder();
-        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getApplicationContext(), Details.class);
-        startActivity(intent);
-        return true;
-    }
+        Log.e("item","" + item);
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
+        call.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                JSONResponse jsonResponse = response.body();
+                if(jsonResponse != null) {
+                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                    PutDataIntoRecyclerView(moviesList);
+                    enableSwipe();
+                } else {
+                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
 
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+
+            }
+        });
+        return true;
+
+    }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void details(View view) {
+        position =  recyclerView.getChildAdapterPosition(view);
+        Intent intent = new Intent(getApplicationContext(), Details.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 
     @Override

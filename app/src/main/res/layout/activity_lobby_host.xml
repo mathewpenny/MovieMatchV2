@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@id/drawer_view">
+    android:id="@id/drawer_view2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,9 +13,9 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:src="@drawable/logo"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="10dp"/>
 
         <Spinner
             android:id="@+id/streamingSpinner"
@@ -41,7 +41,8 @@
             android:layout_marginTop="20dp"
             android:entries="@array/genre"/>
 
-        <EditText android:id="@+id/phoneNumber"
+        <EditText
+            android:id="@+id/phoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -84,6 +85,7 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_view"
         android:layout_width="wrap_content"
@@ -91,4 +93,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_layout"
         app:menu="@menu/drawer_menu"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>

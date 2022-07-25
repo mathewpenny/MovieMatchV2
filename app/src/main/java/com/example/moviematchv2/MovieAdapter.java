@@ -1,23 +1,19 @@
 package com.example.moviematchv2;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
@@ -70,13 +66,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                         .getPosterURLs().getOriginal())
                 .into(holder.poster);
 
-        holder.title.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                setPosition(holder.getPosition());
-                return true;
-            }
+        holder.title.setOnLongClickListener(v -> {
+            setPosition(holder.getPosition());
+            return true;
         });
+        holder.title.setOnClickListener(view -> setPosition(holder.getPosition()));
 
     }
 
@@ -97,11 +91,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             poster = itemView.findViewById(R.id.imageView);
         }
 
-
         @Override
         public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo MenuInfo) {
             menu.setHeaderTitle("Select Action");
-            menu.add(0, Menu.NONE,getAdapterPosition(),"Details");
+            menu.add(0, Menu.NONE,getAdapterPosition(),"netflix");
+            menu.add(1, Menu.NONE,getAdapterPosition(),"prime");
+            menu.add(2, Menu.NONE,getAdapterPosition(),"disney");
         }
     }
 }
