@@ -35,7 +35,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -222,7 +221,7 @@ public class Swipe extends AppCompatActivity {
                     Log.e("MOVIE", ""+movieId);
                     Log.e("CURRENTUSER", ""+userId);
 
-                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
+                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
                     userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
                     DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
@@ -238,7 +237,7 @@ public class Swipe extends AppCompatActivity {
                                     if(movieSnapshot.getChildrenCount() > 1) {
                                         Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
                                         matchMovies.add(movieTitle);
-                                        if(movieSnapshot.hasChildren()) {
+                              /*          if(movieSnapshot.hasChildren()) {
                                             Iterator<DataSnapshot> iterator = movieSnapshot.getChildren().iterator();
                                             while(iterator.hasNext()) {
                                                 matchedUserDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("userId");
@@ -248,7 +247,7 @@ public class Swipe extends AppCompatActivity {
                                                 Toast.makeText(Swipe.this, "We can watch " + movieTitle + " with " + matchedIds, Toast.LENGTH_SHORT).show();
                                                 Log.e("MATCHEDIDS", "" + matchedIds + " with key " + userNodeId);
                                             }
-                                        }
+                                        }*/
                                         Log.e("Matched", "" + matchMovies);
                                     }
                                 }
@@ -357,7 +356,7 @@ public class Swipe extends AppCompatActivity {
                     @Override
                     public void onBackPressed () {
                         moviesList.clear();
-                        Intent intent = new Intent(Swipe.this, WelcomePage.class);
+                        Intent intent = new Intent(Swipe.this, LobbyHost.class);
                         startActivity(intent);
                         finish();
                     }
