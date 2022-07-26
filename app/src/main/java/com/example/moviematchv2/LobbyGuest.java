@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,6 +48,7 @@ public class LobbyGuest extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private String matchMovieIds;
     ArrayList<String> matchMovies;
+    ArrayList<String> movieIds;
 
 
 
@@ -98,31 +100,42 @@ public class LobbyGuest extends AppCompatActivity {
             // get a reference of the userDB holding the movieIds so we have a key and a movie id. then reference the moviesDb, compare the ids and
             // return all other userIds and then display the names and phone numbers in the recyclerView on Matches activity
             currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            userDb = FirebaseDatabase.getInstance().getReference().child("Users");//.child(currentUid).child("connections").child("services").child("netflix").child("movieId");
-            DatabaseReference userDeepDive = userDb.child(currentUid).child("connections").child("services").child("netflix").child("movieId");
-            // Log.e("USER_DB", ""+ userDb);
-            // Log.e("USER_ID", ""+ currentUid);
+            userDb = FirebaseDatabase.getInstance().getReference().child("Users");
+            DatabaseReference matchDb =  FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid);
+            DatabaseReference matchDbAgain = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid).child("connections");
+            DatabaseReference matchDbAgain1 = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid).child("connections").child("services");
+            DatabaseReference netflixMatches = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid).child("connections").child("services").child("netflix");
+            DatabaseReference netflixMatchesYup = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid).child("connections").child("services").child("netflix").child("yup");
+            DatabaseReference netflixMatchesYupIDs = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUid).child("connections").child("services").child("netflix").child("yup").child("movieId");
 
-          userDb.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Log.e("SNAPSHOT", ""+ snapshot);
-                    Log.e("DEEP_DIVE", "" + userDeepDive);
 
-                    if(snapshot.getValue() != null) {
-                        matchMovieIds = "" + snapshot.getValue();
-                        Log.e("MATCH_MOVIE_ID", "" + matchMovieIds);
+             Log.e("USER_DB", ""+ userDb);
+          // Log.e("DEEP_DIVE", ""+ userDeepDive);
+            Log.e("MATCH_DB", ""+ matchDb);
+            Log.e("MATCH_DB", ""+ matchDbAgain);
+            Log.e("MATCH_DB", ""+ matchDbAgain1);
+            Log.e("NETFLIX", ""+ netflixMatches);
+
+        netflixMatchesYupIDs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.e("SNAPSHOT", "" + snapshot);
+                        if(snapshot.hasChildren()) {
+                            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+                            while(iterator.hasNext()) {
+                                snapshot = iterator.next();
+                                String movieIds = (String) snapshot.getValue();
+                                Log.e("MOVIE_IDS_FROM_USER",  movieIds);
+                            }
+                        }
                     }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("DATABASE_ERROR", "Oh snap!! On Cancelled fired!");
-                }
-            });
-
-    }
+                    }
+                });
+        }
 
             private void PutDataIntoRecyclerView(List<User> usersList) {
                 adapter = new UserAdapter(this, usersList);
@@ -144,4 +157,4 @@ public class LobbyGuest extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-}
+        }
