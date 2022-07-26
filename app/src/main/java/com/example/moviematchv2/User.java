@@ -7,7 +7,7 @@ public class User {
     private String userPhone;
     private String userEmail;
 
-/*    public User() {
+  public User() {
     }
 
     public User(String userId, String userName) {
@@ -24,7 +24,7 @@ public class User {
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
-    }*/
+    }
 
     public String getUserId() {
         return userId;

@@ -51,7 +51,7 @@ public class LobbyGuest extends AppCompatActivity {
     ArrayList<String> usersIdList;
     ArrayList<String> matchMovies;
     ArrayList<String> movieIdsList;
-
+    ArrayList<User> userArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +111,8 @@ public class LobbyGuest extends AppCompatActivity {
 
             movieIdsList = new ArrayList<>();
             usersIdList = new ArrayList<>();
+            userArrayList = new ArrayList<User>();
+
 
         netflixMatchesYupIDs.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -161,9 +163,29 @@ public class LobbyGuest extends AppCompatActivity {
                                                 Log.e("SNAPNEXT", "" + snapNext);
                                                 String userIds = (String) snapNext.child("userIds").getValue();
                                                 Log.e("USER_IDS", "" + userIds);
+                                                if(!userIds.equals(currentUid))
                                                 usersIdList.add(userIds);
                                                 Log.e("USER_IDS_FROM_MOVIES", "" + usersIdList);
 
+                                            userDb.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    Iterable<DataSnapshot> snapIter = snapshot.getChildren();
+                                                    Iterator<DataSnapshot> iterator = snapIter.iterator();
+
+                                                    while(iterator.hasNext()) {
+                                                        DataSnapshot snapNext = (DataSnapshot) iterator.next();
+                                                        String name = (String) snapNext.child("name").getValue();
+                                                        User user = new User(name);
+                                                        userArrayList.add(user);
+                                                        PutDataIntoRecyclerView(userArrayList);
+                                                    }
+                                                }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
                                         }
                                     }
                                     @Override
@@ -182,9 +204,14 @@ public class LobbyGuest extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+
+
+        PutDataIntoRecyclerView(userArrayList);
     }
 
-            private void PutDataIntoRecyclerView(List<User> usersList) {
+
+        private void PutDataIntoRecyclerView(List<User> usersList) {
                 adapter = new UserAdapter(this, usersList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
