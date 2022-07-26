@@ -33,11 +33,11 @@ public class LobbyHost extends AppCompatActivity {
     private Integer chosenGenre;
     private String chosenStreaming;
     private String chosenType; //new
-    NavigationView navigationView;
-    Intent intent;
+    private NavigationView navigationView;
+    private Intent intent;
     private FirebaseAuth mAuth;
-    GoogleSignInClient gsc;
-    GoogleSignInOptions gso;
+    private GoogleSignInClient gsc;
+    private GoogleSignInOptions gso;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 

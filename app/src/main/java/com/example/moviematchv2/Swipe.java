@@ -93,7 +93,7 @@ public class Swipe extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //MAyBE NEED THIS< MAYBE NOT
+        //MAYBE NEED THIS///MAYBE NOT
         seeMatches.setOnClickListener(view -> {
             intent = new Intent(Swipe.this, LobbyGuest.class);
             intent.putStringArrayListExtra("matches", matchMovies);
@@ -203,15 +203,14 @@ public class Swipe extends AppCompatActivity {
                 int position = viewHolder.getBindingAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT){
                     final Movie deletedModel = moviesList.get(position);
-
                     final int deletedPosition = position;
                     adapter.removeItem(position);
-
                     Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Not today!", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", view ->
                             adapter.restoreItem(deletedModel, deletedPosition));
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
+
                 } else {
                     // if swiped yes
                     final Movie deletedModel = moviesList.get(position);
@@ -223,9 +222,8 @@ public class Swipe extends AppCompatActivity {
                     Log.e("MOVIE", ""+movieId);
                     Log.e("CURRENTUSER", ""+userId);
 
-                        movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
-                        userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
-
+                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().setValue(userId);
+                    userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
                     DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
                     movieDeepDive.addValueEventListener(new ValueEventListener() {
@@ -296,71 +294,71 @@ public class Swipe extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-                    View itemView = viewHolder.itemView;
-                    if(dX > 0){
-                        p.setColor(Color.parseColor("#388E3C"));
-                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
-                        c.drawRect(background,p);
-                    } else {
-                        p.setColor(Color.parseColor("#D32F2F"));
-                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-                        c.drawRect(background,p);
+                @Override
+                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+                        View itemView = viewHolder.itemView;
+                        if(dX > 0){
+                            p.setColor(Color.parseColor("#388E3C"));
+                            RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
+                            c.drawRect(background,p);
+                        } else {
+                            p.setColor(Color.parseColor("#D32F2F"));
+                            RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                            c.drawRect(background,p);
+                        }
+                    }
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                    }
+                };
+                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+                    itemTouchHelper.attachToRecyclerView(recyclerView);
+                }
+
+                    @Override
+                    public boolean onContextItemSelected(MenuItem item) {
+                        Log.e("item","" + item);
+                        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
+                        call.enqueue(new Callback<JSONResponse>() {
+                            @Override
+                            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                                JSONResponse jsonResponse = response.body();
+                                if(jsonResponse != null) {
+                                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                                    PutDataIntoRecyclerView(moviesList);
+                                    enableSwipe();
+                                } else {
+                                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<JSONResponse> call, Throwable t) {
+
+                            }
+                        });
+                        return true;
+
+                    }
+                    @Override
+                    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+                        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+                            return true;
+                        }
+                        return super.onOptionsItemSelected(item);
+                    }
+                    public void details(View view) {
+                        position =  recyclerView.getChildAdapterPosition(view);
+                        Intent intent = new Intent(getApplicationContext(), Details.class);
+                        intent.putExtra("position", position);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onBackPressed () {
+                        moviesList.clear();
+                        Intent intent = new Intent(Swipe.this, WelcomePage.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-        };
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Log.e("item","" + item);
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
-        call.enqueue(new Callback<JSONResponse>() {
-            @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                JSONResponse jsonResponse = response.body();
-                if(jsonResponse != null) {
-                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                    PutDataIntoRecyclerView(moviesList);
-                    enableSwipe();
-                } else {
-                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
-
-                }
-            }
-            @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
-
-            }
-        });
-        return true;
-
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    public void details(View view) {
-        position =  recyclerView.getChildAdapterPosition(view);
-        Intent intent = new Intent(getApplicationContext(), Details.class);
-        intent.putExtra("position", position);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed () {
-        moviesList.clear();
-        Intent intent = new Intent(Swipe.this, WelcomePage.class);
-        startActivity(intent);
-        finish();
-    }
-}

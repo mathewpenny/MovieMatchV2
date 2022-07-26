@@ -79,8 +79,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
             userPhone = itemView.findViewById(R.id.userPhone);
 
         }
-
     }
-    }
-
+}
 
