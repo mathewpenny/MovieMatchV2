@@ -1,21 +1,16 @@
 package com.example.moviematchv2;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,11 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
-import java.util.Objects;
 
 public class WelcomePage extends AppCompatActivity {
 
@@ -142,31 +133,22 @@ public class WelcomePage extends AppCompatActivity {
         request.executeAsync();
 */
 
-            searchBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
-                    startActivity(intent);
-                    finish();
-                }
+            searchBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
+                startActivity(intent);
+                finish();
             });
 
-            matchesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), LobbyGuest.class);
-                    startActivity(intent);
-                    finish();
-                }
+            matchesBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(), LobbyGuest.class);
+                startActivity(intent);
+                finish();
             });
 
-            accountBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
-                    startActivity(intent);
-                    finish();
-                }
+            accountBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
+                startActivity(intent);
+                finish();
             });
         }
 

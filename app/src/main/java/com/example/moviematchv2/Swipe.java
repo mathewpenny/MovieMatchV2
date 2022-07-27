@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -55,7 +56,7 @@ public class Swipe extends AppCompatActivity {
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
-    private Button seeMatches;
+    private Button seeMatches, refresh;
     private int chosenGenre, position;
     private String chosenType;
     private Intent intent;
@@ -65,8 +66,8 @@ public class Swipe extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     ArrayList<String> matchMovies;
-
-
+    
+    String userName, userPhone, userEmail;
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
@@ -85,6 +86,7 @@ public class Swipe extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         matchMovies = new ArrayList<>();
 
+        refresh = findViewById(R.id.refresh);
         seeMatches = findViewById(R.id.seeMatches);
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -92,7 +94,27 @@ public class Swipe extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //MAYBE NEED THIS///MAYBE NOT
+        
+        refresh.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+               call.enqueue(new Callback<JSONResponse>() {
+                   @Override
+                   public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                       JSONResponse jsonResponse = response.body();
+                       if (jsonResponse != null) {
+                           moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                           PutDataIntoRecyclerView(moviesList);
+                           enableSwipe();
+                       }
+                   }
+                   @Override
+                   public void onFailure(Call<JSONResponse> call, Throwable t) {
+                   }
+               });
+           }
+       });
         seeMatches.setOnClickListener(view -> {
             intent = new Intent(Swipe.this, LobbyGuest.class);
             intent.putStringArrayListExtra("matches", matchMovies);
@@ -137,6 +159,8 @@ public class Swipe extends AppCompatActivity {
             movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
             userDb = FirebaseDatabase.getInstance().getReference().child("Users");
             matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
+
+            matchedUserDb = userDb.child(currentUid);
 
 
             // Get intent from HostActivity to set up API call by choice of streaming service and genre
@@ -218,9 +242,37 @@ public class Swipe extends AppCompatActivity {
                     String movieTitle = deletedModel.getTitle();
                     String userId = mAuth.getCurrentUser().getUid();
 
+
                     Log.e("MOVIE", ""+movieId);
                     Log.e("CURRENTUSER", ""+userId);
 
+                    userDb.child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Log.e("SNAPSHOT_NAME", "" + snapshot);
+                            if(snapshot.exists()) {
+                                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                                if(map.get("name") != null) {
+                                    userName = map.get("name").toString();
+                                    Log.e("USERNAME_TO_PASS", "" + userName);
+                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userName").setValue(userName);
+                                }
+                                if(map.get("phone") != null) {
+                                    userPhone = map.get("phone").toString();
+                                    Log.e("USERPHONE_TO_PASS", "" + userPhone);
+                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userPhone").setValue(userPhone);
+                                }
+                                if(map.get("email") != null) {
+                                    userEmail = map.get("email").toString();
+                                    Log.e("USEREMAIL_TO_PASS", "" + userEmail);
+                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userEmail").setValue(userEmail);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
                     userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
@@ -232,23 +284,9 @@ public class Swipe extends AppCompatActivity {
                                 for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
                                     compareUserIds = "" + movieSnapshot.getValue();
 
-                                    Log.e("USERIDS", ""+ compareUserIds);
-
                                     if(movieSnapshot.getChildrenCount() > 1) {
                                         Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
                                         matchMovies.add(movieTitle);
-                              /*          if(movieSnapshot.hasChildren()) {
-                                            Iterator<DataSnapshot> iterator = movieSnapshot.getChildren().iterator();
-                                            while(iterator.hasNext()) {
-                                                matchedUserDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("userId");
-                                                movieSnapshot = iterator.next();
-                                                String userNodeId = movieSnapshot.getKey();
-                                                String matchedIds = (String) movieSnapshot.getValue();
-                                                Toast.makeText(Swipe.this, "We can watch " + movieTitle + " with " + matchedIds, Toast.LENGTH_SHORT).show();
-                                                Log.e("MATCHEDIDS", "" + matchedIds + " with key " + userNodeId);
-                                            }
-                                        }*/
-                                        Log.e("Matched", "" + matchMovies);
                                     }
                                 }
                             }
@@ -257,16 +295,10 @@ public class Swipe extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
-                    Log.e("Matched", "" + matchMovies);
                     final int deletedPosition = position;
                     adapter.removeItem(position);
                     Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Hope we get a match!", Snackbar.LENGTH_LONG);
-                    snackbar.setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            adapter.restoreItem(deletedModel, deletedPosition);
-                        }
-                    });
+                    snackbar.setAction("UNDO", view -> adapter.restoreItem(deletedModel, deletedPosition));
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
                 }
@@ -283,6 +315,10 @@ public class Swipe extends AppCompatActivity {
                                 enableSwipe();
                             } else {
                                 Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+                                jsonResponse = response.body();
+                                moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                                PutDataIntoRecyclerView(moviesList);
+                                enableSwipe();
                             }
                             count = 0;
                         }
@@ -328,7 +364,10 @@ public class Swipe extends AppCompatActivity {
                                     enableSwipe();
                                 } else {
                                     Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
-
+                                    jsonResponse = response.body();
+                                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                                    PutDataIntoRecyclerView(moviesList);
+                                    enableSwipe();
                                 }
                             }
                             @Override
