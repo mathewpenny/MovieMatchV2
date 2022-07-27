@@ -56,8 +56,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 */
 
 
-        holder.userName.setText(usersList.get(position).getUserId());
-    //    holder.userPhone.setText(usersList.get(position).getUserPhone());
+        holder.userName.setText(usersList.get(position).getUserName());
+        holder.userPhone.setText(usersList.get(position).getUserPhone());
     }
 
     @Override

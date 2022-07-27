@@ -38,6 +38,11 @@ public class LobbyGuest extends AppCompatActivity {
     GoogleSignInOptions gso;
     RecyclerView recyclerView;
     UserAdapter adapter;
+    private String name;
+    private String email;
+    private String phone;
+    private String ids;
+    User user;
 
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
@@ -47,7 +52,7 @@ public class LobbyGuest extends AppCompatActivity {
     private String currentUid;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-
+    private String userIds, userName, userPhone, userEmail;
 
     ArrayList<String> usersIdList;
     ArrayList<String> matchMovies;
@@ -145,34 +150,71 @@ public class LobbyGuest extends AppCompatActivity {
                                     for (int i = 0; i < movieIdsList.size(); i++) {
                                         String idToRead = movieIdsList.get(i);
                                         movieDb4 = movieDb3.child(idToRead);
+                                        // need to take the moves from this list and check all children against currentUid.
+                                        // want to take phone number and name
                                     }
 
                                     DatabaseReference movieDb5 = movieDb4.child("userId");
-
                                     movieDb5.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Log.e("MOVIE5_SNAP?", "" + snapshot); // this snapshot holds all users and their info that have swiped on a movie
+                                            Log.e("MOVIE5_SNAP", "" + snapshot); // this snapshot holds all users and their info that have swiped on a movie
 
                                             Iterable<DataSnapshot> snapIter = snapshot.getChildren();
                                             Iterator<DataSnapshot> iterator = snapIter.iterator();
+                                            User user = new User();
 
-                                            // have to loop thru and get ids, name and phone
-                                            while (iterator.hasNext()) { // while the iterator has children to look thru
+                                                // have to loop thru and get ids, name and phone
+                                            do { // while the iterator has children to look thru(?)
                                                 DataSnapshot snapNext = (DataSnapshot) iterator.next();
-                                                Log.e("SNAP_NEXT", ""+snapNext); // snapNext goes thru the user tree one by one
+                                                Log.e("SNAP_NEXT", "" + snapNext); // snapNext goes thru the user tree one by one
 
-                                                String userIds = (String) snapNext.child("userIds").getValue(); // works, gets id
-                                                Log.e("GETTING_USERIDS", ""+ userIds);
-                                                iterator.next();
-                                                String userNames = (String) snapNext.child("userNames").getValue();
-                                                Log.e("GETTING_USERNAMES", ""+ userNames);
+                                                userIds = (String) snapNext.child("userIds").getValue(); // works, gets id
+                                               // Log.e("GETTING_USERIDS", "" + userIds);
+                                                if(userIds != null) {
+                                                    user.setUserId(userIds);
+                                                    ids = userIds;
+                                                    Log.e("GETTING_USERIDS", "" + ids);
+                                                }
+                                                userName = (String) snapNext.child("userName").getValue(); // works, gets the names
+                                               // Log.e("GETTING_USERNAMES", "" + userName);
 
-                                          /*
+                                                if(userName != null) {
+                                                    user.setUserName(userName);
+                                                    name = userName;
+                                                    Log.e("GETTING_USERNAMES", "" + name);
+                                                }
+
+                                                userPhone = (String) snapNext.child("userPhone").getValue(); // works, gets the phone
+                                                //Log.e("GETTING_USERPHONES", "" + userPhone);
+                                                if(userPhone != null) {
+                                                    user.setUserPhone(userPhone);
+                                                    phone = userPhone;
+                                                    Log.e("GETTING_USERPHONES", "" + phone);
+                                                }
+                                                userEmail= (String) snapNext.child("userEmail").getValue(); // works, gets the email
+                                                //Log.e("GETTING_USEREMAIL", "" + userEmail);
+                                                if(userEmail != null) {
+                                                    user.setUserEmail(userEmail);
+                                                    email = userEmail;
+                                                    Log.e("GETTING_USEREMAIL", "" + email);
+                                                }
+                                                if(ids != null && name != null && phone != null && email != null){
+                                                    user = new User(ids, name, phone, email);
+                                                    Log.e("GETTING_USER", "" + user);
+                                                    userArrayList.add(user);
+                                                    Log.e("GETTING_ARRAY", "" + userArrayList );
+                                                }
+                                              //  Log.e("GETTERS", "" + user.getUserName());
+
+                                            } while (iterator.hasNext());
+
+
+                                            PutDataIntoRecyclerView(userArrayList);
+
+
                                                 matchesDb.child("userIds").push().child("userId").setValue(userIds);
-                                                usersIdList.add(userIds);
-*/
-                                                matchesDb.child("userIds").addValueEventListener(new ValueEventListener() {
+                                         /*       matchesDb.child("userIds").addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         Iterable<DataSnapshot> snapIter = snapshot.getChildren();
@@ -191,8 +233,8 @@ public class LobbyGuest extends AppCompatActivity {
                                                     public void onCancelled(@NonNull DatabaseError error) {
 
                                                     }
-                                                });
-                                            }
+                                                });*/
+
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
