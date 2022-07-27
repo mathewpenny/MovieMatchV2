@@ -168,7 +168,6 @@ public class Swipe extends AppCompatActivity {
             chosenType = intent.getStringExtra("type");
             chosenStreaming = intent.getStringExtra("streaming");
             chosenGenre = intent.getIntExtra("genre", 0);
-            Log.e("CHOSENGENRE", "" + chosenGenre);
 
             // Set up for showing movies in recyclerview
             recyclerView = findViewById(R.id.recyclerView);
@@ -242,10 +241,6 @@ public class Swipe extends AppCompatActivity {
                     String movieTitle = deletedModel.getTitle();
                     String userId = mAuth.getCurrentUser().getUid();
 
-
-                    Log.e("MOVIE", ""+movieId);
-                    Log.e("CURRENTUSER", ""+userId);
-
                     userDb.child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -273,6 +268,7 @@ public class Swipe extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
+
                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
                     userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
 
@@ -284,7 +280,9 @@ public class Swipe extends AppCompatActivity {
                                 for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
                                     compareUserIds = "" + movieSnapshot.getValue();
 
-                                    if(movieSnapshot.getChildrenCount() > 1) {
+                                    //NEED TO RECONFIGURE FOR MATCHES, AUTO 3 CHILDREN
+                                    if(!snapshot.child(userId).equals(currentUid)) {
+                                        Log.e("SNAPSHOT", "" + snapshot);
                                         Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
                                         matchMovies.add(movieTitle);
                                     }

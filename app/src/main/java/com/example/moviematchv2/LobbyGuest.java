@@ -99,110 +99,120 @@ public class LobbyGuest extends AppCompatActivity {
             return false;
         });
 
-            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            userDb = FirebaseDatabase.getInstance().getReference().child("Users");
-            DatabaseReference currentUserDb =  userDb.child(currentUid);
-            DatabaseReference currentUserDbConnect = currentUserDb.child("connections");
-            DatabaseReference currentUserDbConnectServices = currentUserDbConnect.child("services");
-            DatabaseReference netflixMatches = currentUserDbConnectServices.child("netflix");
-            DatabaseReference netflixMatchesYup = netflixMatches.child("yup");
-            DatabaseReference netflixMatchesYupIDs = netflixMatchesYup.child("movieId");
+        currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        DatabaseReference currentUserDb = userDb.child(currentUid);
+        DatabaseReference currentUserDbConnect = currentUserDb.child("connections");
+        DatabaseReference currentUserDbConnectServices = currentUserDbConnect.child("services");
+        DatabaseReference netflixMatches = currentUserDbConnectServices.child("netflix");
+        DatabaseReference netflixMatchesYup = netflixMatches.child("yup");
+        DatabaseReference netflixMatchesYupIDs = netflixMatchesYup.child("movieId");
 
-            matchesDb = FirebaseDatabase.getInstance().getReference().child("Matches");
+        // MovieDB References
+        movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
+        DatabaseReference movieDB1 = FirebaseDatabase.getInstance().getReference().child("Movies").child("services");
+        DatabaseReference movieDB2 = movieDB1.child("netflix");
 
-            movieIdsList = new ArrayList<>();
-            usersIdList = new ArrayList<>();
-            userArrayList = new ArrayList<User>();
+        matchesDb = FirebaseDatabase.getInstance().getReference().child("Matches");
+
+        movieIdsList = new ArrayList<>();
+        usersIdList = new ArrayList<>();
+        userArrayList = new ArrayList<User>();
 
 
         netflixMatchesYupIDs.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChildren()) {
+                    Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+                    while (iterator.hasNext()) {
+                        snapshot = iterator.next();
+                        String movieIds = (String) snapshot.getValue();
+                        movieIdsList.add(movieIds);
+                        Log.e("NETFLIX_YUPS", "" + movieIdsList);
+                    }
+                }
+                movieDB2.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.hasChildren()) {
-                            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
-                            while(iterator.hasNext()) {
-                                snapshot = iterator.next();
-                                String movieIds = (String) snapshot.getValue();
-                                movieIdsList.add(movieIds);
-                            }
+                        if(snapshot.exists()) {
+                            DatabaseReference movieDb3 = movieDB2.child("yup");
+                            movieDb3.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    // LIST ACCESSIBLE HERE
+                                    DatabaseReference movieDb4 = null;
+                                    for (int i = 0; i < movieIdsList.size(); i++) {
+                                        String idToRead = movieIdsList.get(i);
+                                        movieDb4 = movieDb3.child(idToRead);
+                                    }
+
+                                    DatabaseReference movieDb5 = movieDb4.child("userId");
+
+                                    movieDb5.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            Log.e("MOVIE5_SNAP?", "" + snapshot); // this snapshot holds all users and their info that have swiped on a movie
+
+                                            Iterable<DataSnapshot> snapIter = snapshot.getChildren();
+                                            Iterator<DataSnapshot> iterator = snapIter.iterator();
+
+                                            // have to loop thru and get ids, name and phone
+                                            while (iterator.hasNext()) { // while the iterator has children to look thru
+                                                DataSnapshot snapNext = (DataSnapshot) iterator.next();
+                                                Log.e("SNAP_NEXT", ""+snapNext); // snapNext goes thru the user tree one by one
+
+                                                String userIds = (String) snapNext.child("userIds").getValue(); // works, gets id
+                                                Log.e("GETTING_USERIDS", ""+ userIds);
+                                                iterator.next();
+                                                String userNames = (String) snapNext.child("userNames").getValue();
+                                                Log.e("GETTING_USERNAMES", ""+ userNames);
+
+                                          /*
+                                                matchesDb.child("userIds").push().child("userId").setValue(userIds);
+                                                usersIdList.add(userIds);
+*/
+                                                matchesDb.child("userIds").addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        Iterable<DataSnapshot> snapIter = snapshot.getChildren();
+                                                        Iterator<DataSnapshot> iterator = snapIter.iterator();
+
+                                                        while (iterator.hasNext()) {
+                                                            DataSnapshot snapNext = (DataSnapshot) iterator.next();
+                                                            String name = (String) snapNext.child("name").getValue();
+                                                            User user = new User(name);
+                                                            userArrayList.add(user);
+                                                            PutDataIntoRecyclerView(userArrayList);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                        }
+                                    });
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
                         }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
-            // MovieDB References
-            movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
-            DatabaseReference movieDB1 = FirebaseDatabase.getInstance().getReference().child("Movies").child("services");
-            DatabaseReference movieDB2 = movieDB1.child("netflix");
-
-
-        movieDB2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    DatabaseReference movieDb3 = movieDB2.child("yup");
-                    movieDb3.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for(int i = 0; i < movieIdsList.size(); i++) {
-                                String idToRead = movieIdsList.get(i);
-                                DatabaseReference movieDb4 = movieDb3.child(idToRead);
-
-                                DatabaseReference movieDb5 = movieDb4.child("userId");
-                                movieDb5.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                            Iterable<DataSnapshot> snapIter = snapshot.getChildren();
-                                            Iterator<DataSnapshot> iterator = snapIter.iterator();
-
-                                            while(iterator.hasNext()) {
-                                                DataSnapshot snapNext = (DataSnapshot) iterator.next();
-                                                Log.e("SNAPNEXT", "" + snapNext);
-                                                String userIds = (String) snapNext.child("userIds").getValue();
-                                                Log.e("USER_IDS", "" + userIds);
-                                                if(!userIds.equals(currentUid)) {
-                                                    matchesDb.child("userIds").push().child("userId").setValue(userIds);
-                                                    usersIdList.add(userIds);
-                                                    Log.e("MATCHES_DB", "" + matchesDb);
-                                                    Log.e("USER_IDS_FROM_MOVIES", "" + usersIdList);
-                                                }
-
-                                                matchesDb.child("userIds").addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    Iterable<DataSnapshot> snapIter = snapshot.getChildren();
-                                                    Iterator<DataSnapshot> iterator = snapIter.iterator();
-                                                    Log.e("MATCH_SNAP", "" + snapshot);
-                                                    while(iterator.hasNext()) {
-                                                        DataSnapshot snapNext = (DataSnapshot) iterator.next();
-                                                        String name = (String) snapNext.child("name").getValue();
-                                                        User user = new User(name);
-                                                        userArrayList.add(user);
-                                                        Log.e("JUST_USER_IDS", "" + userArrayList);
-                                                        PutDataIntoRecyclerView(userArrayList);
-                                                    }
-                                                }
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                    }
-                                });
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
-                }
             }
+
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
