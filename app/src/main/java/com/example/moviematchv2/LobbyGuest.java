@@ -182,7 +182,6 @@ public class LobbyGuest extends AppCompatActivity {
                                                 if(userEmail != null) {
                                                     user.setUserEmail(userEmail);
                                                     email = userEmail;
-
                                                 }
                                                 if(ids != null && name != null && phone != null && email != null && !ids.equals(currentUid)){
                                                     user = new User(ids, name, phone, email);

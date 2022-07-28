@@ -348,22 +348,19 @@ public class Swipe extends AppCompatActivity {
                     case 4:
                         max = 3; // Musical
                         break;
-                    case 10764:  // NEED TO DTART HERE WHEN CALLS COME BACK
+                    case 10764:  // NEED TO START HERE WHEN CALLS COME BACK
                         max = 56; // Reality
                         break;
                     case 10749:
                         max = 56; // Romance
                         break;
                     case 878:
-                        min = 1;
                         max = 56; // Sci Fi
                         break;
                     case 53:
-                        min = 1;
                         max = 56; // Thriller
                         break;
                     case 37:
-                        min = 1;
                         max = 56; // Western
                         break;
                     default:
