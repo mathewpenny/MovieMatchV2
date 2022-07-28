@@ -9,6 +9,12 @@ public class Movie {
     private String overview;
     private String originalLanguage;
 
+
+    public Movie(String title, String tmdbID) {
+        this.title = title;
+        this.tmdbID = tmdbID;
+    }
+
     public Movie(String title, String tmdbID, int year, int runtime, String overview, PosterURLs posterURLS, String originalLanguage) {
         this.title = title;
         this.tmdbID = tmdbID;
@@ -18,6 +24,7 @@ public class Movie {
         this.posterURLs = posterURLS;
         this.originalLanguage = originalLanguage;
     }
+
 
     public int getYear() {
         return year;

@@ -42,7 +42,7 @@ public class LobbyGuest extends AppCompatActivity {
     private String email;
     private String phone;
     private String ids;
-    User user;
+
 
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
@@ -116,8 +116,9 @@ public class LobbyGuest extends AppCompatActivity {
         // MovieDB References
         movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
         DatabaseReference movieDB1 = FirebaseDatabase.getInstance().getReference().child("Movies").child("services");
-        DatabaseReference movieDB2 = movieDB1.child("netflix");
-
+        DatabaseReference netflixMovies = movieDB1.child("netflix");
+        DatabaseReference primeMovies = movieDB1.child("prime");
+        DatabaseReference disneyMovies = movieDB1.child("disneys");
         matchesDb = FirebaseDatabase.getInstance().getReference().child("Matches");
 
         movieIdsList = new ArrayList<>();
@@ -137,103 +138,62 @@ public class LobbyGuest extends AppCompatActivity {
                         Log.e("NETFLIX_YUPS", "" + movieIdsList);
                     }
                 }
-                movieDB2.addValueEventListener(new ValueEventListener() {
+                netflixMovies.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()) {
-                            DatabaseReference movieDb3 = movieDB2.child("yup");
+                            DatabaseReference movieDb3 = netflixMovies.child("yup");
                             movieDb3.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    // LIST ACCESSIBLE HERE
                                     DatabaseReference movieDb4 = null;
                                     for (int i = 0; i < movieIdsList.size(); i++) {
                                         String idToRead = movieIdsList.get(i);
                                         movieDb4 = movieDb3.child(idToRead);
-                                        // need to take the moves from this list and check all children against currentUid.
-                                        // want to take phone number and name
                                     }
 
                                     DatabaseReference movieDb5 = movieDb4.child("userId");
                                     movieDb5.addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Log.e("MOVIE5_SNAP", "" + snapshot); // this snapshot holds all users and their info that have swiped on a movie
-
                                             Iterable<DataSnapshot> snapIter = snapshot.getChildren();
                                             Iterator<DataSnapshot> iterator = snapIter.iterator();
                                             User user = new User();
 
-                                                // have to loop thru and get ids, name and phone
-                                            do { // while the iterator has children to look thru(?)
+                                            do {
                                                 DataSnapshot snapNext = (DataSnapshot) iterator.next();
-                                                Log.e("SNAP_NEXT", "" + snapNext); // snapNext goes thru the user tree one by one
-
-                                                userIds = (String) snapNext.child("userIds").getValue(); // works, gets id
-                                               // Log.e("GETTING_USERIDS", "" + userIds);
+                                                Log.e("SNAP_NEXT", "" + snapNext);
+                                                userIds = (String) snapNext.child("userIds").getValue();
                                                 if(userIds != null) {
                                                     user.setUserId(userIds);
                                                     ids = userIds;
-                                                    Log.e("GETTING_USERIDS", "" + ids);
                                                 }
-                                                userName = (String) snapNext.child("userName").getValue(); // works, gets the names
-                                               // Log.e("GETTING_USERNAMES", "" + userName);
-
+                                                userName = (String) snapNext.child("userName").getValue();
                                                 if(userName != null) {
                                                     user.setUserName(userName);
                                                     name = userName;
-                                                    Log.e("GETTING_USERNAMES", "" + name);
                                                 }
-
-                                                userPhone = (String) snapNext.child("userPhone").getValue(); // works, gets the phone
-                                                //Log.e("GETTING_USERPHONES", "" + userPhone);
+                                                userPhone = (String) snapNext.child("userPhone").getValue();
                                                 if(userPhone != null) {
                                                     user.setUserPhone(userPhone);
                                                     phone = userPhone;
-                                                    Log.e("GETTING_USERPHONES", "" + phone);
                                                 }
-                                                userEmail= (String) snapNext.child("userEmail").getValue(); // works, gets the email
-                                                //Log.e("GETTING_USEREMAIL", "" + userEmail);
+                                                userEmail= (String) snapNext.child("userEmail").getValue();
                                                 if(userEmail != null) {
                                                     user.setUserEmail(userEmail);
                                                     email = userEmail;
-                                                    Log.e("GETTING_USEREMAIL", "" + email);
+
                                                 }
-                                                if(ids != null && name != null && phone != null && email != null){
+                                                if(ids != null && name != null && phone != null && email != null && !ids.equals(currentUid)){
                                                     user = new User(ids, name, phone, email);
-                                                    Log.e("GETTING_USER", "" + user);
                                                     userArrayList.add(user);
                                                     Log.e("GETTING_ARRAY", "" + userArrayList );
                                                 }
-                                              //  Log.e("GETTERS", "" + user.getUserName());
-
                                             } while (iterator.hasNext());
-
 
                                             PutDataIntoRecyclerView(userArrayList);
 
-
-                                                matchesDb.child("userIds").push().child("userId").setValue(userIds);
-                                         /*       matchesDb.child("userIds").addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        Iterable<DataSnapshot> snapIter = snapshot.getChildren();
-                                                        Iterator<DataSnapshot> iterator = snapIter.iterator();
-
-                                                        while (iterator.hasNext()) {
-                                                            DataSnapshot snapNext = (DataSnapshot) iterator.next();
-                                                            String name = (String) snapNext.child("name").getValue();
-                                                            User user = new User(name);
-                                                            userArrayList.add(user);
-                                                            PutDataIntoRecyclerView(userArrayList);
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });*/
+                                            matchesDb.child("userIds").push().child("userId").setValue(userIds);
 
                                         }
                                         @Override
@@ -252,34 +212,31 @@ public class LobbyGuest extends AppCompatActivity {
                     }
                 });
             }
-
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
 
-        private void PutDataIntoRecyclerView(List<User> usersList) {
-                adapter = new UserAdapter(this, usersList);
-                recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                recyclerView.setAdapter(adapter);
-            }
+    private void PutDataIntoRecyclerView(List<User> usersList) {
+        adapter = new UserAdapter(this, usersList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+    }
 
-            @Override
-            public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-                if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-                    return true;
-                }
-                return super.onOptionsItemSelected(item);
-            }
-
-            @Override
-            public void onBackPressed () {
-                usersIdList.clear();
-                Intent intent = new Intent(LobbyGuest.this, WelcomePage.class);
-                startActivity(intent);
-                finish();
-            }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed () {
+        usersIdList.clear();
+        Intent intent = new Intent(LobbyGuest.this, WelcomePage.class);
+        startActivity(intent);
+        finish();
+    }
+}

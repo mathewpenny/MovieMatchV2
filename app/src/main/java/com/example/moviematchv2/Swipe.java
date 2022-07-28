@@ -66,15 +66,14 @@ public class Swipe extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     ArrayList<String> matchMovies;
-    
-    String userName, userPhone, userEmail;
+
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private DatabaseReference userDb;
     private DatabaseReference matchedUserDb;
     private String currentUid;
-    private String compareUserIds;
+    private String compareUserIds, userName, userPhone, userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,27 +93,27 @@ public class Swipe extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        
+
         refresh.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
-               call.enqueue(new Callback<JSONResponse>() {
-                   @Override
-                   public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                       JSONResponse jsonResponse = response.body();
-                       if (jsonResponse != null) {
-                           moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                           PutDataIntoRecyclerView(moviesList);
-                           enableSwipe();
-                       }
-                   }
-                   @Override
-                   public void onFailure(Call<JSONResponse> call, Throwable t) {
-                   }
-               });
-           }
-       });
+            @Override
+            public void onClick(View view) {
+                Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+                call.enqueue(new Callback<JSONResponse>() {
+                    @Override
+                    public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                        JSONResponse jsonResponse = response.body();
+                        if (jsonResponse != null) {
+                            moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                            PutDataIntoRecyclerView(moviesList);
+                            enableSwipe();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<JSONResponse> call, Throwable t) {
+                    }
+                });
+            }
+        });
         seeMatches.setOnClickListener(view -> {
             intent = new Intent(Swipe.this, LobbyGuest.class);
             intent.putStringArrayListExtra("matches", matchMovies);
@@ -153,58 +152,226 @@ public class Swipe extends AppCompatActivity {
             }
         });
 
-            // Set up for saving matches
-            mAuth = FirebaseAuth.getInstance();
-            currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-            movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
-            userDb = FirebaseDatabase.getInstance().getReference().child("Users");
-            matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        // Set up for saving matches
+        mAuth = FirebaseAuth.getInstance();
+        currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
+        matchedUserDb = userDb.child(currentUid);
 
-            matchedUserDb = userDb.child(currentUid);
+        // Get intent from HostActivity to set up API call by choice of streaming service and genre
+        intent = getIntent();
+        chosenType = intent.getStringExtra("type");
+        chosenStreaming = intent.getStringExtra("streaming");
+        chosenGenre = intent.getIntExtra("genre", 0);
 
+        // Set up for showing movies in recyclerview
+        recyclerView = findViewById(R.id.recyclerView);
+        moviesList = new ArrayList<>();
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://streaming-availability.p.rapidapi.com/search/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        movieApi = retrofit.create(MovieApi.class);
 
-            // Get intent from HostActivity to set up API call by choice of streaming service and genre
-            intent = getIntent();
-            chosenType = intent.getStringExtra("type");
-            chosenStreaming = intent.getStringExtra("streaming");
-            chosenGenre = intent.getIntExtra("genre", 0);
-
-            // Set up for showing movies in recyclerview
-            recyclerView = findViewById(R.id.recyclerView);
-            moviesList = new ArrayList<>();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("https://streaming-availability.p.rapidapi.com/search/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            movieApi = retrofit.create(MovieApi.class);
-
-            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
-            call.enqueue(new Callback<JSONResponse>() {
-                @Override
-                public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                    JSONResponse jsonResponse = response.body();
-                    if(jsonResponse != null) {
-                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                        PutDataIntoRecyclerView(moviesList);
-                        enableSwipe();
-                    } else {
-                        Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
-                    }
-
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+        call.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                JSONResponse jsonResponse = response.body();
+                if(jsonResponse != null) {
+                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                    PutDataIntoRecyclerView(moviesList);
+                    enableSwipe();
+                } else {
+                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
                 }
-                @Override
-                public void onFailure(Call<JSONResponse> call, Throwable t) {
-                }
-            });
-            registerForContextMenu(recyclerView);
-        }
+
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+            }
+        });
+        registerForContextMenu(recyclerView);
+    }
     // generates a random page number. Will have to test the endpoints and use a switch case to
     // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
-        int min = 1;
-        int max = 2;
-        return new Random().nextInt(max - min + 1);
-    }
+        int min = 1, max = 0;
+        // so far, this is for netflix. might be difficult to get the streaming service too.....
+        if(chosenStreaming.equals("netflix")) {
+            switch (chosenGenre) {
+                case 28:
+                    max = 56; // Action
+                    break;
+                case 12:
+                    max = 38; // Adventure
+                    break;
+                case 16:
+                    max = 16; // Animation
+                    break;
+                case 1:
+                    max = 26; // Biography
+                    break;
+                case 35:
+                    max = 133; // Comedy
+                    break;
+                case 80:
+                    max = 59; // Crime
+                    break;
+                case 99:
+                    max = 78; // Documentary
+                    break;
+                case 18:
+                    max = 174; // Drama
+                    break;
+                case 10751:
+                    max = 31; // Family
+                    break;
+                case 14:
+                    max = 22; // Fantasy
+                    break;
+                case 27:
+                    max = 75; // Horror
+                    break;
+                case 4:
+                    max = 5; // Musical
+                    break;
+                case 10764:
+                    max = 1; // Reality
+                    break;
+                case 10749:
+                    max = 49; // Romance
+                    break;
+                case 878:
+                    max = 30; // Sci Fi
+                    break;
+                case 53:
+                    max = 93; // Thriller
+                    break;
+                case 37:
+                    max = 10; // Western
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            }
+        } else if(chosenStreaming.equals("prime")) {
+            switch (chosenGenre) {
+                case 28:
+                    max = 38; // Action
+                    break;
+                case 12:
+                    max = 63; // Adventure
+                    break;
+                case 16:
+                    max = 23; // Animation
+                    break;
+                case 1:
+                    max = 12; // Biography
+                    break;
+                case 35:
+                    max = 72; // Comedy
+                    break;
+                case 80:
+                    max = 16; // Crime
+                    break;
+                case 99:
+                    max = 22; // Documentary
+                    break;
+                case 18:
+                    max = 50; // Drama
+                    break;
+                case 10751:
+                    max = 47; // Family
+                    break;
+                case 14:
+                case 10749:
+                    max = 17; // Fantasy
+                    break;
+                case 27:
+                    max = 6; // Horror
+                    break;
+                case 4:
+                    max = 3; // Musical
+                    break;
+                case 10764:
+                    max = 1; // Reality
+                    break;
+                case 878:
+                    max = 14; // Sci Fi
+                    break;
+                case 53:
+                    max = 11; // Thriller
+                    break;
+                case 37:
+                    max = 2; // Western
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            }
+        } else if(chosenStreaming.equals("disney")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 38; // Action
+                        break;
+                    case 12:
+                        max = 63; // Adventure
+                        break;
+                    case 16:
+                        max = 23; // Animation
+                        break;
+                    case 1:
+                        max = 12; // Biography
+                        break;
+                    case 35:
+                        max = 72; // Comedy
+                        break;
+                    case 80:
+                        max = 16; // Crime
+                        break;
+                    case 99:
+                        max = 22; // Documentary
+                        break;
+                    case 18:
+                        max = 50; // Drama
+                        break;
+                    case 10751:
+                        max = 47; // Family
+                        break;
+                    case 14:
+                        max = 17; // Fantasy
+                        break;
+                    case 27:
+                        max = 6; // Horror
+                        break;
+                    case 4:
+                        max = 3; // Musical
+                        break;
+                    case 10764:  // NEED TO DTART HERE WHEN CALLS COME BACK
+                        max = 56; // Reality
+                        break;
+                    case 10749:
+                        max = 56; // Romance
+                        break;
+                    case 878:
+                        min = 1;
+                        max = 56; // Sci Fi
+                        break;
+                    case 53:
+                        min = 1;
+                        max = 56; // Thriller
+                        break;
+                    case 37:
+                        min = 1;
+                        max = 56; // Western
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
+            }
+                return new Random().nextInt(max - min + 1);
+        }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
         adapter = new MovieAdapter(this, moviesList);
@@ -249,17 +416,14 @@ public class Swipe extends AppCompatActivity {
                                 Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
                                 if(map.get("name") != null) {
                                     userName = map.get("name").toString();
-                                    Log.e("USERNAME_TO_PASS", "" + userName);
                                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userName").setValue(userName);
                                 }
                                 if(map.get("phone") != null) {
                                     userPhone = map.get("phone").toString();
-                                    Log.e("USERPHONE_TO_PASS", "" + userPhone);
                                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userPhone").setValue(userPhone);
                                 }
                                 if(map.get("email") != null) {
                                     userEmail = map.get("email").toString();
-                                    Log.e("USEREMAIL_TO_PASS", "" + userEmail);
                                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userEmail").setValue(userEmail);
                                 }
                             }
@@ -327,74 +491,74 @@ public class Swipe extends AppCompatActivity {
                 }
             }
 
-                @Override
-                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                    if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-                        View itemView = viewHolder.itemView;
-                        if(dX > 0){
-                            p.setColor(Color.parseColor("#388E3C"));
-                            RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
-                            c.drawRect(background,p);
-                        } else {
-                            p.setColor(Color.parseColor("#D32F2F"));
-                            RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-                            c.drawRect(background,p);
-                        }
-                    }
-                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                    }
-                };
-                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-                    itemTouchHelper.attachToRecyclerView(recyclerView);
-                }
-
-                    @Override
-                    public boolean onContextItemSelected(MenuItem item) {
-                        Log.e("item","" + item);
-                        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
-                        call.enqueue(new Callback<JSONResponse>() {
-                            @Override
-                            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                                JSONResponse jsonResponse = response.body();
-                                if(jsonResponse != null) {
-                                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                                    PutDataIntoRecyclerView(moviesList);
-                                    enableSwipe();
-                                } else {
-                                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
-                                    jsonResponse = response.body();
-                                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                                    PutDataIntoRecyclerView(moviesList);
-                                    enableSwipe();
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<JSONResponse> call, Throwable t) {
-
-                            }
-                        });
-                        return true;
-
-                    }
-                    @Override
-                    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-                        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-                            return true;
-                        }
-                        return super.onOptionsItemSelected(item);
-                    }
-                    public void details(View view) {
-                        position =  recyclerView.getChildAdapterPosition(view);
-                        Intent intent = new Intent(getApplicationContext(), Details.class);
-                        intent.putExtra("position", position);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onBackPressed () {
-                        moviesList.clear();
-                        Intent intent = new Intent(Swipe.this, LobbyHost.class);
-                        startActivity(intent);
-                        finish();
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+                    View itemView = viewHolder.itemView;
+                    if(dX > 0){
+                        p.setColor(Color.parseColor("#388E3C"));
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
+                        c.drawRect(background,p);
+                    } else {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background,p);
                     }
                 }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Log.e("item","" + item);
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
+        call.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                JSONResponse jsonResponse = response.body();
+                if(jsonResponse != null) {
+                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                    PutDataIntoRecyclerView(moviesList);
+                    enableSwipe();
+                } else {
+                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+                    jsonResponse = response.body();
+                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                    PutDataIntoRecyclerView(moviesList);
+                    enableSwipe();
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+
+            }
+        });
+        return true;
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    public void details(View view) {
+        position =  recyclerView.getChildAdapterPosition(view);
+        Intent intent = new Intent(getApplicationContext(), Details.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed () {
+        moviesList.clear();
+        Intent intent = new Intent(Swipe.this, LobbyHost.class);
+        startActivity(intent);
+        finish();
+    }
+}

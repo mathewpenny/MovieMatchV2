@@ -18,6 +18,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
     private Context context;
     public List<User> usersList;
+
     private int position;
 
     public int getPosition() {
@@ -58,6 +59,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
         holder.userName.setText(usersList.get(position).getUserName());
         holder.userPhone.setText(usersList.get(position).getUserPhone());
+        //holder.movieTitle.setText(usersList.get(position).getMovieTitle());
     }
 
     @Override
@@ -72,7 +74,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
         public UsersViewHolder(@NonNull View itemView) {
             super(itemView);
-            movieTitle = itemView.findViewById(R.id.textView);
+            movieTitle = itemView.findViewById(R.id.movieTitle);
             posterImg = itemView.findViewById(R.id.imageView);
 
             userName = itemView.findViewById(R.id.userName);

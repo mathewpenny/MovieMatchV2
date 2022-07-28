@@ -6,17 +6,8 @@ public class User {
     private String userName;
     private String userPhone;
     private String userEmail;
-
+    private String movieTitle;
   public User() {
-    }
-
-    public User(String userId, String userName) {
-        this.userId = userId;
-        this.userName = userName;
-    }
-
-    public User(String userId) {
-        this.userId = userId;
     }
 
     public User(String userId, String userName, String userPhone, String userEmail) {
@@ -24,6 +15,15 @@ public class User {
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
+    }
+
+
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
     }
 
     public String getUserId() {
@@ -57,4 +57,5 @@ public class User {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
+
 }
