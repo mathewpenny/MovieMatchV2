@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,7 +56,7 @@ public class Swipe extends AppCompatActivity {
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
-    private Button seeMatches, refresh;
+    private ImageButton seeMatches, refresh;
     private int chosenGenre, position;
     private String chosenType;
     private Intent intent;
@@ -85,7 +85,7 @@ public class Swipe extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         matchMovies = new ArrayList<>();
 
-        refresh = findViewById(R.id.refresh);
+        refresh = findViewById(R.id.refreshBtn);
         seeMatches = findViewById(R.id.seeMatches);
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -408,7 +408,7 @@ public class Swipe extends AppCompatActivity {
                     userDb.child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Log.e("SNAPSHOT_NAME", "" + snapshot);
+                            Log.e("SNAPSHOT_USER_INFO", "" + snapshot);
                             if(snapshot.exists()) {
                                 Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
                                 if(map.get("name") != null) {
@@ -431,22 +431,60 @@ public class Swipe extends AppCompatActivity {
                     });
 
                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
-                    userDb.child(currentUid).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
+                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).push().child("movieTitle").setValue(movieTitle);
+
+                    userDb.child(userId).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
+
 
                     DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
-                    movieDeepDive.addValueEventListener(new ValueEventListener() {
+                    DatabaseReference checkUsers = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId");
+
+                    userDb.child(userId).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.getValue() != null) {
-                                for(DataSnapshot movieSnapshot : snapshot.getChildren()) {
-                                    compareUserIds = "" + movieSnapshot.getValue();
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    movieDeepDive.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot movieCheckSnapshot) {
+                            if(movieCheckSnapshot.getValue() != null) {
+                                for(DataSnapshot movieSnapshot : movieCheckSnapshot.getChildren()) {
+                                    String key = movieSnapshot.getKey();
+                                    String value = String.valueOf(movieSnapshot.getValue());
+                                    Log.e("CHECK_MOVIE_KEYS", "" + key);
+                                    Log.e("CHECK_MOVIE_IDS", "" + value);
+                                    Log.e("CHECK_INDI_MOVIE_ID", "" + movieId);
+
+                                    checkUsers.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot userCheckSnapshot) {
+                                            if(userCheckSnapshot.getValue() != null) {
+                                                for(DataSnapshot usersSnap : userCheckSnapshot.getChildren()) {
+                                                    String key = usersSnap.getKey();
+                                                    String value = String.valueOf(usersSnap.getValue());
+                                                    Log.e("CHECK_USERS_KEYS", "" + key);
+                                                    Log.e("CHECK_USERS", "" + value);
+
+                                                }
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+                                        }
+                                    });
 
                                     //NEED TO RECONFIGURE FOR MATCHES, AUTO 3 CHILDREN
-                                    if(!snapshot.child(userId).equals(currentUid)) {
-                                        Log.e("SNAPSHOT", "" + snapshot);
+                                  /*  if(!movieCheckSnapshot.child(userId).equals(currentUid)) {
+                                        Log.e("MATCHES_SNAP", "" + movieCheckSnapshot);
                                         Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
                                         matchMovies.add(movieTitle);
-                                    }
+                                    }*/
                                 }
                             }
                         }
@@ -462,6 +500,7 @@ public class Swipe extends AppCompatActivity {
                     snackbar.show();
                 }
                 count++;
+
                 if (count == 8) {
                     Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
                     call.enqueue(new Callback<JSONResponse>() {
@@ -511,7 +550,6 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Log.e("item","" + item);
         Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
         call.enqueue(new Callback<JSONResponse>() {
             @Override
@@ -531,12 +569,11 @@ public class Swipe extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
-
             }
         });
         return true;
-
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -544,6 +581,7 @@ public class Swipe extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     public void details(View view) {
         position =  recyclerView.getChildAdapterPosition(view);
         Intent intent = new Intent(getApplicationContext(), Details.class);

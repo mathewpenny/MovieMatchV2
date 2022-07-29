@@ -9,29 +9,63 @@
     android:layout_height="match_parent"
     tools:context=".Swipe">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/updateFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp">
+
+            <ImageButton
+                android:id="@+id/seeMatches"
+                android:layout_width="185dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_theaters_24"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30sp"
+                android:layout_gravity="center"
+                android:text="Matches"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/refreshBtn"
+                android:layout_width="185dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_theaters_24"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30sp"
+                android:layout_gravity="center"
+                android:text="Refresh"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/seeMatches"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="See Matches"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Refresh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/seeMatches"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
