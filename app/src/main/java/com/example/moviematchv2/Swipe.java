@@ -73,7 +73,7 @@ public class Swipe extends AppCompatActivity {
     private DatabaseReference userDb;
     private DatabaseReference matchedUserDb;
     private String currentUid;
-    private String compareUserIds, userName, userPhone, userEmail;
+    private String compareUserId, userName, userPhone, userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -387,6 +387,7 @@ public class Swipe extends AppCompatActivity {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getBindingAdapterPosition();
+
                 if (direction == ItemTouchHelper.LEFT){
                     final Movie deletedModel = moviesList.get(position);
                     final int deletedPosition = position;
@@ -400,7 +401,6 @@ public class Swipe extends AppCompatActivity {
                 } else {
                     // if swiped yes
                     final Movie deletedModel = moviesList.get(position);
-
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
                     String userId = mAuth.getCurrentUser().getUid();
@@ -432,24 +432,10 @@ public class Swipe extends AppCompatActivity {
 
                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
                     movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).push().child("movieTitle").setValue(movieTitle);
-
                     userDb.child(userId).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
-
 
                     DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
                     DatabaseReference checkUsers = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId");
-
-                    userDb.child(userId).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
                     movieDeepDive.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot movieCheckSnapshot) {
@@ -457,7 +443,7 @@ public class Swipe extends AppCompatActivity {
                                 for(DataSnapshot movieSnapshot : movieCheckSnapshot.getChildren()) {
                                     String key = movieSnapshot.getKey();
                                     String value = String.valueOf(movieSnapshot.getValue());
-                                    Log.e("CHECK_MOVIE_KEYS", "" + key);
+                                //    Log.e("CHECK_MOVIE_KEYS", "" + key);
                                     Log.e("CHECK_MOVIE_IDS", "" + value);
                                     Log.e("CHECK_INDI_MOVIE_ID", "" + movieId);
 
