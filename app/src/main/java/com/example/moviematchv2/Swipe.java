@@ -31,12 +31,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -403,79 +404,57 @@ public class Swipe extends AppCompatActivity {
                     final Movie deletedModel = moviesList.get(position);
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
-                    String userId = mAuth.getCurrentUser().getUid();
 
-                    userDb.child(currentUid).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
+                    movieIdQuery.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Log.e("SNAPSHOT_USER_INFO", "" + snapshot);
-                            if(snapshot.exists()) {
-                                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                                if(map.get("name") != null) {
-                                    userName = map.get("name").toString();
-                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userName").setValue(userName);
-                                }
-                                if(map.get("phone") != null) {
-                                    userPhone = map.get("phone").toString();
-                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userPhone").setValue(userPhone);
-                                }
-                                if(map.get("email") != null) {
-                                    userEmail = map.get("email").toString();
-                                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userEmail").setValue(userEmail);
-                                }
-                            }
+                            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+                           if(iterator.hasNext()) {
+                              DataSnapshot infoSnap = iterator.next();
+                               boolean userExists = false;
+                               ArrayList<String> userIdList = new ArrayList<>();
+                               for(DataSnapshot childList : infoSnap.getChildren()) {
+                                   for(DataSnapshot idList : childList.getChildren()) {
+                                       if (idList.getKey().equals("userId")) {
+                                           String matchUserId = (String) idList.getValue();
+                                           if (!matchUserId.equals(currentUid)) {
+                                               userIdList.add(matchUserId);
+                                           } else {
+                                               userExists = true;
+                                           }
+                                       }
+                                   }
+                               } // Now, check if user is already existing in the list, if no, add to list
+                               if(!userExists) {
+                                   Log.e("USER_EXISTS", "" + userExists);
+                                   movieDb.child("services").child(chosenStreaming).child(movieId).push().child("userId").setValue(currentUid);
+                                   userDb.child(currentUid).child("connections").child(chosenStreaming).push().child("movieId").setValue(movieId);
+                               }
+                               // Then check if List is empty, If not empty, process user list to show matches in recyclerview
+                               if(userIdList.size() == 0) {
+                                   Toast.makeText(Swipe.this, "Still...no matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
+                               } else {
+                                   Toast.makeText(Swipe.this, "You have MATCHED! with " + userIdList.size() + " other people! Look at you, having good taste in movies!", Toast.LENGTH_SHORT).show();
+                               }
+                           } else {
+                               Log.e("MOVIE_EXISTS", "" + movieId);
+                               // here we want to add movie Id, title and user id to the database and tell them that they
+                               // have bad taste in movies aka no matches :(
+                               movieDb.child("services").child(chosenStreaming).child(movieId).push().child("movieTitle").setValue(movieTitle);
+                               movieDb.child("services").child(chosenStreaming).child(movieId).push().child("userId").setValue(currentUid);
+                               userDb.child(currentUid).child("connections").child(chosenStreaming).push().child("movieId").setValue(movieId);
+                               Toast.makeText(Swipe.this, "No matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
+                           }
+                           // stops the listener so that it doesn't push the user again.
+                           movieIdQuery.removeEventListener(this);
+
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
 
-                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId").push().child("userIds").setValue(userId);
-                    movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).push().child("movieTitle").setValue(movieTitle);
-                    userDb.child(userId).child("connections").child("services").child(chosenStreaming).child("yup").child("movieId").push().setValue(movieId);
-
-                    DatabaseReference movieDeepDive = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId);
-                    DatabaseReference checkUsers = movieDb.child("services").child(chosenStreaming).child("yup").child(movieId).child("userId");
-                    movieDeepDive.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot movieCheckSnapshot) {
-                            if(movieCheckSnapshot.getValue() != null) {
-                                for(DataSnapshot movieSnapshot : movieCheckSnapshot.getChildren()) {
-                                    String key = movieSnapshot.getKey();
-                                    String value = String.valueOf(movieSnapshot.getValue());
-                                //    Log.e("CHECK_MOVIE_KEYS", "" + key);
-                                    Log.e("CHECK_MOVIE_IDS", "" + value);
-                                    Log.e("CHECK_INDI_MOVIE_ID", "" + movieId);
-
-                                    checkUsers.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot userCheckSnapshot) {
-                                            if(userCheckSnapshot.getValue() != null) {
-                                                for(DataSnapshot usersSnap : userCheckSnapshot.getChildren()) {
-                                                    String key = usersSnap.getKey();
-                                                    String value = String.valueOf(usersSnap.getValue());
-                                                    Log.e("CHECK_USERS_KEYS", "" + key);
-                                                    Log.e("CHECK_USERS", "" + value);
-
-                                                }
-                                            }
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-
-                                    //NEED TO RECONFIGURE FOR MATCHES, AUTO 3 CHILDREN
-                                  /*  if(!movieCheckSnapshot.child(userId).equals(currentUid)) {
-                                        Log.e("MATCHES_SNAP", "" + movieCheckSnapshot);
-                                        Toast.makeText(Swipe.this, "Match Made! We can watch " + movieTitle, Toast.LENGTH_SHORT).show();
-                                        matchMovies.add(movieTitle);
-                                    }*/
-                                }
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
                     final int deletedPosition = position;
