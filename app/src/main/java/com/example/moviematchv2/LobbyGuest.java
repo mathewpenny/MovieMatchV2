@@ -2,7 +2,9 @@ package com.example.moviematchv2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -17,8 +19,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,31 +39,27 @@ public class LobbyGuest extends AppCompatActivity {
     GoogleSignInOptions gso;
     RecyclerView recyclerView;
     UserAdapter adapter;
-    private String name;
-    private String email;
-    private String phone;
-    private String ids;
-
+    TextView movieTitleRV;
 
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
-    private DatabaseReference movieDb;
     private DatabaseReference userDb;
-    private DatabaseReference matchesDb;
     private String currentUid;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    private String userIds, userName, userPhone, userEmail;
 
-    ArrayList<String> usersIdList;
-    ArrayList<String> matchMovies;
-    ArrayList<String> movieIdsList;
-    ArrayList<User> userArrayList;
+    ArrayList<String> potentialMatch;
+    ArrayList<User> matchPeople;
+    String movieTitle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby_guest);
+
+        movieTitleRV = findViewById(R.id.movieTitleTxt);
 
         recyclerView = findViewById(R.id.recyclerViewMatches);
 
@@ -70,8 +72,8 @@ public class LobbyGuest extends AppCompatActivity {
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        matchMovies = new ArrayList<>();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -101,25 +103,35 @@ public class LobbyGuest extends AppCompatActivity {
 
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         userDb = FirebaseDatabase.getInstance().getReference().child("Users");
-        DatabaseReference currentUserDb = userDb.child(currentUid);
-        DatabaseReference currentUserDbConnect = currentUserDb.child("connections");
-        DatabaseReference currentUserDbConnectServices = currentUserDbConnect.child("services");
-        DatabaseReference netflixMatches = currentUserDbConnectServices.child("netflix");
+        matchPeople = new ArrayList<>();
 
+        intent = getIntent();
+        movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
+        potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
+        movieTitleRV.setText(movieTitle);
 
-        // MovieDB References
-        movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
-        DatabaseReference movieDB1 = FirebaseDatabase.getInstance().getReference().child("Movies").child("services");
-        DatabaseReference netflixMovies = movieDB1.child("netflix");
-        DatabaseReference primeMovies = movieDB1.child("prime");
-        DatabaseReference disneyMovies = movieDB1.child("disney");
-        matchesDb = FirebaseDatabase.getInstance().getReference().child("Matches");
+        Query userDbQuery = userDb.orderByKey();
+        userDbQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot user : snapshot.getChildren()) {
+                    if(potentialMatch.contains(user.getKey())) {
+                        user.getValue();
+                        User matched = new User();
+                        matched.setUserName((String) user.child("name").getValue());
+                        matched.setUserPhone((String) user.child("phone").getValue());
+                        matchPeople.add(matched);
+                    }
+                }
+                Log.e("HASH_MAP_CHECK" , "" + matchPeople);
+                userDbQuery.removeEventListener(this);
+                PutDataIntoRecyclerView(matchPeople);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        movieIdsList = new ArrayList<>();
-        usersIdList = new ArrayList<>();
-        userArrayList = new ArrayList<User>();
-
-
+            }
+        });
     }
 
     private void PutDataIntoRecyclerView(List<User> usersList) {
@@ -138,7 +150,6 @@ public class LobbyGuest extends AppCompatActivity {
 
     @Override
     public void onBackPressed () {
-        usersIdList.clear();
         Intent intent = new Intent(LobbyGuest.this, WelcomePage.class);
         startActivity(intent);
         finish();

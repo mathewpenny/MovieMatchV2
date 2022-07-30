@@ -74,7 +74,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
         public UsersViewHolder(@NonNull View itemView) {
             super(itemView);
-            movieTitle = itemView.findViewById(R.id.movieTitle);
+            //movieTitle = itemView.findViewById(R.id.movieTitle);
             posterImg = itemView.findViewById(R.id.imageView);
 
             userName = itemView.findViewById(R.id.userName);

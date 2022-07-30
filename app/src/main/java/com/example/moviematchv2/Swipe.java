@@ -74,7 +74,7 @@ public class Swipe extends AppCompatActivity {
     private DatabaseReference userDb;
     private DatabaseReference matchedUserDb;
     private String currentUid;
-    private String compareUserId, userName, userPhone, userEmail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -405,7 +405,6 @@ public class Swipe extends AppCompatActivity {
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
 
-
                     Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
                     movieIdQuery.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -414,7 +413,7 @@ public class Swipe extends AppCompatActivity {
                            if(iterator.hasNext()) {
                               DataSnapshot infoSnap = iterator.next();
                                boolean userExists = false;
-                               ArrayList<String> userIdList = new ArrayList<>();
+                               ArrayList<String> userIdList = new ArrayList<String>();
                                for(DataSnapshot childList : infoSnap.getChildren()) {
                                    for(DataSnapshot idList : childList.getChildren()) {
                                        if (idList.getKey().equals("userId")) {
@@ -437,6 +436,12 @@ public class Swipe extends AppCompatActivity {
                                    Toast.makeText(Swipe.this, "Still...no matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
                                } else {
                                    Toast.makeText(Swipe.this, "You have MATCHED! with " + userIdList.size() + " other people! Look at you, having good taste in movies!", Toast.LENGTH_SHORT).show();
+
+                                   // Launch the LobbyGuest Activity to pass the User Details from the Users table and project that into RecyclerView
+                                   intent = new Intent(Swipe.this, LobbyGuest.class);
+                                   intent.putExtra("movieTitle", movieTitle);
+                                   intent.putStringArrayListExtra("PASS_MATCHES", userIdList);
+                                   startActivity(intent);
                                }
                            } else {
                                Log.e("MOVIE_EXISTS", "" + movieId);
