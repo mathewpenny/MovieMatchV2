@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class WelcomePage extends AppCompatActivity {
 
-    private ImageButton matchesBtn, searchBtn, accountBtn;
+    private ImageButton logoutBtn, searchBtn, accountBtn;
     private TextView name;
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
@@ -92,15 +92,13 @@ public class WelcomePage extends AppCompatActivity {
         });
 
             searchBtn = (ImageButton) findViewById(R.id.swipeButton);
-            matchesBtn = (ImageButton) findViewById(R.id.matchButton);
             accountBtn = (ImageButton) findViewById(R.id.accountButton);
+            logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
             name = (TextView) findViewById(R.id.nameText);
 
             user = FirebaseAuth.getInstance().getCurrentUser();
-
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             gsc = GoogleSignIn.getClient(this, gso);
-
 
             GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
             if (account != null) {
@@ -139,8 +137,13 @@ public class WelcomePage extends AppCompatActivity {
                 finish();
             });
 
-            matchesBtn.setOnClickListener(view -> {
-                Intent intent = new Intent(getApplicationContext(), LobbyGuest.class);
+            logoutBtn.setOnClickListener(view -> {
+                mAuth.signOut();
+                // Google Sign out
+                gsc.signOut();
+                // Facebook Sign Out
+                LoginManager.getInstance().logOut();
+                Intent intent = new Intent(WelcomePage.this, Login.class);
                 startActivity(intent);
                 finish();
             });

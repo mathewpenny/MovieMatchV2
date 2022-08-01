@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/matches"
+    android:background="@drawable/popcorn"
     android:id="@id/drawer_view2"
     tools:context=".LobbyGuest">
 
@@ -27,8 +27,10 @@
             android:id="@+id/movieTitleTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
-            android:text="TEXTVIEW"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:text="Movie Title Here"
             android:textColor="@color/white"
             android:textAllCaps="true"/>
 
@@ -42,7 +44,9 @@
             app:layout_constraintTop_toTopOf="parent"
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_view"
         android:layout_width="wrap_content"

@@ -57,7 +57,7 @@ public class Swipe extends AppCompatActivity {
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
-    private ImageButton seeMatches, refresh;
+    private ImageButton refresh;
     private int chosenGenre, position;
     private String chosenType;
     private Intent intent;
@@ -87,7 +87,7 @@ public class Swipe extends AppCompatActivity {
         matchMovies = new ArrayList<>();
 
         refresh = findViewById(R.id.refreshBtn);
-        seeMatches = findViewById(R.id.seeMatches);
+
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -115,13 +115,6 @@ public class Swipe extends AppCompatActivity {
                 });
             }
         });
-        seeMatches.setOnClickListener(view -> {
-            intent = new Intent(Swipe.this, LobbyGuest.class);
-            intent.putStringArrayListExtra("matches", matchMovies);
-            startActivity(intent);
-            finish();
-        });
-
 
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -199,9 +192,9 @@ public class Swipe extends AppCompatActivity {
     // generates a random page number. Will have to test the endpoints and use a switch case to
     // set the maximum page depending on service, genre etc.
     private Integer generateRandomPage() {
-        int min = 1, max = 0;
+        int min = 1, max = 1;
         // so far, this is for netflix. might be difficult to get the streaming service too.....
-        if(chosenStreaming.equals("netflix")) {
+        if(chosenStreaming.equals("netflix") && chosenType.equals("movies")) {
             switch (chosenGenre) {
                 case 28:
                     max = 56; // Action
@@ -341,7 +334,8 @@ public class Swipe extends AppCompatActivity {
                         max = 47; // Family
                         break;
                     case 14:
-                        max = 17; // Fantasy
+                    case 10749:
+                        max = 17; // Fantasy & Romance
                         break;
                     case 27:
                         max = 6; // Horror
@@ -352,22 +346,155 @@ public class Swipe extends AppCompatActivity {
                     case 10764:  // NEED TO START HERE WHEN CALLS COME BACK
                         max = 56; // Reality
                         break;
-                    case 10749:
-                        max = 56; // Romance
-                        break;
                     case 878:
-                        max = 56; // Sci Fi
+                        max = 14; // Sci Fi
                         break;
                     case 53:
-                        max = 56; // Thriller
+                        max = 11; // Thriller
                         break;
                     case 37:
-                        max = 56; // Western
+                        max = 2; // Western
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + chosenGenre);
                 }
             }
+        if(chosenStreaming.equals("netflix") && chosenType.equals("series")) {
+            switch (chosenGenre) {
+                case 28:
+                    max = 20; // Action
+                    break;
+                case 12:
+                    max = 23; // Adventure
+                    break;
+                case 16:
+                    max = 28; // Animation
+                    break;
+                case 1:
+                case 14:
+                case 27:
+                    max = 5; // Biography
+                    break;
+                case 35:
+                    max = 31; // Comedy
+                    break;
+                case 80:
+                    max = 22; // Crime
+                    break;
+                case 99:
+                    max = 30; // Documentary
+                    break;
+                case 18:
+                    max = 33; // Drama
+                    break;
+                case 10751:
+                    max = 13;  // & Family
+                    break;
+                case 4:
+                case 37:
+                    max = 1; // Musical
+                    break;
+                case 10764:
+                    max = 14; // Reality
+                    break;
+                case 878:
+                case 53:
+                    max = 4; // Sci Fi
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            }
+        } else if(chosenStreaming.equals("prime") && chosenType.equals("series")) {
+            switch (chosenGenre) {
+                case 28:
+                case 10764:
+                case 878:
+                    max = 12; // Action
+                    break;
+                case 12:
+                    max = 13; // Adventure
+                    break;
+                case 16:
+                    max = 11; // Animation
+                    break;
+                case 1:
+                case 27:
+                    max = 4; // Biography
+                    break;
+                case 35:
+                    max = 22; // Comedy
+                    break;
+                case 80:
+                    max = 17; // Crime
+                    break;
+                case 99:
+                    max = 21; // Documentary
+                    break;
+                case 18:
+                    max = 38; // Drama
+                    break;
+                case 10751:
+                    max = 9; // Family
+                    break;
+                case 14:
+                    max = 7;
+                    break;
+                case 10749:
+                case 4:
+                    max = 1; // Fantasy
+                    break;
+                case 53:
+                    max = 6; // Thriller
+                    break;
+                case 37:
+                    max = 2;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            }
+        } else if(chosenStreaming.equals("disney") && chosenType.equals("series")) {
+            switch (chosenGenre) {
+                case 28:
+                    max = 14; // Action
+                    break;
+                case 12:
+                case 16:
+                    max = 18; // Adventure
+                    break;
+                case 1:
+                    max = 3; // Biography
+                    break;
+                case 35:
+                case 18:
+                    max = 21; // Comedy
+                    break;
+                case 80:
+                    max = 8; // Crime
+                    break;
+                case 99:
+                    max = 12; // Documentary
+                    break;
+                case 10751:
+                    max = 13; // Family
+                    break;
+                case 14:
+                case 878:
+                    max = 4;
+                    break;
+                case 27:
+                case 4:
+                    max = 1; // Horror
+                    break;
+                case 10764:
+                    max = 6; // Reality
+                    break;
+                case 53:
+                    max = 2; // Thriller
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            }
+        }
                 return new Random().nextInt(max - min + 1);
         }
 

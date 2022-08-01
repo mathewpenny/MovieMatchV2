@@ -18,14 +18,15 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:backgroundTint="@color/black"
-        app:cardCornerRadius="50dp"
-        android:padding="15dp">
+        android:orientation="vertical"
+        android:padding="15dp"
+        app:cardCornerRadius="50dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
             android:orientation="vertical">
 
@@ -33,11 +34,12 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Title"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
+                android:text="Title"
+                android:textColor="@color/white"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -48,49 +50,52 @@
                     android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="rating"/>
+                    android:layout_marginEnd="10dp"
+                    android:text="Rating"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/runtime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Run Time"
                     android:layout_marginStart="10dp"
-                    android:textColor="@color/white"/>
+                    android:layout_marginEnd="10dp"
+                    android:text="Run Time"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:layout_marginStart="10dp"
-                    android:text="Year"/>
+                    android:layout_marginEnd="10dp"
+                    android:text="Year"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/language"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Streaming"
-                    android:textColor="@color/white"
-                    android:layout_marginStart="10dp"/>
+                    android:layout_marginStart="10dp"
+                    android:text="Stream Lang."
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:text="Synopsis"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/overview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:text="This is the story..."
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

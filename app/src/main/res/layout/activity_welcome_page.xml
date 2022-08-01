@@ -65,27 +65,7 @@
                 android:textSize="20sp"/>
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
 
-            <ImageButton
-                android:id="@+id/matchButton"
-                android:layout_width="250dp"
-                android:layout_height="85dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30sp"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:text="Matches"
-                android:textSize="20sp"/>
-        </FrameLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -106,6 +86,28 @@
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="Account"
+                android:textSize="20sp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageButton
+                android:id="@+id/logoutButton"
+                android:layout_width="250dp"
+                android:layout_height="85dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_theaters_24"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:text="Logout"
                 android:textSize="20sp"/>
         </FrameLayout>
     </LinearLayout>

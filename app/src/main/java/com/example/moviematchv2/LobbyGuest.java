@@ -148,7 +148,7 @@ public class LobbyGuest extends AppCompatActivity {
 
     @Override
     public void onBackPressed () {
-        Intent intent = new Intent(LobbyGuest.this, WelcomePage.class);
+        Intent intent = new Intent(LobbyGuest.this, Swipe.class);
         startActivity(intent);
         finish();
     }

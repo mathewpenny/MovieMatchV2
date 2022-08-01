@@ -15,30 +15,6 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/updateFrame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp">
-
-            <ImageButton
-                android:id="@+id/seeMatches"
-                android:layout_width="185dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30sp"
-                android:layout_gravity="center"
-                android:text="Matches"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-        </FrameLayout>
-
-        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
