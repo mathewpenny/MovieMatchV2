@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 public interface MovieApi {
 
     @Headers("X-RapidAPI-Key: 773f617c47mshddd96ac84298570p1ff3f7jsnacc2ecf64d46")
-    @GET("basic?country=ca&type=movie")
+    @GET("basic?country=ca ")
     Call<JSONResponse> getMovies(@Query("page") Integer page,
                                  @Query("service") String service,
                                  @Query("type") String type,

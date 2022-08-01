@@ -2,7 +2,6 @@ package com.example.moviematchv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -48,9 +47,9 @@ public class LobbyGuest extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
-    ArrayList<String> potentialMatch;
-    ArrayList<User> matchPeople;
-    String movieTitle;
+    private ArrayList<String> potentialMatch;
+    private ArrayList<User> matchPeople;
+    private String movieTitle;
 
 
 
@@ -123,7 +122,6 @@ public class LobbyGuest extends AppCompatActivity {
                         matchPeople.add(matched);
                     }
                 }
-                Log.e("HASH_MAP_CHECK" , "" + matchPeople);
                 userDbQuery.removeEventListener(this);
                 PutDataIntoRecyclerView(matchPeople);
             }
