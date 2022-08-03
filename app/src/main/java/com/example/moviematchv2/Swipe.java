@@ -58,7 +58,7 @@ public class Swipe extends AppCompatActivity {
     private MovieAdapter adapter;
     private String chosenStreaming;
     private ImageButton refresh;
-    private int chosenGenre, position;
+    private int chosenGenre, position, answer, max;
     private String chosenType;
     private Intent intent;
     NavigationView navigationView;
@@ -72,7 +72,6 @@ public class Swipe extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private DatabaseReference userDb;
-    private DatabaseReference matchedUserDb;
     private String currentUid;
 
 
@@ -96,7 +95,7 @@ public class Swipe extends AppCompatActivity {
 
 
         refresh.setOnClickListener(view -> {
-            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), chosenStreaming, chosenType, chosenGenre);
             call.enqueue(new Callback<JSONResponse>() {
                 @Override
                 public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -144,8 +143,6 @@ public class Swipe extends AppCompatActivity {
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         movieDb = FirebaseDatabase.getInstance().getReference().child("Movies");
         userDb = FirebaseDatabase.getInstance().getReference().child("Users");
-        matchedUserDb = FirebaseDatabase.getInstance().getReference().child("Users");
-        matchedUserDb = userDb.child(currentUid);
 
         // Get intent from HostActivity to set up API call by choice of streaming service and genre
         intent = getIntent();
@@ -162,17 +159,22 @@ public class Swipe extends AppCompatActivity {
                 .build();
         movieApi = retrofit.create(MovieApi.class);
 
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+        int initialPage = generateRandomPage(chosenStreaming, chosenType);
+        Log.e("INITIAL_PAGE", "" + initialPage); // shows 0 currently
+        Log.e("Streaming", "" + chosenStreaming);
+        Log.e("Type", "" + chosenType);
+
+
+
+        Call<JSONResponse> call = movieApi.getMovies(initialPage, chosenStreaming, chosenType, chosenGenre);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 JSONResponse jsonResponse = response.body();
-                Log.e("RANDOM_PAGE", "" + generateRandomPage());
                 if(jsonResponse != null) {
                     moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
                     PutDataIntoRecyclerView(moviesList);
                     enableSwipe();
-
                 } else {
                     Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
                 }
@@ -187,171 +189,219 @@ public class Swipe extends AppCompatActivity {
 
 
     @NonNull
-    private Integer generateRandomPage() {
+    private int generateRandomPage(String chosenStreaming, String chosenType) {
         Random random = new Random();
-        int randomPage = 0;
-        while (chosenStreaming.equals("netflix") && chosenType.equals("movies")) {
+        if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
+            Log.e("Streaming", "" + chosenStreaming);
+            Log.e("Type", "" + chosenType);
             switch (chosenGenre) {
                 case 28:
-                    randomPage = random.nextInt(57); // Action
+                    max = 56;
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
-                    randomPage = random.nextInt(39); //Adventure
+                    max = 38; //Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
-                    randomPage = random.nextInt(17); // Animation
+                    max = 16; // Animation
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
-                    randomPage = random.nextInt(27); // Biography
+                    max = 26; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
-                    randomPage = random.nextInt(134); // Comedy
+                    max = 133; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
-                    randomPage = random.nextInt(60); // Crime
+                    max = 59; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
-                    randomPage = random.nextInt(79); // Documentary
+                    max = 78; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
-                /*case 18:
+                case 18:
                     max = 174; // Drama
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 31; // Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
                     max = 22; // Fantasy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
                     max = 75; // Horror
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 4:
                     max = 5; // Musical
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
                     max = 2; // Reality
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10749:
                     max = 49; // Romance
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 878:
                     max = 30; // Sci Fi
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 53:
                     max = 93; // Thriller
-
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 37:
                     max = 10; // Western
-                    randomPage = new Random().nextInt(max - min + 1);
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if (chosenStreaming.equals("prime") && chosenType.equals("movies")) {
+        } else if (chosenStreaming.equals("prime") && chosenType.equals("movie")) {
             switch (chosenGenre) {
                 case 28:
                     max = 38; // Action
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
                     max = 63; // Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
                     max = 23; // Animation
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
                     max = 12; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
                     max = 72; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
                     max = 16; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
                     max = 22; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 18:
                     max = 50; // Drama
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 47; // Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
                 case 10749:
                     max = 17; // Fantasy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
                     max = 6; // Horror
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 4:
                     max = 3; // Musical
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
                     max = 2; // Reality
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 878:
                     max = 14; // Sci Fi
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 53:
                     max = 11; // Thriller
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 37:
                     max = 2; // Western
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if (chosenStreaming.equals("disney") && chosenType.equals("movies")) {
+        } else if (chosenStreaming.equals("disney") && chosenType.equals("movie")) {
             switch (chosenGenre) {
                 case 28:
                     max = 38; // Action
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
                     max = 63; // Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
                     max = 23; // Animation
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
                     max = 12; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
                     max = 72; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
                     max = 16; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
                     max = 22; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 18:
                     max = 50; // Drama
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 47; // Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
                 case 10749:
                     max = 17; // Fantasy & Romance
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
                     max = 6; // Horror
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 4:
                     max = 3; // Musical
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
                     max = 56; // Reality
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 878:
                     max = 14; // Sci Fi
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 53:
                     max = 11; // Thriller
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 37:
                     max = 2; // Western
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
@@ -361,43 +411,55 @@ public class Swipe extends AppCompatActivity {
             switch (chosenGenre) {
                 case 28:
                     max = 20; // Action
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
                     max = 23; // Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
                     max = 28; // Animation
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
                 case 14:
                 case 27:
                     max = 5; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
                     max = 31; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
                     max = 22; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
                     max = 30; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 18:
                     max = 33; // Drama
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 13;  // & Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 4:
                 case 37:
                     max = 2; // Musical
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
                     max = 14; // Reality
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 878:
                 case 53:
                     max = 4; // Sci Fi
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
@@ -408,44 +470,57 @@ public class Swipe extends AppCompatActivity {
                 case 10764:
                 case 878:
                     max = 12; // Action
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
                     max = 13; // Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
                     max = 11; // Animation
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
                 case 27:
                     max = 4; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
                     max = 22; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
                     max = 17; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
                     max = 21; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 18:
                     max = 38; // Drama
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 9; // Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
                     max = 7;
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10749:
                 case 4:
                     max = 1; // Fantasy
+                    answer = random.nextInt(0) + 1;
                     break;
                 case 53:
                     max = 6; // Thriller
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 37:
                     max = 2;
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
@@ -454,49 +529,59 @@ public class Swipe extends AppCompatActivity {
             switch (chosenGenre) {
                 case 28:
                     max = 14; // Action
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
                 case 16:
                     max = 18; // Adventure
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
                     max = 3; // Biography
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
                 case 18:
                     max = 21; // Comedy
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 80:
                     max = 8; // Crime
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
                     max = 12; // Documentary
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
                     max = 13; // Family
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
                 case 878:
                     max = 4;
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
                 case 4:
                     max = 1; // Horror
+                    answer = random.nextInt(0) + 1;
                     break;
                 case 10764:
                     max = 6; // Reality
+                    answer = random.nextInt(max - 1) + 1;
                     break;
                 case 53:
                     max = 2; // Thriller
-                    randomPage = random.nextInt(max);
-                    randomPage += 1;
+                    answer = random.nextInt(max - 1) + 1;
                 break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre); */
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
 
             }
         }
-                return randomPage;
+        Log.e("Answer", "" + answer);
+            return answer;
     }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
@@ -600,7 +685,7 @@ public class Swipe extends AppCompatActivity {
                 count++;
 
                 if (count == 8) {
-                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+                    Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming,chosenType ), chosenStreaming, chosenType, chosenGenre);
                     call.enqueue(new Callback<JSONResponse>() {
                         @Override
                         public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -648,7 +733,7 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), String.valueOf(item), chosenType, chosenGenre); //new
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), String.valueOf(item), chosenType, chosenGenre); //new
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
