@@ -2,9 +2,12 @@ package com.example.moviematchv2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +22,7 @@ public class Register extends AppCompatActivity {
 
     private EditText nameET, emailET, phoneET, passwordET, confirmPasswordET;
     private ImageButton registerBtn;
-
+    private CheckBox privacyCheck;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
 
@@ -49,6 +52,8 @@ public class Register extends AppCompatActivity {
                 }
             };
 
+            privacyCheck = (CheckBox) findViewById(R.id.privacyCheck);
+            privacyHyperLink();
             nameET = (EditText) findViewById(R.id.registerName);
             emailET = (EditText) findViewById(R.id.registerEmail);
             phoneET = (EditText) findViewById(R.id.registerPhone);
@@ -87,7 +92,7 @@ public class Register extends AppCompatActivity {
                         emailET.requestFocus();
                     }
 
-                    if (password.length() > 7 && password.equals(confirmPass)) {
+                    if (password.length() > 7 && password.equals(confirmPass) && privacyCheck.isChecked()) {
                         // Create the user here with onCompleteListener to check if task is successful
                         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(Register.this, task -> {
                             //this will only be triggered if the registration was not successful.
@@ -113,6 +118,12 @@ public class Register extends AppCompatActivity {
             });
         }
     }
+
+    private void privacyHyperLink() {
+        TextView privacyCheck = findViewById(R.id.privacyCheck);
+        privacyCheck.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -73,8 +73,17 @@
             android:inputType="textPassword"
             android:textColor="#8A8585"
             android:textColorHint="#8A8585"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="25dp"
             android:id="@+id/confirmPassword"/>
+
+        <CheckBox
+            android:id="@+id/privacyCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textColor="@color/white"
+            android:text="@string/hyperlink_privacy"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -97,6 +106,9 @@
                 android:text="Register"
                 android:textSize="20sp"/>
         </FrameLayout>
+
+
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

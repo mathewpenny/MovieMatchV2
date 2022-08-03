@@ -63,38 +63,35 @@ public class WelcomePage extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navigationView = findViewById(R.id.drawer_view2);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) { //this is the item in the menu that was selected
-                int id = item.getItemId();
+        navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
+            int id = item.getItemId();
 
-                if (id == R.id.AccountLobby) {
-                    intent = new Intent(getApplicationContext(), Login.class);
-                    startActivity(intent);
-                    finish();
-                }else if(id == R.id.Instructions){
-                    intent = new Intent(getApplicationContext(), FAQ.class);
-                    startActivity(intent);
-                    finish();
-                }else if(id == R.id.Logout){
-                    // Firebase Sign Out
-                    mAuth.signOut();
-                    // Google Sign out
-                    gsc.signOut();
-                    // Facebook Sign Out
-                    LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(WelcomePage.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return false;
+            if (id == R.id.AccountLobby) {
+                intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            }else if(id == R.id.Instructions){
+                intent = new Intent(getApplicationContext(), FAQ.class);
+                startActivity(intent);
+                finish();
+            }else if(id == R.id.Logout){
+                // Firebase Sign Out
+                mAuth.signOut();
+                // Google Sign out
+                gsc.signOut();
+                // Facebook Sign Out
+                LoginManager.getInstance().logOut();
+                Intent intent = new Intent(WelcomePage.this, Login.class);
+                startActivity(intent);
+                finish();
             }
+            return false;
         });
 
-            searchBtn = (ImageButton) findViewById(R.id.swipeButton);
-            accountBtn = (ImageButton) findViewById(R.id.accountButton);
-            logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
-            name = (TextView) findViewById(R.id.nameText);
+            searchBtn =  findViewById(R.id.swipeButton);
+            accountBtn = findViewById(R.id.accountButton);
+            logoutBtn = findViewById(R.id.logoutButton);
+            name = findViewById(R.id.nameText);
 
             user = FirebaseAuth.getInstance().getCurrentUser();
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();

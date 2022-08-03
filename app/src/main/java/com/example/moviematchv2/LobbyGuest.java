@@ -127,7 +127,6 @@ public class LobbyGuest extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }

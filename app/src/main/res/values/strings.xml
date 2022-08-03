@@ -6,7 +6,8 @@
     <string name="fb_login_protocol_scheme">fb396185682520701</string>
     <string name="facebook_client_token">17d461661ccdc9cfbb5e434c86d1971c</string>
 
-
+    <string name="hyperlink_privacy">By checking this I agree to the <a href="https://app.termly.io/dashboard/website/066e09ba-feb6-4fe2-a987-cc7d394f90e4/privacy-policy">Privacy Policy</a>
+      </string>
     <!-- Spinner Strings -->
     <string-array name="streamingPlatform">
         <item>Choose Platform</item>

@@ -106,6 +106,7 @@ public class Swipe extends AppCompatActivity {
                         enableSwipe();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<JSONResponse> call, Throwable t) {
                 }
@@ -119,11 +120,11 @@ public class Swipe extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
-            }else if(id == R.id.Instructions){
+            } else if (id == R.id.Instructions) {
                 intent = new Intent(getApplicationContext(), FAQ.class);
                 startActivity(intent);
                 finish();
-            }else if(id == R.id.Logout){
+            } else if (id == R.id.Logout) {
                 // Firebase Sign Out
                 mAuth.signOut();
                 // Google Sign out
@@ -161,27 +162,27 @@ public class Swipe extends AppCompatActivity {
 
         int initialPage = generateRandomPage(chosenStreaming, chosenType);
 
-        Call<JSONResponse> call = movieApi.getMovies(initialPage, chosenStreaming, chosenType, chosenGenre);
-        call.enqueue(new Callback<JSONResponse>() {
-            @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                JSONResponse jsonResponse = response.body();
-                if(jsonResponse != null) {
-                    moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                    PutDataIntoRecyclerView(moviesList);
-                    enableSwipe();
-                } else {
-                    Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+        if (initialPage != 0 && chosenStreaming != null && chosenType != null && chosenGenre != 0) {
+            Call<JSONResponse> call = movieApi.getMovies(initialPage, chosenStreaming, chosenType, chosenGenre);
+            call.enqueue(new Callback<JSONResponse>() {
+                @Override
+                public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                    JSONResponse jsonResponse = response.body();
+                    if (jsonResponse != null) {
+                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
+                        PutDataIntoRecyclerView(moviesList);
+                        enableSwipe();
+                    } else {
+                        Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
+                    }
                 }
-
-            }
-            @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
-            }
-        });
-        registerForContextMenu(recyclerView);
+                @Override
+                public void onFailure(Call<JSONResponse> call, Throwable t) {
+                }
+            });
+            registerForContextMenu(recyclerView);
+        }
     }
-
 
     @NonNull
     private int generateRandomPage(String chosenStreaming, String chosenType) {

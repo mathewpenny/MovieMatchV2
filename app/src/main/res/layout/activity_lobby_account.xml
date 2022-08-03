@@ -88,30 +88,7 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/updateFrame"
-            android:layout_gravity="center"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="75dp">
-
-            <ImageButton
-                android:id="@+id/reviewButton"
-                android:layout_width="175dp"
-                android:layout_height="85dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30sp"
-                android:layout_gravity="center"
-                android:text="Review"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </FrameLayout>
+      
 
         <FrameLayout
             android:layout_width="wrap_content"
