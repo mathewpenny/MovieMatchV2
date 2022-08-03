@@ -66,7 +66,7 @@ public class Swipe extends AppCompatActivity {
     GoogleSignInOptions gso;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    ArrayList<String> matchMovies;
+    private ArrayList<String> matchMovies;
 
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
@@ -95,55 +95,48 @@ public class Swipe extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
-                call.enqueue(new Callback<JSONResponse>() {
-                    @Override
-                    public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                        JSONResponse jsonResponse = response.body();
-                        if (jsonResponse != null) {
-                            moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
-                            PutDataIntoRecyclerView(moviesList);
-                            enableSwipe();
-                        }
+        refresh.setOnClickListener(view -> {
+            Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(), chosenStreaming, chosenType, chosenGenre);
+            call.enqueue(new Callback<JSONResponse>() {
+                @Override
+                public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                    JSONResponse jsonResponse = response.body();
+                    if (jsonResponse != null) {
+                        moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
+                        PutDataIntoRecyclerView(moviesList);
+                        enableSwipe();
                     }
-                    @Override
-                    public void onFailure(Call<JSONResponse> call, Throwable t) {
-                    }
-                });
-            }
+                }
+                @Override
+                public void onFailure(Call<JSONResponse> call, Throwable t) {
+                }
+            });
         });
 
         navigationView = findViewById(R.id.drawer_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.AccountLobby) {
+                intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            }else if(id == R.id.Instructions){
+                intent = new Intent(getApplicationContext(), FAQ.class);
+                startActivity(intent);
+                finish();
+            }else if(id == R.id.Logout){
+                // Firebase Sign Out
+                mAuth.signOut();
+                // Google Sign out
+                gsc.signOut();
+                // Facebook Sign Out
+                LoginManager.getInstance().logOut();
 
-                if (id == R.id.AccountLobby) {
-                    intent = new Intent(getApplicationContext(), Login.class);
-                    startActivity(intent);
-                    finish();
-                }else if(id == R.id.Instructions){
-                    intent = new Intent(getApplicationContext(), FAQ.class);
-                    startActivity(intent);
-                    finish();
-                }else if(id == R.id.Logout){
-                    // Firebase Sign Out
-                    mAuth.signOut();
-                    // Google Sign out
-                    gsc.signOut();
-                    // Facebook Sign Out
-                    LoginManager.getInstance().logOut();
-
-                    Intent intent = new Intent(Swipe.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-                return false;
+                Intent intent = new Intent(Swipe.this, Login.class);
+                startActivity(intent);
+                finish();
             }
+            return false;
         });
 
         // Set up for saving matches
@@ -174,10 +167,12 @@ public class Swipe extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 JSONResponse jsonResponse = response.body();
+                Log.e("RANDOM_PAGE", "" + generateRandomPage());
                 if(jsonResponse != null) {
                     moviesList = new ArrayList<>(Arrays.asList(jsonResponse != null ? jsonResponse.getMovieList() : new Movie[0]));
                     PutDataIntoRecyclerView(moviesList);
                     enableSwipe();
+
                 } else {
                     Toast.makeText(Swipe.this, "Oh snap! We had a problem, try again please!", Toast.LENGTH_LONG).show();
                 }
@@ -189,35 +184,36 @@ public class Swipe extends AppCompatActivity {
         });
         registerForContextMenu(recyclerView);
     }
-    // generates a random page number. Will have to test the endpoints and use a switch case to
-    // set the maximum page depending on service, genre etc.
+
+
+    @NonNull
     private Integer generateRandomPage() {
-        int min = 1, max = 1;
-        // so far, this is for netflix. might be difficult to get the streaming service too.....
-        if(chosenStreaming.equals("netflix") && chosenType.equals("movies")) {
+        Random random = new Random();
+        int randomPage = 0;
+        while (chosenStreaming.equals("netflix") && chosenType.equals("movies")) {
             switch (chosenGenre) {
                 case 28:
-                    max = 56; // Action
+                    randomPage = random.nextInt(57); // Action
                     break;
                 case 12:
-                    max = 38; // Adventure
+                    randomPage = random.nextInt(39); //Adventure
                     break;
                 case 16:
-                    max = 16; // Animation
+                    randomPage = random.nextInt(17); // Animation
                     break;
                 case 1:
-                    max = 26; // Biography
+                    randomPage = random.nextInt(27); // Biography
                     break;
                 case 35:
-                    max = 133; // Comedy
+                    randomPage = random.nextInt(134); // Comedy
                     break;
                 case 80:
-                    max = 59; // Crime
+                    randomPage = random.nextInt(60); // Crime
                     break;
                 case 99:
-                    max = 78; // Documentary
+                    randomPage = random.nextInt(79); // Documentary
                     break;
-                case 18:
+                /*case 18:
                     max = 174; // Drama
                     break;
                 case 10751:
@@ -233,7 +229,7 @@ public class Swipe extends AppCompatActivity {
                     max = 5; // Musical
                     break;
                 case 10764:
-                    max = 1; // Reality
+                    max = 2; // Reality
                     break;
                 case 10749:
                     max = 49; // Romance
@@ -243,14 +239,16 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 53:
                     max = 93; // Thriller
+
                     break;
                 case 37:
                     max = 10; // Western
+                    randomPage = new Random().nextInt(max - min + 1);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if(chosenStreaming.equals("prime")) {
+        } else if (chosenStreaming.equals("prime") && chosenType.equals("movies")) {
             switch (chosenGenre) {
                 case 28:
                     max = 38; // Action
@@ -290,7 +288,7 @@ public class Swipe extends AppCompatActivity {
                     max = 3; // Musical
                     break;
                 case 10764:
-                    max = 1; // Reality
+                    max = 2; // Reality
                     break;
                 case 878:
                     max = 14; // Sci Fi
@@ -304,62 +302,62 @@ public class Swipe extends AppCompatActivity {
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if(chosenStreaming.equals("disney")) {
-                switch (chosenGenre) {
-                    case 28:
-                        max = 38; // Action
-                        break;
-                    case 12:
-                        max = 63; // Adventure
-                        break;
-                    case 16:
-                        max = 23; // Animation
-                        break;
-                    case 1:
-                        max = 12; // Biography
-                        break;
-                    case 35:
-                        max = 72; // Comedy
-                        break;
-                    case 80:
-                        max = 16; // Crime
-                        break;
-                    case 99:
-                        max = 22; // Documentary
-                        break;
-                    case 18:
-                        max = 50; // Drama
-                        break;
-                    case 10751:
-                        max = 47; // Family
-                        break;
-                    case 14:
-                    case 10749:
-                        max = 17; // Fantasy & Romance
-                        break;
-                    case 27:
-                        max = 6; // Horror
-                        break;
-                    case 4:
-                        max = 3; // Musical
-                        break;
-                    case 10764:  // NEED TO START HERE WHEN CALLS COME BACK
-                        max = 56; // Reality
-                        break;
-                    case 878:
-                        max = 14; // Sci Fi
-                        break;
-                    case 53:
-                        max = 11; // Thriller
-                        break;
-                    case 37:
-                        max = 2; // Western
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
-                }
+        } else if (chosenStreaming.equals("disney") && chosenType.equals("movies")) {
+            switch (chosenGenre) {
+                case 28:
+                    max = 38; // Action
+                    break;
+                case 12:
+                    max = 63; // Adventure
+                    break;
+                case 16:
+                    max = 23; // Animation
+                    break;
+                case 1:
+                    max = 12; // Biography
+                    break;
+                case 35:
+                    max = 72; // Comedy
+                    break;
+                case 80:
+                    max = 16; // Crime
+                    break;
+                case 99:
+                    max = 22; // Documentary
+                    break;
+                case 18:
+                    max = 50; // Drama
+                    break;
+                case 10751:
+                    max = 47; // Family
+                    break;
+                case 14:
+                case 10749:
+                    max = 17; // Fantasy & Romance
+                    break;
+                case 27:
+                    max = 6; // Horror
+                    break;
+                case 4:
+                    max = 3; // Musical
+                    break;
+                case 10764:
+                    max = 56; // Reality
+                    break;
+                case 878:
+                    max = 14; // Sci Fi
+                    break;
+                case 53:
+                    max = 11; // Thriller
+                    break;
+                case 37:
+                    max = 2; // Western
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        if(chosenStreaming.equals("netflix") && chosenType.equals("series")) {
+        }
+        if (chosenStreaming.equals("netflix") && chosenType.equals("series")) {
             switch (chosenGenre) {
                 case 28:
                     max = 20; // Action
@@ -392,7 +390,7 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 4:
                 case 37:
-                    max = 1; // Musical
+                    max = 2; // Musical
                     break;
                 case 10764:
                     max = 14; // Reality
@@ -404,7 +402,7 @@ public class Swipe extends AppCompatActivity {
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if(chosenStreaming.equals("prime") && chosenType.equals("series")) {
+        } else if (chosenStreaming.equals("prime") && chosenType.equals("series")) {
             switch (chosenGenre) {
                 case 28:
                 case 10764:
@@ -452,7 +450,7 @@ public class Swipe extends AppCompatActivity {
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
             }
-        } else if(chosenStreaming.equals("disney") && chosenType.equals("series")) {
+        } else if (chosenStreaming.equals("disney") && chosenType.equals("series")) {
             switch (chosenGenre) {
                 case 28:
                     max = 14; // Action
@@ -490,13 +488,16 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 53:
                     max = 2; // Thriller
-                    break;
+                    randomPage = random.nextInt(max);
+                    randomPage += 1;
+                break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                    throw new IllegalStateException("Unexpected value: " + chosenGenre); */
+
             }
         }
-                return new Random().nextInt(max - min + 1);
-        }
+                return randomPage;
+    }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
         adapter = new MovieAdapter(this, moviesList);
@@ -688,7 +689,6 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public void onBackPressed () {
-        moviesList.clear();
         Intent intent = new Intent(Swipe.this, LobbyHost.class);
         startActivity(intent);
         finish();
