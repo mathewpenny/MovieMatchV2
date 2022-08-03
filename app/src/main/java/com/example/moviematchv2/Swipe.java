@@ -160,11 +160,6 @@ public class Swipe extends AppCompatActivity {
         movieApi = retrofit.create(MovieApi.class);
 
         int initialPage = generateRandomPage(chosenStreaming, chosenType);
-        Log.e("INITIAL_PAGE", "" + initialPage); // shows 0 currently
-        Log.e("Streaming", "" + chosenStreaming);
-        Log.e("Type", "" + chosenType);
-
-
 
         Call<JSONResponse> call = movieApi.getMovies(initialPage, chosenStreaming, chosenType, chosenGenre);
         call.enqueue(new Callback<JSONResponse>() {
@@ -192,8 +187,6 @@ public class Swipe extends AppCompatActivity {
     private int generateRandomPage(String chosenStreaming, String chosenType) {
         Random random = new Random();
         if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
-            Log.e("Streaming", "" + chosenStreaming);
-            Log.e("Type", "" + chosenType);
             switch (chosenGenre) {
                 case 28:
                     max = 56;
@@ -331,7 +324,7 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 37:
                     max = 2; // Western
-                    answer = random.nextInt(max - 1) + 1;
+                    answer = random.nextInt(0) + 1;
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + chosenGenre);
@@ -640,16 +633,14 @@ public class Swipe extends AppCompatActivity {
                                    }
                                } // Now, check if user is already existing in the list, if no, add to list
                                if(!userExists) {
-                                   Log.e("USER_EXISTS", "" + userExists);
                                    movieDb.child("services").child(chosenStreaming).child(movieId).push().child("userId").setValue(currentUid);
                                    userDb.child(currentUid).child("connections").child(chosenStreaming).push().child("movieId").setValue(movieId);
                                }
                                // Then check if List is empty, If not empty, process user list to show matches in recyclerview
                                if(userIdList.size() == 0) {
-                                   Toast.makeText(Swipe.this, "Still...no matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(Swipe.this, "No matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
                                } else {
-                                   Toast.makeText(Swipe.this, "You have MATCHED! with " + userIdList.size() + " other people! Look at you, having good taste in movies!", Toast.LENGTH_SHORT).show();
-
+                                   Toast.makeText(Swipe.this, "You have MATCHED! with " + userIdList.size() + " other people!!", Toast.LENGTH_SHORT).show();
                                    // Launch the LobbyGuest Activity to pass the User Details from the Users table and project that into RecyclerView
                                    intent = new Intent(Swipe.this, LobbyGuest.class);
                                    intent.putExtra("movieTitle", movieTitle);

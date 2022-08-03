@@ -12,52 +12,36 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageButton
                 android:id="@+id/refreshBtn"
                 android:layout_width="185dp"
                 android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
                 android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30sp"
-                android:layout_gravity="center"
                 android:text="Refresh"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
-
+                android:layout_gravity="center"
+                android:textSize="16sp"/>
         </FrameLayout>
-
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:nestedScrollingEnabled="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_view"
         android:layout_width="wrap_content"
@@ -65,4 +49,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/header_layout"
         app:menu="@menu/drawer_menu"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>

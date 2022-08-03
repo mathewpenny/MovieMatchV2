@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,13 +25,12 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LobbyHost extends AppCompatActivity {
     private Spinner streamingSpn;
     private Spinner genreSpn;
-    private Spinner typeSpn; //new
-    private EditText phoneNumber;
-    private ImageButton sendBtn;
+    private Spinner typeSpn;
+    private ImageButton startBtn;
     private String friendNumber;
     private Integer chosenGenre;
     private String chosenStreaming;
-    private String chosenType; //new
+    private String chosenType;
     private NavigationView navigationView;
     private Intent intent;
     private FirebaseAuth mAuth;
@@ -48,9 +46,8 @@ public class LobbyHost extends AppCompatActivity {
 
         streamingSpn = (Spinner) findViewById(R.id.streamingSpinner);
         genreSpn = (Spinner) findViewById(R.id.genreSpinner);
-        typeSpn = (Spinner) findViewById(R.id.typeSpinner); //new
-        phoneNumber = (EditText) findViewById(R.id.phoneNumber);
-        sendBtn = (ImageButton) findViewById(R.id.sendRequestButton);
+        typeSpn = (Spinner) findViewById(R.id.typeSpinner);
+        startBtn = (ImageButton) findViewById(R.id.sendRequestButton);
 
         drawerLayout = findViewById(R.id.drawer_view2);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -60,60 +57,68 @@ public class LobbyHost extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        friendNumber = phoneNumber.getEditableText().toString();
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
         navigationView = findViewById(R.id.drawer_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) { //this is the item in the menu that was selected
-                int id = item.getItemId();
+        navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
+            int id = item.getItemId();
 
-                if (id == R.id.AccountLobby) {
-                    intent = new Intent(getApplicationContext(), Login.class);
-                    startActivity(intent);
-                    finish();
-                } else if (id == R.id.Instructions) {
-                    intent = new Intent(getApplicationContext(), FAQ.class);
-                    startActivity(intent);
-                    finish();
-                } else if (id == R.id.Logout) {
-                    // Firebase Sign Out
-                    mAuth.signOut();
-                    // Google Sign out
-                    gsc.signOut();
-                    // Facebook Sign Out
-                    LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(LobbyHost.this, Login.class);
-                    startActivity(intent);
-                    finish();
+            if (id == R.id.AccountLobby) {
+                intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            } else if (id == R.id.Instructions) {
+                intent = new Intent(getApplicationContext(), FAQ.class);
+                startActivity(intent);
+                finish();
+            } else if (id == R.id.Logout) {
+                // Firebase Sign Out
+                mAuth.signOut();
+                // Google Sign out
+                gsc.signOut();
+                // Facebook Sign Out
+                LoginManager.getInstance().logOut();
+                Intent intent = new Intent(LobbyHost.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+            return false;
+        });
+
+
+        streamingSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (streamingSpn.getSelectedItem().toString().equals("Netflix")) {
+                    chosenStreaming = "netflix";
+                } else if (streamingSpn.getSelectedItem().toString().equals("Prime")) {
+                    chosenStreaming = "prime";
+                } else if (streamingSpn.getSelectedItem().toString().equals("Disney")) {
+                    chosenStreaming = "disney";
                 }
-                return false;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Toast.makeText(LobbyHost.this, "Please choose a service.", Toast.LENGTH_SHORT).show();
+                streamingSpn.requestFocus();
             }
         });
         typeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                chosenType = typeSpn.getSelectedItem().toString();
+                if(typeSpn.getSelectedItem().toString().equals("Movie")) {
+                    chosenType = "movie";
+                }
+                else if (typeSpn.getSelectedItem().toString().equals("Movie")) {
+                    chosenType = "series";
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 Toast.makeText(LobbyHost.this, "Please choose a type.", Toast.LENGTH_SHORT).show();
-                streamingSpn.requestFocus();
-            }
-        });
-
-        streamingSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                chosenStreaming = streamingSpn.getSelectedItem().toString();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                Toast.makeText(LobbyHost.this, "Please choose a service.", Toast.LENGTH_SHORT).show();
                 streamingSpn.requestFocus();
             }
         });
@@ -176,27 +181,20 @@ public class LobbyHost extends AppCompatActivity {
                     case "Western":
                         chosenGenre = 37;
                         break;
-                    default:
-                        chosenGenre = 0; //can change the default to set no genre
-                        break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
-        //new if statement for type
-        //Must both send an SMS and forward data to swipe for API call
-        sendBtn.setOnClickListener(view -> {
+        startBtn.setOnClickListener(view -> {
             if (streamingSpn.getSelectedItem().toString().equals("Choose Platform")) {
                 Toast.makeText(LobbyHost.this, "Please choose a service", Toast.LENGTH_SHORT).show();
                 streamingSpn.requestFocus();
-            }if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){ //new
-                Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show(); //new
-                genreSpn.requestFocus(); //new
+            }if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
+                Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show();
+                genreSpn.requestFocus();
             }if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
                 Toast.makeText(LobbyHost.this, "Please choose a Type", Toast.LENGTH_SHORT).show();
                 genreSpn.requestFocus();
@@ -204,8 +202,7 @@ public class LobbyHost extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Swipe.class);
                 intent.putExtra("streaming", chosenStreaming);
                 intent.putExtra("genre", chosenGenre);
-                intent.putExtra("phone", friendNumber);
-                intent.putExtra("type", chosenType); //new
+                intent.putExtra("type", chosenType);
                 startActivity(intent);
                 finish();
             }

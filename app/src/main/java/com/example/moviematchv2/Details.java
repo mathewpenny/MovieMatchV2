@@ -22,7 +22,6 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         recyclerView = findViewById(R.id.recyclerView2);
-        // moviesList = new ArrayList<>();
 
         Intent intent = getIntent();
         int pos = intent.getIntExtra("position",0);
@@ -30,6 +29,7 @@ public class Details extends AppCompatActivity {
         PutDataIntoRecyclerView(Collections.singletonList(Swipe.moviesList.get(pos)));
 
     }
+
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
         adapter = new DetailsAdapter(this, moviesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

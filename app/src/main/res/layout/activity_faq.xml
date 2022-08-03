@@ -18,30 +18,43 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:textColor="@color/white"
-        android:text="How to use"/>
+        android:text="How to Match"/>
 
     <TextView
         android:id="@+id/howToText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:textColor="@color/white"
-        android:text="Once you have created an account, head to the Host section. Here you can choose a service
-(Netflix, Disney+ or Prime Video) and choose a genre. Enter your friends number and press
-the SEND button. Movies will start to appear and you can swipe left for NO or right for
-YES. Once a match is made, you have the movie or series that you will watch tonight!!"/>
+        android:text="Once you have created an account, head to the Swipe section.
+Here you can choose a service (Netflix, Disney+ or Prime Video), choose a
+genre and press Start. Movies will start to appear and you can swipe left
+for NO or right for YES. Once a match is made, you will see who else wants to see that
+choice!!"/>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:textColor="@color/white"
-        android:text=""/>
+        android:text="Contacting Matches"/>
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:textColor="@color/white"
         android:text="More Blablabla"/>
 </LinearLayout>

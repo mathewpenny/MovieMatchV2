@@ -8,6 +8,7 @@
     android:padding="10dp"
     android:layout_margin="25dp"
     app:cardCornerRadius="8dp"
+    android:onClick="SMS"
     app:cardBackgroundColor="@color/bgblack">
 
     <LinearLayout
@@ -52,7 +53,8 @@
             android:text="TextView"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            />
 
     </LinearLayout>
 
