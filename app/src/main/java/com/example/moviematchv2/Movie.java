@@ -2,20 +2,22 @@ package com.example.moviematchv2;
 
 public class Movie {
 
-    private String title, tmdbID;
+    private String title, tmdbID, movieLink;
     private PosterURLs posterURLs;
     private int year;
     private int runtime;
     private String overview;
     private String originalLanguage;
 
+    public Movie() {
+    }
 
     public Movie(String title, String tmdbID) {
         this.title = title;
         this.tmdbID = tmdbID;
     }
 
-    public Movie(String title, String tmdbID, int year, int runtime, String overview, PosterURLs posterURLS, String originalLanguage) {
+    public Movie(String title, String tmdbID, int year, int runtime, String overview, PosterURLs posterURLS, String originalLanguage, String movieLink) {
         this.title = title;
         this.tmdbID = tmdbID;
         this.year = year;
@@ -23,8 +25,16 @@ public class Movie {
         this.overview = overview;
         this.posterURLs = posterURLS;
         this.originalLanguage = originalLanguage;
+        this.movieLink = movieLink;
     }
 
+    public String getMovieLink() {
+        return movieLink;
+    }
+
+    public void setMovieLink(String movieLink) {
+        this.movieLink = movieLink;
+    }
 
     public int getYear() {
         return year;
@@ -58,8 +68,6 @@ public class Movie {
         this.originalLanguage = originalLanguage;
     }
 
-    public Movie() {
-    }
 
     public String getTmdbID() {
         return tmdbID;

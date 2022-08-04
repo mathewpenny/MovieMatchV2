@@ -1,8 +1,11 @@
 package com.example.moviematchv2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,13 +46,13 @@ public class LobbyGuest extends AppCompatActivity {
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
     private DatabaseReference userDb;
-    private String currentUid;
+    private String currentUid, movieTitle, movieId, chosenStreaming;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-
+    private ImageButton playBtn, shareBtn;
     private ArrayList<String> potentialMatch;
     private ArrayList<User> matchPeople;
-    private String movieTitle;
+
 
 
 
@@ -73,6 +76,8 @@ public class LobbyGuest extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        playBtn = findViewById(R.id.playButton);
+        shareBtn = findViewById(R.id.shareButton);
 
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -99,15 +104,68 @@ public class LobbyGuest extends AppCompatActivity {
             }
             return false;
         });
+        intent = getIntent();
+
+        chosenStreaming = intent.getStringExtra("chosenStreaming"); // streaming platform for share and play button
+        movieId = intent.getStringExtra("movieId"); // list of movie ids
+        movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
+        potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
+        movieTitleRV.setText(movieTitle);
+
+        // OnClick for opening other applications from clicking in Swipe Activity
+        // If User is signed into their streaming accounts, button will open that app. If it is not downloaded or signed in, Exception passes
+        // Intent to the website instead. Need to drill into the response tree and get the link. Set up for link is
+        // "streamingInfo" { "ca" { "link" : "https://blah blah "
+        playBtn.setOnClickListener(view -> {
+            String urlNetflix = "http://www.netflix.com/";
+            String urlPrime ="https://www.primevideo.com/";
+            String urlDisney = "https://www.disneyplus.com/";
+            Log.e("MOVIE_ID", ""+ movieId);
+            switch (chosenStreaming) {
+                case "netflix":
+                    try {
+                        urlNetflix += movieId;
+                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                        launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
+                        launchIntent.putExtra("movieId", movieId);
+                      //  launchIntent.setData(Uri.parse(urlNetflix));
+                        startActivity(launchIntent);
+                    } catch (Exception e) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(urlNetflix));
+                        startActivity(intent);
+                    }
+                    break;
+                case "prime":
+                    try {
+                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                        launchIntent.setClassName("com.amazon.firebat", "com.amazon.firebat.deeplink.DeepLinkRoutingActivity");
+                        launchIntent.setData(Uri.parse(urlPrime));
+                        startActivity(launchIntent);
+                    } catch (Exception e) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(urlPrime));
+                        startActivity(intent);
+                    }
+                    break;
+                case "disney":
+                    try {
+                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                        launchIntent.setClassName("com.disney.disneyplus", "com.bamtechmedia.dominguez.main.MainActivity");
+                        launchIntent.setData(Uri.parse(urlDisney));
+                        startActivity(launchIntent);
+                    } catch (Exception e) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(urlDisney));
+                        startActivity(intent);
+                    }
+                    break;
+            }
+        });
 
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         userDb = FirebaseDatabase.getInstance().getReference().child("Users");
         matchPeople = new ArrayList<>();
-
-        intent = getIntent();
-        movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
-        potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
-        movieTitleRV.setText(movieTitle);
 
         Query userDbQuery = userDb.orderByKey();
         userDbQuery.addValueEventListener(new ValueEventListener() {
@@ -128,6 +186,16 @@ public class LobbyGuest extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
+        });
+
+        shareBtn.setOnClickListener(view -> {
+            Intent myIntent = new Intent(Intent.ACTION_SEND);
+            myIntent.setType("text/plain");
+            String shareBody = "Hey! I just found a person to watch " + movieTitle + " on Movie Match!!";
+            String shareSub = "Found a Movie Match!";
+            myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
+            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(myIntent, "Share using"));
         });
     }
 

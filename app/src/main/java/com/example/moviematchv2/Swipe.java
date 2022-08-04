@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -160,54 +159,6 @@ public class Swipe extends AppCompatActivity {
                 .build();
         movieApi = retrofit.create(MovieApi.class);
 
-       // OnClick for opening other applications from clicking in Swipe Activity
-           playBtn.setOnClickListener(view -> {
-               String urlNetflix = "http://www.netflix.com/";
-               String urlPrime ="https://www.primevideo.com/";
-               String urlDisney = "https://www.disneyplus.com/home/";
-
-               if(chosenStreaming.equals("netflix")) {
-                   try {
-                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                       launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
-                       launchIntent.setData(Uri.parse(urlNetflix));
-                       startActivity(launchIntent);
-
-                   } catch (Exception e) {
-                       // in case, Netflix is not installed, will send to website
-                       Intent intent = new Intent(Intent.ACTION_VIEW);
-                       intent.setData(Uri.parse(urlNetflix));
-                       startActivity(intent);
-                   }
-               } else if(chosenStreaming.equals("prime")) {
-                   try {
-                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                       launchIntent.setClassName("com.amazon.firebat", "com.amazon.firebat.deeplink.DeepLinkRoutingActivity");
-                       launchIntent.setData(Uri.parse(urlPrime));
-                       startActivity(launchIntent);
-
-                   } catch (Exception e) {
-                       Intent intent = new Intent(Intent.ACTION_VIEW);
-                       intent.setData(Uri.parse(urlPrime));
-                       startActivity(intent);
-                   }
-               }
-               else if(chosenStreaming.equals("disney")) {
-                   try {
-                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                       launchIntent.setClassName("com.disney.disneyplus", "com.bamtechmedia.dominguez.main.MainActivity");
-                       launchIntent.setData(Uri.parse(urlDisney));
-                       startActivity(launchIntent);
-
-                   } catch (Exception e) {
-                       Intent intent = new Intent(Intent.ACTION_VIEW);
-                       intent.setData(Uri.parse(urlDisney));
-                       startActivity(intent);
-                   }
-               }
-
-           });
-
         int initialPage = generateRandomPage(chosenStreaming, chosenType);
 
         if (initialPage != 0 && chosenStreaming != null && chosenType != null && chosenGenre != 0) {
@@ -236,395 +187,396 @@ public class Swipe extends AppCompatActivity {
     private int generateRandomPage(String chosenStreaming, String chosenType) {
         Random random = new Random();
         int max;
-        if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
-            switch (chosenGenre) {
-                case 28:
-                    max = 56;
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                    max = 38; //Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 16:
-                    max = 16; // Animation
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                    max = 26; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                    max = 133; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 59; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 78; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 18:
-                    max = 174; // Drama
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 31; // Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 14:
-                    max = 22; // Fantasy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 27:
-                    max = 75; // Horror
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 4:
-                    max = 5; // Musical
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10764:
-                    max = 2; // Reality
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10749:
-                    max = 49; // Romance
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 878:
-                    max = 30; // Sci Fi
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 53:
-                    max = 93; // Thriller
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 37:
-                    max = 10; // Western
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 56;
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                        max = 38; //Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 16:
+                        max = 16; // Animation
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                        max = 26; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                        max = 133; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 59; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 78; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 18:
+                        max = 174; // Drama
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 31; // Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 14:
+                        max = 22; // Fantasy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 27:
+                        max = 75; // Horror
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 4:
+                        max = 5; // Musical
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10764:
+                        max = 2; // Reality
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10749:
+                        max = 49; // Romance
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 878:
+                        max = 30; // Sci Fi
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 53:
+                        max = 93; // Thriller
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 37:
+                        max = 10; // Western
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
+            } else if (chosenStreaming.equals("prime") && chosenType.equals("movie")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 38; // Action
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                        max = 63; // Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 16:
+                        max = 23; // Animation
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                        max = 12; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                        max = 72; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 16; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 22; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 18:
+                        max = 50; // Drama
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 47; // Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 14:
+                    case 10749:
+                        max = 17; // Fantasy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 27:
+                        max = 6; // Horror
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 4:
+                        max = 3; // Musical
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10764:
+                        max = 2; // Reality
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 878:
+                        max = 14; // Sci Fi
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 53:
+                        max = 11; // Thriller
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 37:
+                        max = 2; // Western
+                        answer = random.nextInt(0) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
+            } else if (chosenStreaming.equals("disney") && chosenType.equals("movie")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 38; // Action
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                        max = 63; // Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 16:
+                        max = 23; // Animation
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                        max = 12; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                        max = 72; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 16; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 22; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 18:
+                        max = 50; // Drama
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 47; // Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 14:
+                    case 10749:
+                        max = 17; // Fantasy & Romance
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 27:
+                        max = 6; // Horror
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 4:
+                        max = 3; // Musical
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10764:
+                        max = 56; // Reality
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 878:
+                        max = 14; // Sci Fi
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 53:
+                        max = 11; // Thriller
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 37:
+                        max = 2; // Western
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
             }
-        } else if (chosenStreaming.equals("prime") && chosenType.equals("movie")) {
-            switch (chosenGenre) {
-                case 28:
-                    max = 38; // Action
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                    max = 63; // Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 16:
-                    max = 23; // Animation
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                    max = 12; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                    max = 72; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 16; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 22; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 18:
-                    max = 50; // Drama
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 47; // Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 14:
-                case 10749:
-                    max = 17; // Fantasy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 27:
-                    max = 6; // Horror
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 4:
-                    max = 3; // Musical
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10764:
-                    max = 2; // Reality
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 878:
-                    max = 14; // Sci Fi
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 53:
-                    max = 11; // Thriller
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 37:
-                    max = 2; // Western
-                    answer = random.nextInt(0) + 1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
-            }
-        } else if (chosenStreaming.equals("disney") && chosenType.equals("movie")) {
-            switch (chosenGenre) {
-                case 28:
-                    max = 38; // Action
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                    max = 63; // Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 16:
-                    max = 23; // Animation
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                    max = 12; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                    max = 72; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 16; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 22; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 18:
-                    max = 50; // Drama
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 47; // Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 14:
-                case 10749:
-                    max = 17; // Fantasy & Romance
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 27:
-                    max = 6; // Horror
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 4:
-                    max = 3; // Musical
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10764:
-                    max = 56; // Reality
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 878:
-                    max = 14; // Sci Fi
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 53:
-                    max = 11; // Thriller
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 37:
-                    max = 2; // Western
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
-            }
-        }
-        if (chosenStreaming.equals("netflix") && chosenType.equals("series")) {
-            switch (chosenGenre) {
-                case 28:
-                    max = 20; // Action
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                    max = 23; // Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 16:
-                    max = 28; // Animation
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                case 14:
-                case 27:
-                    max = 5; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                    max = 31; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 22; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 30; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 18:
-                    max = 33; // Drama
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 13;  // & Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 4:
-                case 37:
-                    max = 2; // Musical
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10764:
-                    max = 14; // Reality
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 878:
-                case 53:
-                    max = 4; // Sci Fi
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
-            }
-        } else if (chosenStreaming.equals("prime") && chosenType.equals("series")) {
-            switch (chosenGenre) {
-                case 28:
-                case 10764:
-                case 878:
-                    max = 12; // Action
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                    max = 13; // Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 16:
-                    max = 11; // Animation
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                case 27:
-                    max = 4; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                    max = 22; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 17; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 21; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 18:
-                    max = 38; // Drama
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 9; // Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 14:
-                    max = 7;
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10749:
-                case 4:
-                    max = 1; // Fantasy
-                    answer = random.nextInt(0) + 1;
-                    break;
-                case 53:
-                    max = 6; // Thriller
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 37:
-                    max = 2;
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
-            }
-        } else if (chosenStreaming.equals("disney") && chosenType.equals("series")) {
-            switch (chosenGenre) {
-                case 28:
-                    max = 14; // Action
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 12:
-                case 16:
-                    max = 18; // Adventure
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 1:
-                    max = 3; // Biography
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 35:
-                case 18:
-                    max = 21; // Comedy
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 80:
-                    max = 8; // Crime
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 99:
-                    max = 12; // Documentary
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 10751:
-                    max = 13; // Family
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 14:
-                case 878:
-                    max = 4;
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 27:
-                case 4:
-                    max = 1; // Horror
-                    answer = random.nextInt(0) + 1;
-                    break;
-                case 10764:
-                    max = 6; // Reality
-                    answer = random.nextInt(max - 1) + 1;
-                    break;
-                case 53:
-                    max = 2; // Thriller
-                    answer = random.nextInt(max - 1) + 1;
-                break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + chosenGenre);
+            if (chosenStreaming.equals("netflix") && chosenType.equals("series")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 20; // Action
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                        max = 23; // Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 16:
+                        max = 28; // Animation
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                    case 14:
+                    case 27:
+                        max = 5; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                        max = 31; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 22; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 30; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 18:
+                        max = 33; // Drama
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 13;  // & Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 4:
+                    case 37:
+                        max = 2; // Musical
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10764:
+                        max = 14; // Reality
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 878:
+                    case 53:
+                        max = 4; // Sci Fi
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
+            } else if (chosenStreaming.equals("prime") && chosenType.equals("series")) {
+                switch (chosenGenre) {
+                    case 28:
+                    case 10764:
+                    case 878:
+                        max = 12; // Action
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                        max = 13; // Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 16:
+                        max = 11; // Animation
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                    case 27:
+                        max = 4; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                        max = 22; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 17; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 21; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 18:
+                        max = 38; // Drama
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 9; // Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 14:
+                        max = 7;
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10749:
+                    case 4:
+                        max = 1; // Fantasy
+                        answer = random.nextInt(0) + 1;
+                        break;
+                    case 53:
+                        max = 6; // Thriller
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 37:
+                        max = 2;
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                }
+            } else if (chosenStreaming.equals("disney") && chosenType.equals("series")) {
+                switch (chosenGenre) {
+                    case 28:
+                        max = 14; // Action
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 12:
+                    case 16:
+                        max = 18; // Adventure
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 1:
+                        max = 3; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 35:
+                    case 18:
+                        max = 21; // Comedy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 80:
+                        max = 8; // Crime
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 99:
+                        max = 12; // Documentary
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 10751:
+                        max = 13; // Family
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 14:
+                    case 878:
+                        max = 4;
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 27:
+                    case 4:
+                        max = 1; // Horror
+                        answer = random.nextInt(0) + 1;
+                        break;
+                    case 10764:
+                        max = 6; // Reality
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    case 53:
+                        max = 2; // Thriller
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
 
+                }
             }
-        }
-        Log.e("Answer", "" + answer);
-            return answer;
+            Log.e("Answer", "" + answer);
+
+        return answer;
     }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {
@@ -640,7 +592,6 @@ public class Swipe extends AppCompatActivity {
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
             }
-
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getBindingAdapterPosition();
@@ -660,6 +611,7 @@ public class Swipe extends AppCompatActivity {
                     final Movie deletedModel = moviesList.get(position);
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
+                    String movieLink = deletedModel.getMovieLink();
 
                     Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
                     movieIdQuery.addValueEventListener(new ValueEventListener() {
@@ -693,12 +645,14 @@ public class Swipe extends AppCompatActivity {
                                    Toast.makeText(Swipe.this, "You have MATCHED! with " + userIdList.size() + " other people!!", Toast.LENGTH_SHORT).show();
                                    // Launch the LobbyGuest Activity to pass the User Details from the Users table and project that into RecyclerView
                                    intent = new Intent(Swipe.this, LobbyGuest.class);
+                                   intent.putExtra("chosenStreaming", chosenStreaming);
+                                   intent.putExtra("movieId", movieId);
                                    intent.putExtra("movieTitle", movieTitle);
                                    intent.putStringArrayListExtra("PASS_MATCHES", userIdList);
                                    startActivity(intent);
                                }
                            } else {
-                               Log.e("MOVIE_EXISTS", "" + movieId);
+                               Log.e("MOVIE_EXISTS", "" + movieId); // can maybe use the play button here and get the id to open on watch
                                // here we want to add movie Id, title and user id to the database and tell them that they
                                // have bad taste in movies aka no matches :(
                                movieDb.child("services").child(chosenStreaming).child(movieId).push().child("movieTitle").setValue(movieTitle);
@@ -710,10 +664,8 @@ public class Swipe extends AppCompatActivity {
                            movieIdQuery.removeEventListener(this);
 
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                     final int deletedPosition = position;
@@ -774,7 +726,7 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), String.valueOf(item), chosenType, chosenGenre); //new
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), String.valueOf(item), chosenType, chosenGenre);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

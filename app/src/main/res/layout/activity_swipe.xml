@@ -13,9 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,28 +35,7 @@
                 android:textSize="16sp"/>
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
 
-            <ImageButton
-                android:id="@+id/playButton"
-                android:layout_width="185dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_theaters_24"
-                android:scaleType="centerCrop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:text="Play"
-                android:textSize="16sp" />
-        </FrameLayout>
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

@@ -4,6 +4,7 @@ package com.example.moviematchv2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import java.util.List;
 public class Details extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DetailsAdapter adapter;
+    TextView playLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +24,16 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         recyclerView = findViewById(R.id.recyclerView2);
+        playLink = findViewById(R.id.playLink);
 
         Intent intent = getIntent();
         int pos = intent.getIntExtra("position",0);
         Log.e("detailsPosition", String.valueOf(pos));
         PutDataIntoRecyclerView(Collections.singletonList(Swipe.moviesList.get(pos)));
 
+        playLink.setOnClickListener(view -> {
+            Intent launchIntent = new Intent();
+        });
     }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {

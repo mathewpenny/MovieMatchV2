@@ -69,16 +69,7 @@
                 android:text="Register"
                 android:textSize="18sp"/>
         </FrameLayout>
-
-    <FrameLayout
-        android:layout_marginTop="75dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_below="@+id/registerFrame">
-
-    </FrameLayout>
-
+    
     <TextView
         android:id="@+id/regText"
         android:layout_width="match_parent"

@@ -22,7 +22,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:textColor="@color/white"
-        android:text="How to Match"/>
+        android:text="Finding Something to Watch"/>
 
     <TextView
         android:id="@+id/howToText"
