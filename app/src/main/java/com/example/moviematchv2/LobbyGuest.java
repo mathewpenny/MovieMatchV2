@@ -83,7 +83,12 @@ public class LobbyGuest extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            if (id == R.id.AccountLobby) {
+            if(id == R.id.WelcomePage) {
+                intent = new Intent(getApplicationContext(), WelcomePage.class);
+                startActivity(intent);
+                finish();
+            }
+            else if (id == R.id.AccountLobby) {
                 intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();

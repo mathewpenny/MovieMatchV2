@@ -1,15 +1,15 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -54,8 +54,12 @@ public class LobbyAccount extends AppCompatActivity {
             navigationView = findViewById(R.id.drawer_view);
             navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
                 int id = item.getItemId();
-
-                if (id == R.id.AccountLobby) {
+                if(id == R.id.WelcomePage) {
+                    intent = new Intent(getApplicationContext(), WelcomePage.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else if (id == R.id.AccountLobby) {
                     intent = new Intent(getApplicationContext(), Login.class);
                     startActivity(intent);
                     finish();
