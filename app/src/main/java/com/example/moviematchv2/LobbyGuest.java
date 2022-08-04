@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class LobbyGuest extends AppCompatActivity {
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
     private DatabaseReference userDb;
-    private String currentUid, movieTitle, movieId, chosenStreaming;
+    private String currentUid, movieTitle, movieId, chosenStreaming, name;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageButton playBtn, shareBtn;
@@ -115,6 +116,7 @@ public class LobbyGuest extends AppCompatActivity {
         movieId = intent.getStringExtra("movieId"); // list of movie ids
         movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
         potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
+        name = intent.getStringExtra("name");
         movieTitleRV.setText(movieTitle);
 
         // OnClick for opening other applications from clicking in Swipe Activity
@@ -132,8 +134,7 @@ public class LobbyGuest extends AppCompatActivity {
                         urlNetflix += movieId;
                         Intent launchIntent = new Intent(Intent.ACTION_VIEW);
                         launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
-                        launchIntent.putExtra("movieId", movieId);
-                      //  launchIntent.setData(Uri.parse(urlNetflix));
+                        launchIntent.setData(Uri.parse(urlNetflix));
                         startActivity(launchIntent);
                     } catch (Exception e) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -193,36 +194,46 @@ public class LobbyGuest extends AppCompatActivity {
             }
         });
 
-        shareBtn.setOnClickListener(view -> {
-            Intent myIntent = new Intent(Intent.ACTION_SEND);
-            myIntent.setType("text/plain");
-            String shareBody = "Hey! I just found a person to watch " + movieTitle + " on Movie Match!!";
-            String shareSub = "Found a Movie Match!";
-            myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
-            myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(myIntent, "Share using"));
-        });
-    }
-
-    private void PutDataIntoRecyclerView(List<User> usersList) {
-        adapter = new UserAdapter(this, usersList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+            shareBtn.setOnClickListener(view -> {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "Hey! I just found a person to watch " + movieTitle + " on Movie Match!!";
+                String shareSub = "Found a Movie Match!";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
+                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(myIntent, "Share using"));
+            });
         }
-        return super.onOptionsItemSelected(item);
-    }
+
+        public void sendText(View view){
+            String phone = matchPeople.get(adapter.getPosition()).getUserPhone();
+            String nameFriend = matchPeople.get(adapter.getPosition()).getUserName();
+            Uri uri = Uri.parse("smsto:" + phone);
+            Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+            String message = ("Hello " + nameFriend + ". My name is " + name +  ". We just matched on the application MovieMatch for the following movie: " + movieTitle + ". Would you like to watch it together?" );
+            intent.putExtra("sms_body", "" + message);
+            startActivity(intent);
+        }
+
+        private void PutDataIntoRecyclerView(List<User> usersList) {
+            adapter = new UserAdapter(this, usersList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
 
 
-    @Override
-    public void onBackPressed () {
-        Intent intent = new Intent(LobbyGuest.this, Swipe.class);
-        startActivity(intent);
-        finish();
+        @Override
+        public void onBackPressed () {
+            Intent intent = new Intent(LobbyGuest.this, Swipe.class);
+            startActivity(intent);
+            finish();
+        }
     }
-}

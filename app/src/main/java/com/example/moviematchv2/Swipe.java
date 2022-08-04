@@ -72,7 +72,7 @@ public class Swipe extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private DatabaseReference userDb;
-    private String currentUid;
+    private String currentUid, name;
 
 
     @Override
@@ -86,7 +86,6 @@ public class Swipe extends AppCompatActivity {
         matchMovies = new ArrayList<>();
 
         ImageButton refreshBtn = findViewById(R.id.refreshBtn);
-        ImageButton playBtn = findViewById(R.id.playButton);
 
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -120,8 +119,7 @@ public class Swipe extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
-            }
-            else if (id == R.id.AccountLobby) {
+            } else if (id == R.id.AccountLobby) {
                 intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
@@ -154,6 +152,7 @@ public class Swipe extends AppCompatActivity {
         chosenType = intent.getStringExtra("type");
         chosenStreaming = intent.getStringExtra("streaming");
         chosenGenre = intent.getIntExtra("genre", 0);
+        name = intent.getStringExtra("name");
 
         // Set up for showing movies in recyclerview
         recyclerView = findViewById(R.id.recyclerView);
@@ -653,11 +652,11 @@ public class Swipe extends AppCompatActivity {
                                    intent.putExtra("chosenStreaming", chosenStreaming);
                                    intent.putExtra("movieId", movieId);
                                    intent.putExtra("movieTitle", movieTitle);
+                                   intent.putExtra("name", name);
                                    intent.putStringArrayListExtra("PASS_MATCHES", userIdList);
                                    startActivity(intent);
                                }
                            } else {
-                               Log.e("MOVIE_EXISTS", "" + movieId); // can maybe use the play button here and get the id to open on watch
                                // here we want to add movie Id, title and user id to the database and tell them that they
                                // have bad taste in movies aka no matches :(
                                movieDb.child("services").child(chosenStreaming).child(movieId).push().child("movieTitle").setValue(movieTitle);
@@ -665,8 +664,8 @@ public class Swipe extends AppCompatActivity {
                                userDb.child(currentUid).child("connections").child(chosenStreaming).push().child("movieId").setValue(movieId);
                                Toast.makeText(Swipe.this, "No matches yet! Keep trying!", Toast.LENGTH_SHORT).show();
                            }
-                           // stops the listener so that it doesn't push the user again.
-                           movieIdQuery.removeEventListener(this);
+                            // stops the listener so that it doesn't push the user again.
+                            movieIdQuery.removeEventListener(this);
 
                         }
                         @Override

@@ -49,7 +49,7 @@
             android:layout_gravity="center">
 
             <ImageButton
-                android:id="@+id/swipeButton"
+                android:id="@+id/startButton"
                 android:layout_width="250dp"
                 android:layout_height="85dp"
                 android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 android:layout_height="30sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
-                android:text="Swipe"
+                android:text="Start"
                 android:textSize="20sp"/>
         </FrameLayout>
 

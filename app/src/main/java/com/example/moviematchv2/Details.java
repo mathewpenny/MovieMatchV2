@@ -24,16 +24,13 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         recyclerView = findViewById(R.id.recyclerView2);
-        playLink = findViewById(R.id.playLink);
+
 
         Intent intent = getIntent();
         int pos = intent.getIntExtra("position",0);
         Log.e("detailsPosition", String.valueOf(pos));
         PutDataIntoRecyclerView(Collections.singletonList(Swipe.moviesList.get(pos)));
 
-        playLink.setOnClickListener(view -> {
-            Intent launchIntent = new Intent();
-        });
     }
 
     private void PutDataIntoRecyclerView(List<Movie> moviesList) {

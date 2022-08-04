@@ -27,10 +27,9 @@ public class LobbyHost extends AppCompatActivity {
     private Spinner genreSpn;
     private Spinner typeSpn;
     private ImageButton startBtn;
-    private String friendNumber;
     private Integer chosenGenre;
     private String chosenStreaming;
-    private String chosenType;
+    private String chosenType, name;
     private NavigationView navigationView;
     private Intent intent;
     private FirebaseAuth mAuth;
@@ -61,6 +60,9 @@ public class LobbyHost extends AppCompatActivity {
         gsc = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
+        intent = getIntent();
+        name = intent.getStringExtra("name");
+
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
             int id = item.getItemId();
@@ -69,8 +71,7 @@ public class LobbyHost extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
-            }
-            else if (id == R.id.AccountLobby) {
+            } else if (id == R.id.AccountLobby) {
                 intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
@@ -120,7 +121,6 @@ public class LobbyHost extends AppCompatActivity {
                     chosenType = "series";
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 Toast.makeText(LobbyHost.this, "Please choose a type.", Toast.LENGTH_SHORT).show();
@@ -208,6 +208,7 @@ public class LobbyHost extends AppCompatActivity {
                 intent.putExtra("streaming", chosenStreaming);
                 intent.putExtra("genre", chosenGenre);
                 intent.putExtra("type", chosenType);
+                intent.putExtra("name", name);
                 startActivity(intent);
                 finish();
             }

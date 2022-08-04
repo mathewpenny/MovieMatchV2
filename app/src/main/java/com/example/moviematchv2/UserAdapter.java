@@ -17,6 +17,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
     private Context context;
     public List<User> usersList;
+    private int position;
 
     public UserAdapter(Context context, List<User> usersList) {
         this.context = context;
@@ -48,6 +49,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
     @Override
     public int getItemCount() {
         return usersList.size();
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public class UsersViewHolder extends RecyclerView.ViewHolder {

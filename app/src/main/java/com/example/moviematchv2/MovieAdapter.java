@@ -65,7 +65,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
                 load(moviesList.get(position)
                         .getPosterURLs().getOriginal())
                 .into(holder.poster);
-
         holder.title.setOnLongClickListener(v -> {
             setPosition(holder.getPosition());
             return true;

@@ -80,7 +80,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHo
             runtime = itemView.findViewById(R.id.runtime);
             overview = itemView.findViewById(R.id.overview);
             language = itemView.findViewById(R.id.language);
-            playLink = itemView.findViewById(R.id.playLink);
+
         }
     }
 }

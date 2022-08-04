@@ -35,4 +35,10 @@ public class DeleteAccount extends AppCompatActivity{
             });
         });
     }
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(DeleteAccount.this, LobbyAccount.class);
+        startActivity(intent);
+        finish();
+    }
 }

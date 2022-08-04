@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class WelcomePage extends AppCompatActivity {
 
-    private ImageButton logoutBtn, searchBtn, accountBtn;
+    private ImageButton logoutBtn, startBtn, accountBtn;
     private TextView name;
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
@@ -92,7 +92,7 @@ public class WelcomePage extends AppCompatActivity {
             return false;
         });
 
-            searchBtn =  findViewById(R.id.swipeButton);
+            startBtn =  findViewById(R.id.startButton);
             accountBtn = findViewById(R.id.accountButton);
             logoutBtn = findViewById(R.id.logoutButton);
             name = findViewById(R.id.nameText);
@@ -132,8 +132,9 @@ public class WelcomePage extends AppCompatActivity {
         request.executeAsync();
 */
 
-            searchBtn.setOnClickListener(view -> {
+            startBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
+                intent.putExtra("name", userName);
                 startActivity(intent);
                 finish();
             });
@@ -156,7 +157,6 @@ public class WelcomePage extends AppCompatActivity {
             });
         }
 
-    // Outside of onCreate() starts here
     private void getUserName() {
         userDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
