@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -57,8 +58,8 @@ public class Swipe extends AppCompatActivity {
     private MovieApi movieApi;
     private MovieAdapter adapter;
     private String chosenStreaming;
-    private ImageButton refresh;
-    private int chosenGenre, position, answer, max;
+    private int chosenGenre;
+    private int answer;
     private String chosenType;
     private Intent intent;
     NavigationView navigationView;
@@ -85,7 +86,8 @@ public class Swipe extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         matchMovies = new ArrayList<>();
 
-        refresh = findViewById(R.id.refreshBtn);
+        ImageButton refreshBtn = findViewById(R.id.refreshBtn);
+        ImageButton playBtn = findViewById(R.id.playButton);
 
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -94,11 +96,11 @@ public class Swipe extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        refresh.setOnClickListener(view -> {
+        refreshBtn.setOnClickListener(view -> {
             Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), chosenStreaming, chosenType, chosenGenre);
             call.enqueue(new Callback<JSONResponse>() {
                 @Override
-                public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                public void onResponse(@NonNull Call<JSONResponse> call, @NonNull Response<JSONResponse> response) {
                     JSONResponse jsonResponse = response.body();
                     if (jsonResponse != null) {
                         moviesList = new ArrayList<>(Arrays.asList(jsonResponse.getMovieList()));
@@ -106,7 +108,6 @@ public class Swipe extends AppCompatActivity {
                         enableSwipe();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<JSONResponse> call, Throwable t) {
                 }
@@ -131,7 +132,6 @@ public class Swipe extends AppCompatActivity {
                 gsc.signOut();
                 // Facebook Sign Out
                 LoginManager.getInstance().logOut();
-
                 Intent intent = new Intent(Swipe.this, Login.class);
                 startActivity(intent);
                 finish();
@@ -160,6 +160,54 @@ public class Swipe extends AppCompatActivity {
                 .build();
         movieApi = retrofit.create(MovieApi.class);
 
+       // OnClick for opening other applications from clicking in Swipe Activity
+           playBtn.setOnClickListener(view -> {
+               String urlNetflix = "http://www.netflix.com/";
+               String urlPrime ="https://www.primevideo.com/";
+               String urlDisney = "https://www.disneyplus.com/home/";
+
+               if(chosenStreaming.equals("netflix")) {
+                   try {
+                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                       launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
+                       launchIntent.setData(Uri.parse(urlNetflix));
+                       startActivity(launchIntent);
+
+                   } catch (Exception e) {
+                       // in case, Netflix is not installed, will send to website
+                       Intent intent = new Intent(Intent.ACTION_VIEW);
+                       intent.setData(Uri.parse(urlNetflix));
+                       startActivity(intent);
+                   }
+               } else if(chosenStreaming.equals("prime")) {
+                   try {
+                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                       launchIntent.setClassName("com.amazon.firebat", "com.amazon.firebat.deeplink.DeepLinkRoutingActivity");
+                       launchIntent.setData(Uri.parse(urlPrime));
+                       startActivity(launchIntent);
+
+                   } catch (Exception e) {
+                       Intent intent = new Intent(Intent.ACTION_VIEW);
+                       intent.setData(Uri.parse(urlPrime));
+                       startActivity(intent);
+                   }
+               }
+               else if(chosenStreaming.equals("disney")) {
+                   try {
+                       Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                       launchIntent.setClassName("com.disney.disneyplus", "com.bamtechmedia.dominguez.main.MainActivity");
+                       launchIntent.setData(Uri.parse(urlDisney));
+                       startActivity(launchIntent);
+
+                   } catch (Exception e) {
+                       Intent intent = new Intent(Intent.ACTION_VIEW);
+                       intent.setData(Uri.parse(urlDisney));
+                       startActivity(intent);
+                   }
+               }
+
+           });
+
         int initialPage = generateRandomPage(chosenStreaming, chosenType);
 
         if (initialPage != 0 && chosenStreaming != null && chosenType != null && chosenGenre != 0) {
@@ -187,6 +235,7 @@ public class Swipe extends AppCompatActivity {
     @NonNull
     private int generateRandomPage(String chosenStreaming, String chosenType) {
         Random random = new Random();
+        int max;
         if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
             switch (chosenGenre) {
                 case 28:
@@ -758,7 +807,7 @@ public class Swipe extends AppCompatActivity {
     }
 
     public void details(View view) {
-        position =  recyclerView.getChildAdapterPosition(view);
+        int position = recyclerView.getChildAdapterPosition(view);
         Intent intent = new Intent(getApplicationContext(), Details.class);
         intent.putExtra("position", position);
         startActivity(intent);
