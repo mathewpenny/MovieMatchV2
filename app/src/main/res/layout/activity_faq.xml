@@ -56,5 +56,31 @@ choice!!"/>
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:textColor="@color/white"
-        android:text="More Blablabla"/>
+        android:text="Once a Match has been made, you can click on the different users
+and see their contact information and optional image. An auto-generated message will be
+ drafted and you will be redirected to your device's messaging app. You can decide whether
+to send or not."/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="Sharing and Playing"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="@color/white"
+        android:text="When on the Matches page, you can share the movie or series that
+ you have decided to watch with your many followers and friends. Just use the Share button
+ and pick the platform that you wish to share on. You can also open the streaming services'
+platforms without changing applications! Just press Play and you're good to go!"/>
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -82,12 +83,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
         TextView title;
         ImageView poster;
+        ImageButton playButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener(this);
             title = itemView.findViewById(R.id.textView);
             poster = itemView.findViewById(R.id.imageView);
+            playButton = itemView.findViewById(R.id.playButton);
         }
 
         @Override

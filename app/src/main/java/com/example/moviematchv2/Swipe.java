@@ -615,7 +615,7 @@ public class Swipe extends AppCompatActivity {
                     final Movie deletedModel = moviesList.get(position);
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
-                    String movieLink = deletedModel.getMovieLink();
+                    /*String movieLink = deletedModel.getMovieLink();*/
 
                     Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
                     movieIdQuery.addValueEventListener(new ValueEventListener() {
