@@ -28,6 +28,15 @@
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="104dp"/>
 
+            <ImageButton
+                android:id="@+id/shareButton"
+                android:layout_width="51dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_share_24"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,18 +59,9 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <ImageButton
-                android:id="@+id/shareButton"
-                android:layout_width="51dp"
-                android:layout_height="44dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/ic_baseline_share_24">
-
-            </ImageButton>
         </FrameLayout>
         </LinearLayout>
-    </LinearLayout>
+
         <TextView
             android:id="@+id/movieTitleTxt"
             android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-
+    </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_view"
         android:layout_width="wrap_content"

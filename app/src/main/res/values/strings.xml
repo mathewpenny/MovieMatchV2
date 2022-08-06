@@ -34,12 +34,12 @@
         <item>Documentary</item>
         <item>Drama</item>
         <item>Family</item>
-        <item>History</item>
+        <item>Fantasy</item>
         <item>Horror</item>
         <item>Musical</item>
         <item>Reality</item>
         <item>Romance</item>
-        <item>SciFi &amp; Fantasy</item>
+        <item>SciFi</item>
         <item>Thriller</item>
         <item>Western</item>
     </string-array>

@@ -3,7 +3,6 @@ package com.example.moviematchv2;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -47,7 +46,7 @@ public class LobbyGuest extends AppCompatActivity {
     // Variables for Database and Reading Matches
     private FirebaseAuth mAuth;
     private DatabaseReference userDb;
-    private String currentUid, movieTitle, movieId, chosenStreaming, name;
+    private String currentUid, movieTitle, movieId, chosenStreaming, name, externalLaunchLink;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageButton playBtn, shareBtn;
@@ -117,57 +116,9 @@ public class LobbyGuest extends AppCompatActivity {
         movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
         potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
         name = intent.getStringExtra("name");
+        externalLaunchLink = intent.getStringExtra("externalLaunchLink");
         movieTitleRV.setText(movieTitle);
 
-        // OnClick for opening other applications from clicking in Swipe Activity
-        // If User is signed into their streaming accounts, button will open that app. If it is not downloaded or signed in, Exception passes
-        // Intent to the website instead. Need to drill into the response tree and get the link. Set up for link is
-        // "streamingInfo" { "ca" { "link" : "https://blah blah "
-        playBtn.setOnClickListener(view -> {
-            String urlNetflix = "http://www.netflix.com/";
-            String urlPrime ="https://www.primevideo.com/";
-            String urlDisney = "https://www.disneyplus.com/";
-            Log.e("MOVIE_ID", ""+ movieId);
-            switch (chosenStreaming) {
-                case "netflix":
-                    try {
-                        urlNetflix += movieId;
-                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                        launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
-                        launchIntent.setData(Uri.parse(urlNetflix));
-                        startActivity(launchIntent);
-                    } catch (Exception e) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(urlNetflix));
-                        startActivity(intent);
-                    }
-                    break;
-                case "prime":
-                    try {
-                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                        launchIntent.setClassName("com.amazon.firebat", "com.amazon.firebat.deeplink.DeepLinkRoutingActivity");
-                        launchIntent.setData(Uri.parse(urlPrime));
-                        startActivity(launchIntent);
-                    } catch (Exception e) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(urlPrime));
-                        startActivity(intent);
-                    }
-                    break;
-                case "disney":
-                    try {
-                        Intent launchIntent = new Intent(Intent.ACTION_VIEW);
-                        launchIntent.setClassName("com.disney.disneyplus", "com.bamtechmedia.dominguez.main.MainActivity");
-                        launchIntent.setData(Uri.parse(urlDisney));
-                        startActivity(launchIntent);
-                    } catch (Exception e) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(urlDisney));
-                        startActivity(intent);
-                    }
-                    break;
-            }
-        });
 
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         userDb = FirebaseDatabase.getInstance().getReference().child("Users");

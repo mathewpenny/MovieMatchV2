@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -56,10 +57,7 @@ public class Swipe extends AppCompatActivity {
     private Retrofit retrofit;
     private MovieApi movieApi;
     private MovieAdapter adapter;
-    private String chosenStreaming;
-    private int chosenGenre;
-    private int answer;
-    private String chosenType;
+
     private Intent intent;
     NavigationView navigationView;
     GoogleSignInClient gsc;
@@ -67,12 +65,13 @@ public class Swipe extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private ArrayList<String> matchMovies;
-
+    private TextView streamingPlatform, genreDisplay;
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
     private DatabaseReference userDb;
-    private String currentUid, name;
+    private String currentUid, name, chosenStreaming, chosenType, externalLink;
+    private int chosenGenre, answer;
 
 
     @Override
@@ -86,6 +85,8 @@ public class Swipe extends AppCompatActivity {
         matchMovies = new ArrayList<>();
 
         ImageButton refreshBtn = findViewById(R.id.refreshBtn);
+        streamingPlatform = findViewById(R.id.streaming);
+        genreDisplay = findViewById(R.id.genre);
 
         drawerLayout = findViewById(R.id.linearLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -153,6 +154,60 @@ public class Swipe extends AppCompatActivity {
         chosenStreaming = intent.getStringExtra("streaming");
         chosenGenre = intent.getIntExtra("genre", 0);
         name = intent.getStringExtra("name");
+
+        streamingPlatform.setText(chosenStreaming);
+        switch (chosenGenre) {
+            case 28:
+                genreDisplay.setText("Action");
+                break;
+            case 12:
+                genreDisplay.setText("Adventure");
+                break;
+            case 16:
+                genreDisplay.setText("Animation");
+                break;
+            case 1:
+                genreDisplay.setText("Biography");
+                break;
+            case 35:
+                genreDisplay.setText("Comedy");
+                break;
+            case 80:
+                genreDisplay.setText("Crime");
+                break;
+            case 99:
+                genreDisplay.setText("Documentary");
+                break;
+            case 18:
+                genreDisplay.setText("Drama");
+                break;
+            case 10751:
+                genreDisplay.setText("Family");
+                break;
+            case 14:
+                genreDisplay.setText("Fantasy");
+            case 10749:
+                genreDisplay.setText("Romance");
+                break;
+            case 27:
+                genreDisplay.setText("Horror");
+                break;
+            case 4:
+                genreDisplay.setText("Musical");
+                break;
+            case 10764:
+                genreDisplay.setText("Reality");
+                break;
+            case 878:
+                genreDisplay.setText("Sci Fi");
+                break;
+            case 53:
+                genreDisplay.setText("Thriller");
+                break;
+            case 37:
+                genreDisplay.setText("Western");
+                break;
+        }
 
         // Set up for showing movies in recyclerview
         recyclerView = findViewById(R.id.recyclerView);
@@ -230,7 +285,7 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 14:
-                        max = 22; // Fantasy
+                        max = 19; // Fantasy
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 27:
@@ -303,8 +358,11 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 14:
+                        max = 28;// Fantasy
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
                     case 10749:
-                        max = 17; // Fantasy
+                        max = 17;
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 27:
@@ -374,7 +432,7 @@ public class Swipe extends AppCompatActivity {
                         break;
                     case 14:
                     case 10749:
-                        max = 17; // Fantasy & Romance
+                        max = 17;
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 27:
@@ -421,6 +479,9 @@ public class Swipe extends AppCompatActivity {
                         break;
                     case 1:
                     case 14:
+                        max = 15; // Biography
+                        answer = random.nextInt(max - 1) + 1;
+                        break;
                     case 27:
                         max = 5; // Biography
                         answer = random.nextInt(max - 1) + 1;
@@ -500,11 +561,8 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 10751:
-                        max = 9; // Family
-                        answer = random.nextInt(max - 1) + 1;
-                        break;
                     case 14:
-                        max = 7;
+                        max = 9; // Family
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     case 10749:
@@ -615,8 +673,14 @@ public class Swipe extends AppCompatActivity {
                     final Movie deletedModel = moviesList.get(position);
                     String movieId = deletedModel.getTmdbID();
                     String movieTitle = deletedModel.getTitle();
-                    /*String movieLink = deletedModel.getMovieLink();*/
 
+                    if(chosenStreaming.equals("netflix")) {
+                        externalLink = deletedModel.getStreamingInfo().netflix.canada.link;
+                    } else if(chosenStreaming.equals("disney")) {
+                        externalLink = deletedModel.getStreamingInfo().disney.canada.link;
+                    } else if(chosenStreaming.equals("prime")) {
+                        externalLink = deletedModel.getStreamingInfo().netflix.canada.link;
+                    }
                     Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
                     movieIdQuery.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -653,6 +717,7 @@ public class Swipe extends AppCompatActivity {
                                    intent.putExtra("movieId", movieId);
                                    intent.putExtra("movieTitle", movieTitle);
                                    intent.putExtra("name", name);
+                                   intent.putExtra("link", externalLink);
                                    intent.putStringArrayListExtra("PASS_MATCHES", userIdList);
                                    startActivity(intent);
                                }
@@ -730,7 +795,9 @@ public class Swipe extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), String.valueOf(item), chosenType, chosenGenre);
+        chosenStreaming = String.valueOf(item);
+        streamingPlatform.setText(chosenStreaming);
+        Call<JSONResponse> call = movieApi.getMovies(generateRandomPage(chosenStreaming, chosenType), chosenStreaming, chosenType, chosenGenre);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -764,8 +831,19 @@ public class Swipe extends AppCompatActivity {
 
     public void details(View view) {
         int position = recyclerView.getChildAdapterPosition(view);
+
+        if(chosenStreaming.equals("netflix")) {
+            externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
+        } else if(chosenStreaming.equals("disney")) {
+            externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
+        } else if(chosenStreaming.equals("prime")) {
+            externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
+        }
+
         Intent intent = new Intent(getApplicationContext(), Details.class);
         intent.putExtra("position", position);
+        intent.putExtra("link", externalLink);
+        intent.putExtra("chosenStreaming", chosenStreaming);
         startActivity(intent);
     }
 
