@@ -53,9 +53,6 @@ public class LobbyGuest extends AppCompatActivity {
     private ArrayList<String> potentialMatch;
     private ArrayList<User> matchPeople;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +113,7 @@ public class LobbyGuest extends AppCompatActivity {
         movieTitle = intent.getStringExtra("movieTitle");  // list of movie titles
         potentialMatch = intent.getStringArrayListExtra("PASS_MATCHES"); // list of user ID
         name = intent.getStringExtra("name");
-        externalLaunchLink = intent.getStringExtra("externalLaunchLink");
+        externalLaunchLink = intent.getStringExtra("link");
         movieTitleRV.setText(movieTitle);
 
 
@@ -149,19 +146,61 @@ public class LobbyGuest extends AppCompatActivity {
                 Intent myIntent = new Intent(Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
                 String shareBody = "Hey! I just found a person to watch " + movieTitle + " on Movie Match!!";
-                String shareSub = "Found a Movie Match!";
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(myIntent, "Share using"));
             });
-        }
+
+            playBtn.setOnClickListener(view -> {
+                switch (chosenStreaming) {
+                    case "netflix":
+                        try {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setClassName("com.netflix.mediaclient", "com.netflix.mediaclient.ui.launch.UIWebViewActivity");
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        } catch (Exception e) {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        }
+                        break;
+                    case "prime":
+                        try {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setClassName("com.amazon.firebat", "com.amazon.firebat.deeplink.DeepLinkRoutingActivity");
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        } catch (Exception e) {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        }
+                        break;
+                    case "disney":
+                        try {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setClassName("com.disney.disneyplus", "com.bamtechmedia.dominguez.main.MainActivity");
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        } catch (Exception e) {
+                            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+                            launchIntent.setData(Uri.parse(externalLaunchLink));
+                            startActivity(launchIntent);
+                        }
+                        break;
+                }
+            });
+
+    }
+
 
         public void sendText(View view){
             String phone = matchPeople.get(adapter.getPosition()).getUserPhone();
             String nameFriend = matchPeople.get(adapter.getPosition()).getUserName();
             Uri uri = Uri.parse("smsto:" + phone);
             Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-            String message = ("Hello " + nameFriend + ". My name is " + name +  ". We just matched on the application MovieMatch for the following movie: " + movieTitle + ". Would you like to watch it together?" );
+            String message = ("Hello " + nameFriend + ". My name is " + name +  ". We just matched on the application Movie Match for the following movie: " + movieTitle + ". Would you like to watch it together?" );
             intent.putExtra("sms_body", "" + message);
             startActivity(intent);
         }
@@ -179,7 +218,6 @@ public class LobbyGuest extends AppCompatActivity {
             }
             return super.onOptionsItemSelected(item);
         }
-
 
         @Override
         public void onBackPressed () {

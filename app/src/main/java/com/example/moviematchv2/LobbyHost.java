@@ -117,7 +117,7 @@ public class LobbyHost extends AppCompatActivity {
                 if(typeSpn.getSelectedItem().toString().equals("Movie")) {
                     chosenType = "movie";
                 }
-                else if (typeSpn.getSelectedItem().toString().equals("Movie")) {
+                else if (typeSpn.getSelectedItem().toString().equals("Series")) {
                     chosenType = "series";
                 }
             }
@@ -190,6 +190,7 @@ public class LobbyHost extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                chosenGenre = 10751; //  Family, figured this is a safe default
             }
         });
 
@@ -197,12 +198,12 @@ public class LobbyHost extends AppCompatActivity {
             if (streamingSpn.getSelectedItem().toString().equals("Choose Platform")) {
                 Toast.makeText(LobbyHost.this, "Please choose a service", Toast.LENGTH_SHORT).show();
                 streamingSpn.requestFocus();
-            }if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
+            }else if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
                 Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show();
                 genreSpn.requestFocus();
-            }if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
+            }else if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
                 Toast.makeText(LobbyHost.this, "Please choose a Type", Toast.LENGTH_SHORT).show();
-                genreSpn.requestFocus();
+                typeSpn.requestFocus();
             } else {
                 Intent intent = new Intent(getApplicationContext(), Swipe.class);
                 intent.putExtra("streaming", chosenStreaming);

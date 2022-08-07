@@ -245,6 +245,8 @@ public class Swipe extends AppCompatActivity {
     @NonNull
     private int generateRandomPage(String chosenStreaming, String chosenType) {
         Random random = new Random();
+        Log.e("chosenStreaming", "" + chosenStreaming);
+        Log.e("chosenType", "" + chosenType);
         int max;
             if (chosenStreaming.equals("netflix") && chosenType.equals("movie")) {
                 switch (chosenGenre) {
@@ -317,7 +319,8 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
                 }
             } else if (chosenStreaming.equals("prime") && chosenType.equals("movie")) {
                 switch (chosenGenre) {
@@ -390,7 +393,8 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(0) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
                 }
             } else if (chosenStreaming.equals("disney") && chosenType.equals("movie")) {
                 switch (chosenGenre) {
@@ -460,10 +464,11 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
                 }
             }
-            if (chosenStreaming.equals("netflix") && chosenType.equals("series")) {
+           else if (chosenStreaming.equals("netflix") && chosenType.equals("series")) {
                 switch (chosenGenre) {
                     case 28:
                         max = 20; // Action
@@ -521,7 +526,8 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
                 }
             } else if (chosenStreaming.equals("prime") && chosenType.equals("series")) {
                 switch (chosenGenre) {
@@ -579,7 +585,8 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
                 }
             } else if (chosenStreaming.equals("disney") && chosenType.equals("series")) {
                 switch (chosenGenre) {
@@ -632,11 +639,11 @@ public class Swipe extends AppCompatActivity {
                         answer = random.nextInt(max - 1) + 1;
                         break;
                     default:
-                        throw new IllegalStateException("Unexpected value: " + chosenGenre);
+                        answer = 5;
+                        break;
 
                 }
             }
-            Log.e("Answer", "" + answer);
 
         return answer;
     }
@@ -835,9 +842,9 @@ public class Swipe extends AppCompatActivity {
         if(chosenStreaming.equals("netflix")) {
             externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
         } else if(chosenStreaming.equals("disney")) {
-            externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
+            externalLink = Swipe.moviesList.get(position).getStreamingInfo().disney.canada.link;
         } else if(chosenStreaming.equals("prime")) {
-            externalLink = Swipe.moviesList.get(position).getStreamingInfo().netflix.canada.link;
+            externalLink = Swipe.moviesList.get(position).getStreamingInfo().prime.canada.link;
         }
 
         Intent intent = new Intent(getApplicationContext(), Details.class);

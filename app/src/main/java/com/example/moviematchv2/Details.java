@@ -35,8 +35,7 @@ public class Details extends AppCompatActivity {
         PutDataIntoRecyclerView(Collections.singletonList(Swipe.moviesList.get(position)));
 
         // If User is signed into their streaming accounts, button will open that app. If it is not downloaded or signed in, Exception passes
-        // Intent to the website instead. Need to drill into the response tree and get the link. Set up for link is
-        // "streamingInfo" { "ca" { "link" : "https://blah blah "
+        // Intent to the website instead.
         playButton.setOnClickListener(view -> {
             switch (chosenStreaming) {
                 case "netflix":
