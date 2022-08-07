@@ -6,16 +6,18 @@ public class User {
     private String userName;
     private String userPhone;
     private String userEmail;
+    private String userImage;
     private String movieTitle;
 
   public User() {
     }
 
-    public User(String userId, String userName, String userPhone, String userEmail) {
+    public User(String userId, String userName, String userPhone, String userEmail, String userImage) {
         this.userId = userId;
         this.userName = userName;
         this.userPhone = userPhone;
         this.userEmail = userEmail;
+        this.userImage = userImage;
     }
 
 
@@ -59,4 +61,11 @@ public class User {
         this.userEmail = userEmail;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
 }

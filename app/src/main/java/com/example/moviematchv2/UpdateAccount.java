@@ -1,9 +1,5 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,24 +7,21 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,26 +93,18 @@ public class UpdateAccount extends AppCompatActivity {
             StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
 
             // adding listeners on upload or failure of image
-            ref.putFile(filepath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {// Image uploaded successfull Dismiss dialog
-                            progressDialog.dismiss();
-                            Toast.makeText(UpdateAccount.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
-                        }
+            // Progress Listener for loading percentage on the dialog box
+            ref.putFile(filepath).addOnSuccessListener(taskSnapshot -> {// Image uploaded successfull Dismiss dialog
+                progressDialog.dismiss();
+                Toast.makeText(UpdateAccount.this, "Image Uploaded!!", Toast.LENGTH_SHORT).show();
+            })
+                    .addOnFailureListener(e -> {  // Error, Image not uploaded
+                        progressDialog.dismiss();
+                        Toast.makeText(UpdateAccount.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {  // Error, Image not uploaded
-                            progressDialog.dismiss();
-                            Toast.makeText(UpdateAccount.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {// Progress Listener for loading percentage on the dialog box
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%");
                     });
         }
     }
@@ -150,6 +135,7 @@ public class UpdateAccount extends AppCompatActivity {
         userInfo.put("name", name);
         userInfo.put("phone", phone);
         userInfo.put("password", password);
+       /* userInfo.put("profilePic", filepath);*/
         userDb.updateChildren(userInfo);
 
         Toast.makeText(UpdateAccount.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();

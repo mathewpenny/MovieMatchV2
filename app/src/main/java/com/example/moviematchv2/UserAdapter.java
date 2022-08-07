@@ -62,11 +62,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
     public class UsersViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName, userPhone;
-        ImageView posterImg;
+        ImageView profilePic;
 
         public UsersViewHolder(@NonNull View itemView) {
             super(itemView);
-            posterImg = itemView.findViewById(R.id.imageView);
+            profilePic = itemView.findViewById(R.id.imageView);
             userName = itemView.findViewById(R.id.userName);
             userPhone = itemView.findViewById(R.id.userPhone);
 

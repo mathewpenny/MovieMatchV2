@@ -1,34 +1,33 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ForgotPassword extends AppCompatActivity {
 
-    ImageButton sendEmail;
-    EditText email;
+    ImageButton resetPasswordBtn;
+    EditText password, passwordConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
         //Hides action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
 
-            email = findViewById(R.id.passwordResetEmail);
-            sendEmail = findViewById(R.id.sendButton);
+            password = findViewById(R.id.passwordReset);
+            passwordConfirm = findViewById(R.id.passwordConfirmReset);
+            resetPasswordBtn = findViewById(R.id.resetPasswordBtn);
 
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -37,14 +36,11 @@ public class ForgotPassword extends AppCompatActivity {
                 String emailAddress = user.getEmail();
 
                 mAuth.sendPasswordResetEmail(emailAddress)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.e("EMAIL", "Email sent.");
-                                    Intent intent = new Intent(ForgotPassword.this, Login.class);
-                                    startActivity(intent);
-                                }
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.e("EMAIL", "Email sent.");
+                                Intent intent = new Intent(ForgotPassword.this, Login.class);
+                                startActivity(intent);
                             }
                         });
             }

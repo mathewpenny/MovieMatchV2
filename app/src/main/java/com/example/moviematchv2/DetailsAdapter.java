@@ -65,7 +65,6 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHo
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView playLink;
         ImageView poster;
         TextView year;
         TextView runtime;

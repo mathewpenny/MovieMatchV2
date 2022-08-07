@@ -16,8 +16,8 @@ import java.util.List;
 public class Details extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DetailsAdapter adapter;
-    String chosenStreaming, playLink;
-    ImageButton playButton;
+    private String chosenStreaming, playLink;
+    private ImageButton playButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
