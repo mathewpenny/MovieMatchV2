@@ -24,7 +24,6 @@ public class FacebookSignIn extends LandingPage {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
@@ -33,7 +32,6 @@ public class FacebookSignIn extends LandingPage {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         handleFacebookAccessToken(loginResult.getAccessToken());
-
                     }
                     @Override
                     public void onCancel() {
@@ -42,34 +40,33 @@ public class FacebookSignIn extends LandingPage {
                     public void onError(FacebookException exception) {
                     }
                 });
+            }
 
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            // Pass the activity result back to the Facebook SDK
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
 
-        // Pass the activity result back to the Facebook SDK
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-    private void handleFacebookAccessToken(AccessToken token) {
+        private void handleFacebookAccessToken(AccessToken token) {
+            AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(FacebookSignIn.this, ""+ task.getException(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(FacebookSignIn.this, ""+ task.getException(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        private void updateUI(FirebaseUser user) {
+            Intent intent = new Intent(FacebookSignIn.this, WelcomePage.class);
+            startActivity(intent);
+        }
     }
-
-    private void updateUI(FirebaseUser user) {
-        Intent intent = new Intent(FacebookSignIn.this, WelcomePage.class);
-        startActivity(intent);
-    }
-}

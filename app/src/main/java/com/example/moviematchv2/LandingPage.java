@@ -2,10 +2,8 @@ package com.example.moviematchv2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,18 +21,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LandingPage extends AppCompatActivity {
 
-
     private ImageButton loginBtn, registerBtn;
     private ImageButton googleSignIn, metaSignIn;
 
     private ImageView image;
-    private TextView logoText;
 
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     FirebaseAuth mAuth;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +41,10 @@ public class LandingPage extends AppCompatActivity {
         metaSignIn = (ImageButton) findViewById(R.id.metaSignIn);
 
         image = findViewById(R.id.logoImg);
-        //logoText = findViewById(R.id.textView);
-
         mAuth = FirebaseAuth.getInstance();
-
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
-
 
             metaSignIn.setOnClickListener(view -> {
                 Intent intent = new Intent(LandingPage.this, FacebookSignIn.class);
@@ -73,36 +63,22 @@ public class LandingPage extends AppCompatActivity {
                 navigateToSecondActivity();
             }
 
-            googleSignIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
-
-
+            googleSignIn.setOnClickListener(view -> signIn());
             // Navigation Logic here
             // Navigate to Login page for regular Email/Password Firebase
-            loginBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(LandingPage.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
+            loginBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(LandingPage.this, Login.class);
+                startActivity(intent);
+                finish();
             });
             // Navigate to Register Page for regular Email/Password Firebase
-            registerBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(LandingPage.this, Register.class);
-                    startActivity(intent);
-                    finish();
-                }
+            registerBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(LandingPage.this, Register.class);
+                startActivity(intent);
+                finish();
             });
         }
     }
-
     // End of onCreate method here
     private void signIn() {
         Intent signInIntent = gsc.getSignInIntent();
@@ -116,7 +92,6 @@ public class LandingPage extends AppCompatActivity {
 
         if(requestCode == 1000) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
@@ -126,11 +101,6 @@ public class LandingPage extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential).addOnSuccessListener(this, authResult -> {
@@ -138,6 +108,7 @@ public class LandingPage extends AppCompatActivity {
             finish();
         });
     }
+
     private void navigateToSecondActivity() {
         finish();
         Intent intent = new Intent(LandingPage.this, WelcomePage.class);

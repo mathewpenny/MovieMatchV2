@@ -66,6 +66,7 @@ public class Swipe extends AppCompatActivity {
     public ActionBarDrawerToggle actionBarDrawerToggle;
     private ArrayList<String> matchMovies;
     private TextView streamingPlatform, genreDisplay;
+
     // Variables for Database and Saving Matches
     private FirebaseAuth mAuth;
     private DatabaseReference movieDb;
@@ -218,9 +219,10 @@ public class Swipe extends AppCompatActivity {
                 .build();
         movieApi = retrofit.create(MovieApi.class);
 
+
         int initialPage = generateRandomPage(chosenStreaming, chosenType);
 
-        if (initialPage != 0 && chosenStreaming != null && chosenType != null && chosenGenre != 0) {
+        if (initialPage != 0 && chosenStreaming != null && chosenType != null) {
             Call<JSONResponse> call = movieApi.getMovies(initialPage, chosenStreaming, chosenType, chosenGenre);
             call.enqueue(new Callback<JSONResponse>() {
                 @Override

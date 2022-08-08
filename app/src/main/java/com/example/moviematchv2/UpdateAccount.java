@@ -106,8 +106,8 @@ public class UpdateAccount extends AppCompatActivity {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                         progressDialog.setMessage("Uploaded " + (int) progress + "%");
                     });
+            }
         }
-    }
 
 
     // Update user information from Users who do not use Google or Facebook
@@ -148,9 +148,7 @@ public class UpdateAccount extends AppCompatActivity {
             final Uri imageUri = data.getData();
             filepath = imageUri;
             profilePic.setImageURI(filepath);
-
             filepath = data.getData();
-
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath);
                     profilePic.setImageBitmap(bitmap);
@@ -159,10 +157,11 @@ public class UpdateAccount extends AppCompatActivity {
                 }
             }
         }
+
     @Override
     public void onBackPressed () {
         Intent intent = new Intent(UpdateAccount.this, LobbyAccount.class);
         startActivity(intent);
         finish();
     }
-    }
+}

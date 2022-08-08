@@ -109,6 +109,7 @@
                 android:text="Back"
                 android:textSize="20sp"/>
         </FrameLayout>
+
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

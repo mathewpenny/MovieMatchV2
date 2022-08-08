@@ -1,24 +1,14 @@
 package com.example.moviematchv2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,7 +19,6 @@ public class Login extends AppCompatActivity {
     private TextView forgotPassword;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +31,12 @@ public class Login extends AppCompatActivity {
 
             // StateListener will be listening for the state of login of the user
             mAuth = FirebaseAuth.getInstance();
-            firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null) { // means user is logged in so we can move on in the app
-                        Intent intent = new Intent(Login.this, WelcomePage.class);
-                        startActivity(intent);
-                        finish();
-                    }
+            firebaseAuthStateListener = firebaseAuth -> {
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) { // means user is logged in so we can move on in the app
+                    Intent intent = new Intent(Login.this, WelcomePage.class);
+                    startActivity(intent);
+                    finish();
                 }
             };
 
@@ -61,14 +47,10 @@ public class Login extends AppCompatActivity {
             backBtn = (ImageButton) findViewById(R.id.backButton);
 
             forgotPassword = (TextView) findViewById(R.id.forgotPassLink);
-
-            forgotPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Login.this, ForgotPassword.class);
-                    startActivity(intent);
-                    finish();
-                }
+            forgotPassword.setOnClickListener(view -> {
+                Intent intent = new Intent(Login.this, ForgotPassword.class);
+                startActivity(intent);
+                finish();
             });
 
             backBtn.setOnClickListener(view -> {
@@ -84,19 +66,15 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Email cannot be blank", Toast.LENGTH_SHORT).show();
                     emailET.requestFocus();
                 }
-
                 if (password.equals("")) {
                     Toast.makeText(Login.this, "Password cannot be blank", Toast.LENGTH_SHORT).show();
                     passwordET.requestFocus();
                 } else {
                     // Create the user here with onCompleteListener to check if task is successful
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            //this will only be triggered if the registration was not successful.
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
-                            }
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(Login.this, task -> {
+                        //this will only be triggered if the registration was not successful.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(Login.this, "Login Error", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

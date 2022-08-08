@@ -65,7 +65,6 @@ public class WelcomePage extends AppCompatActivity {
         navigationView = findViewById(R.id.drawer_view2);
         navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
             int id = item.getItemId();
-
             if(id == R.id.WelcomePage) {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
@@ -109,21 +108,18 @@ public class WelcomePage extends AppCompatActivity {
                 getUserName();
             }
 
-     /*   // This is where the app gets hung up. Null object Reference on fullName
+/*
+
+        // This is where the app gets hung up. Null object Reference on fullName
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(
-                            JSONObject object,
-                            GraphResponse response) {
-                        try {
-                            String fullName = object.getString("name");
-                            name.setText(fullName);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                (object, response) -> {
+                    try {
+                        String fullName = object.getString("name");
+                        name.setText(fullName);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 });
         Bundle parameters = new Bundle();
@@ -131,6 +127,7 @@ public class WelcomePage extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 */
+
 
             startBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
@@ -181,12 +178,12 @@ public class WelcomePage extends AppCompatActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
-    }
+        }
 
         @Override
         public void onBackPressed () {
             Intent intent = new Intent(WelcomePage.this, LandingPage.class);
             startActivity(intent);
             finish();
+        }
     }
-}
