@@ -1,21 +1,113 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/landingbg"
     tools:context=".LandingPage">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/loginButton"/>
+    <ImageView
+        android:id="@+id/logoImg"
+        android:layout_width="139dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentLeft="true"
+        app:srcCompat="@drawable/logo"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="104dp"/>
 
-    <Button
+    <FrameLayout
+        android:id="@+id/loginFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:layout_gravity="center"
+        android:layout_below="@+id/logoImg">
+
+        <ImageButton
+            android:id="@+id/loginButton"
+            android:layout_width="200dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_baseline_theaters_24"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:text="Login"
+            android:textSize="18sp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/registerFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_below="@+id/loginFrame">
+
+        <ImageButton
+            android:id="@+id/registerButton"
+            android:layout_width="200dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_baseline_theaters_24"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:text="Register"
+            android:textSize="18sp"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/regText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:id="@+id/registerButton"/>
+        android:layout_below="@+id/registerFrame"
+        android:layout_marginTop="10dp"
+        android:text="Or Register with:"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="24sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/metaSignIn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/regText"
+            android:layout_marginTop="15dp"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_facebook"/>
+
+        <ImageButton
+            android:id="@+id/googleSignIn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/regText"
+            android:padding="0dp"
+            android:layout_marginStart="40dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icons8_google"/>
+
+    </LinearLayout>
+
 </LinearLayout>

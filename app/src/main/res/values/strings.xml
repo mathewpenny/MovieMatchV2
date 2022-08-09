@@ -1,3 +1,51 @@
 <resources>
-    <string name="app_name">MovieMatchV2</string>
+    <string name="app_name">Movie Match</string>
+
+    <!--Required Strings for Facebook sign in -->
+    <string name="facebook_app_id">396185682520701</string>
+    <string name="fb_login_protocol_scheme">fb396185682520701</string>
+    <string name="facebook_client_token">17d461661ccdc9cfbb5e434c86d1971c</string>
+
+    <string name="hyperlink_privacy">By checking this I agree to the <a href="https://app.termly.io/dashboard/website/066e09ba-feb6-4fe2-a987-cc7d394f90e4/privacy-policy">Privacy Policy</a>
+      </string>
+    <!-- Spinner Strings -->
+    <string-array name="streamingPlatform">
+        <item>Choose Platform</item>
+        <item>Netflix</item>
+        <item>Prime</item>
+        <item>Disney</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>Choose Type</item>
+        <item>Movie</item>
+        <item>Series</item>
+    </string-array>
+
+    <string-array name="genre">
+        <item>Choose Genre</item>
+        <item>No preference</item>
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Animation</item>
+        <item>Biography</item>
+        <item>Comedy</item>
+        <item>Crime</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Family</item>
+        <item>Fantasy</item>
+        <item>Horror</item>
+        <item>Musical</item>
+        <item>Reality</item>
+        <item>Romance</item>
+        <item>SciFi</item>
+        <item>Thriller</item>
+        <item>Western</item>
+    </string-array>
+
+    <!--Strings for Navigation Drawer -->
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+
 </resources>
