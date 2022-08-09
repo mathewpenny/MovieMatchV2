@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -28,15 +28,17 @@
                 tools:layout_editor_absoluteY="104dp"/>
 
             <TextView
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="35dp"
+                android:layout_marginStart="25dp"
+                android:padding="5dp"
                 android:fontFamily="@font/bangers"
                 android:text="Account Page"
                 android:textAlignment="center"
                 android:textColor="#CDC300"
-                android:textSize="32sp"/>
+                android:textSize="25sp"/>
 
         </LinearLayout>
 
