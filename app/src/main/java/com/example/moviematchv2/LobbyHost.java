@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-//two new variables, new spinner initialized, new spinner listener, new if statement in button listener + put extra intent
 public class LobbyHost extends AppCompatActivity {
     private Spinner streamingSpn;
     private Spinner genreSpn;
@@ -111,6 +110,7 @@ public class LobbyHost extends AppCompatActivity {
                 streamingSpn.requestFocus();
             }
         });
+
         typeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -198,10 +198,10 @@ public class LobbyHost extends AppCompatActivity {
             if (streamingSpn.getSelectedItem().toString().equals("Choose Platform")) {
                 Toast.makeText(LobbyHost.this, "Please choose a service", Toast.LENGTH_SHORT).show();
                 streamingSpn.requestFocus();
-            }else if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
+            } else if(genreSpn.getSelectedItem().toString().equals("Choose Genre")){
                 Toast.makeText(LobbyHost.this, "Please choose a Genre", Toast.LENGTH_SHORT).show();
                 genreSpn.requestFocus();
-            }else if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
+            } else if(typeSpn.getSelectedItem().toString().equals("Choose Type")){
                 Toast.makeText(LobbyHost.this, "Please choose a Type", Toast.LENGTH_SHORT).show();
                 typeSpn.requestFocus();
             } else {

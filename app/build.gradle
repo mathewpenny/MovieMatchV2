@@ -40,6 +40,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.firebase:firebase-firestore:24.2.1'
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-alpha07'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     // End of Glide dependencies
 
@@ -67,6 +70,6 @@ dependencies {
 
     testImplementation 'com.google.truth:truth:1.0.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4-alpha07'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha07'
 }

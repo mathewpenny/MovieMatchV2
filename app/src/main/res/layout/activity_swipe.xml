@@ -42,7 +42,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/streaming"
+                android:id="@+id/streamingDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -53,7 +53,7 @@
                 android:text="Streaming"/>
 
             <TextView
-                android:id="@+id/genre"
+                android:id="@+id/genreDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#CDC300"

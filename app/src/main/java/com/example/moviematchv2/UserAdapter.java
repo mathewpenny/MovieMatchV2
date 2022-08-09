@@ -15,7 +15,7 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolder> {
 
-    private Context context;
+    private final Context context;
     public List<User> usersList;
     private int position;
 

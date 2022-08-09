@@ -70,7 +70,7 @@ public class WelcomePage extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else if (id == R.id.AccountLobby) {
-                intent = new Intent(getApplicationContext(), Login.class);
+                intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
             } else if(id == R.id.Instructions){

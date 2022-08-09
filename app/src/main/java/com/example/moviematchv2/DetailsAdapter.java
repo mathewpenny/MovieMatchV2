@@ -15,8 +15,8 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MyViewHolder> {
-    private Context context;
-    private List<Movie> moviesList;
+    private final Context context;
+    private final List<Movie> moviesList;
     int position;
 
     public int getPosition() {
