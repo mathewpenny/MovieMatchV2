@@ -35,12 +35,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
-      /*
-     Glide.with(context).
-                load(moviesList.get(position)
-                        .getPosterURLs().getOriginal())
-                .into(holder.poster);
-*/
+
+
         holder.userName.setText(usersList.get(position).getUserName());
         holder.userPhone.setText(usersList.get(position).getUserPhone());
 
