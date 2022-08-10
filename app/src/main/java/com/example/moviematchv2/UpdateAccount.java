@@ -118,7 +118,7 @@ public class UpdateAccount extends AppCompatActivity {
             Toast.makeText(UpdateAccount.this, "Must enter new name.", Toast.LENGTH_SHORT).show();
             nameET.requestFocus();
         }
-        if(!phoneET.equals("")) {
+        if (!phoneET.equals("")) {
             phone = phoneET.getText().toString();
         } else {
             Toast.makeText(UpdateAccount.this, "Must enter new phone number.", Toast.LENGTH_SHORT).show();

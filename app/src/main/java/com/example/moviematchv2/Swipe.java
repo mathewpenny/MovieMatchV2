@@ -121,7 +121,7 @@ public class Swipe extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else if (id == R.id.AccountLobby) {
-                intent = new Intent(getApplicationContext(), Login.class);
+                intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
             } else if (id == R.id.Instructions) {
@@ -186,6 +186,7 @@ public class Swipe extends AppCompatActivity {
                 break;
             case 14:
                 genreDisplay.setText("Fantasy");
+                break;
             case 10749:
                 genreDisplay.setText("Romance");
                 break;
@@ -668,7 +669,7 @@ public class Swipe extends AppCompatActivity {
                     final Movie deletedModel = moviesList.get(position);
                     final int deletedPosition = position;
                     adapter.removeItem(position);
-                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Are you sure?", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Are you sure?", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", view ->
                             adapter.restoreItem(deletedModel, deletedPosition));
                     snackbar.setActionTextColor(Color.YELLOW);
@@ -749,7 +750,7 @@ public class Swipe extends AppCompatActivity {
                     });
                     final int deletedPosition = position;
                     adapter.removeItem(position);
-                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Are you sure?", Snackbar.LENGTH_SHORT);
+                    Snackbar snackbar = Snackbar.make(getWindow().getDecorView().getRootView(), "Are you sure?", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", view -> adapter.restoreItem(deletedModel, deletedPosition));
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
