@@ -86,7 +86,7 @@ public class LobbyGuest extends AppCompatActivity {
                 finish();
             }
             else if (id == R.id.AccountLobby) {
-                intent = new Intent(getApplicationContext(), Login.class);
+                intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
             } else if (id == R.id.Instructions) {
@@ -131,6 +131,7 @@ public class LobbyGuest extends AppCompatActivity {
                         User matched = new User();
                         matched.setUserName((String) user.child("name").getValue());
                         matched.setUserPhone((String) user.child("phone").getValue());
+                        matched.setUserImage((String) user.child("profileImage").getValue());
                         matchPeople.add(matched);
                     }
                 }
@@ -148,7 +149,7 @@ public class LobbyGuest extends AppCompatActivity {
                 String shareBody = "Hey! I just found a person to watch " + movieTitle + " on Movie Match!!";
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, shareBody);
                 myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(myIntent, "Share using"));
+                startActivity(Intent.createChooser(myIntent, "Share using..."));
             });
 
             playBtn.setOnClickListener(view -> {

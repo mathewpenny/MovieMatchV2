@@ -33,21 +33,18 @@ public class UpdateAccount extends AppCompatActivity {
     private ImageView profilePic;
     private ImageButton updateAccount;
     private Button uploadImg;
+
     private FirebaseAuth mAuth;
     private DatabaseReference userDb;
-    FirebaseStorage storage;
     StorageReference storageReference;
     private Uri filepath;
 
-    private String userId, name, phone, password, profileUri;
-
-
+    private String userId, name, phone, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_account);
-
 
         nameET = findViewById(R.id.updateName);
         phoneET = findViewById(R.id.updatePhone);
@@ -56,12 +53,10 @@ public class UpdateAccount extends AppCompatActivity {
         uploadImg = findViewById(R.id.uploadImg);                
         profilePic = findViewById(R.id.profileImage);
         
-
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
-        userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        userDb = FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("profileImage");
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         profilePic.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
@@ -135,7 +130,7 @@ public class UpdateAccount extends AppCompatActivity {
         userInfo.put("name", name);
         userInfo.put("phone", phone);
         userInfo.put("password", password);
-       /* userInfo.put("profilePic", filepath);*/
+        userInfo.put("profilePic", filepath);
         userDb.updateChildren(userInfo);
 
         Toast.makeText(UpdateAccount.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();
