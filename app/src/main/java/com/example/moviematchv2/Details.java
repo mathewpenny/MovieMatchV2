@@ -1,12 +1,17 @@
 package com.example.moviematchv2;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +38,13 @@ public class Details extends AppCompatActivity {
         playLink = intent.getStringExtra("link");
 
         PutDataIntoRecyclerView(Collections.singletonList(Swipe.moviesList.get(position)));
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("Notification", " Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
 
         // If User is signed into their streaming accounts, button will open that app. If it is not downloaded or signed in, Exception passes
         // Intent to the website instead.
@@ -75,6 +87,13 @@ public class Details extends AppCompatActivity {
                     }
                     break;
             }
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(Details.this, "Notification");
+                    builder.setContentTitle("Let's Start Watching!");
+                    builder.setContentText("Enjoy your film/show! Don't forget to tell your friends!");
+                    builder.setSmallIcon(R.drawable.logo);
+                    builder.setAutoCancel(true);
+                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(Details.this);
+                    managerCompat.notify(1, builder.build());
         });
 
     }

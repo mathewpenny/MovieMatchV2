@@ -1,12 +1,17 @@
 package com.example.moviematchv2;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +48,12 @@ public class ForgotPassword extends AppCompatActivity {
             passwordConfirmET = findViewById(R.id.passwordConfirmReset);
             resetPasswordBtn = findViewById(R.id.resetPasswordBtn);
 
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("Notification", " Notification", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager manager = getSystemService(NotificationManager.class);
+                manager.createNotificationChannel(channel);
+            }
+
             resetPasswordBtn.setOnClickListener(view -> {
                 if (user != null) {
                     if (!passwordET.equals("") || !passwordConfirmET.equals("")) {
@@ -58,7 +69,14 @@ public class ForgotPassword extends AppCompatActivity {
                 Map<String, Object> userInfo = new HashMap<>();
                 userInfo.put("password", password);
                 userDb.updateChildren(userInfo);
-                Toast.makeText(ForgotPassword.this, "Information updated successfully.", Toast.LENGTH_SHORT).show();
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(ForgotPassword.this, "Notification");
+                builder.setContentTitle("Password Changed!");
+                builder.setContentText("Password successfully changed.");
+                builder.setSmallIcon(R.drawable.logo);
+                builder.setAutoCancel(true);
+                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(ForgotPassword.this);
+                managerCompat.notify(1, builder.build());
             });
         }
     }

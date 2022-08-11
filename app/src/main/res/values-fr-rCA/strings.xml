@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Movie Match</string>
+    <!-- Spinner Strings -->
+
+    <string-array name="streamingPlatform">
+        <item>Choisissez la platforme</item>
+        <item>Netflix</item>
+        <item>Prime</item>
+        <item>Disney</item>
+    </string-array>
+
+    <string-array name="type">
+        <item>Choisissez Type</item>
+        <item>Movie</item>
+        <item>Series</item>
+    </string-array>
+
+    <string-array name="genre">
+        <item>Choisissez Categorie</item>
+        <item>Aucun preference</item>
+        <item>Action</item>
+        <item>Aventure</item>
+        <item>Animation</item>
+        <item>Biography</item>
+        <item>Comedy</item>
+        <item>Crime</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Family</item>
+        <item>Fantasy</item>
+        <item>Horror</item>
+        <item>Musical</item>
+        <item>Reality</item>
+        <item>Romance</item>
+        <item>SciFi</item>
+        <item>Thriller</item>
+        <item>Western</item>
+    </string-array>
+
+
+</resources>
