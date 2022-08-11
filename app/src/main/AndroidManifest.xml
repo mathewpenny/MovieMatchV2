@@ -90,7 +90,7 @@
             android:exported="false"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LandingPage"
             android:screenOrientation="portrait"
             android:exported="false"
             tools:ignore="LockedOrientationActivity" />
@@ -100,7 +100,7 @@
             android:exported="false"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".LandingPage"
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">

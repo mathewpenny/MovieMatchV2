@@ -40,7 +40,9 @@
         android:text="Once you have created an account, head to the Swipe section.
 Here you can choose a service (Netflix, Disney+ or Prime Video), choose a
 genre and press Start. Movies will start to appear and you can swipe left
-for NO or right for YES. Once a match is made, you will see who else wants to see that
+for NO or right for YES. If you need more information, just click once on the movie
+ or series. To change services, press and hold and a menu will appear. Once a match
+  is made, you will see who else wants to see that
 choice!!"/>
 
     <TextView

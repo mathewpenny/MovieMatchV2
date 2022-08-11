@@ -275,7 +275,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 99:
-                    max = 78; // Documentary
+                    max = 61; // Documentary
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 18:
@@ -283,7 +283,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
-                    max = 31; // Family
+                    max = 25; // Family
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
@@ -291,7 +291,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
-                    max = 75; // Horror
+                    max = 29; // Horror
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 4:
@@ -307,11 +307,11 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 878:
-                    max = 30; // Sci Fi
+                    max = 15; // Sci Fi
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 53:
-                    max = 93; // Thriller
+                    max = 58; // Thriller
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 37:
@@ -329,7 +329,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
-                    max = 63; // Adventure
+                    max = 60; // Adventure
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 16:
@@ -357,7 +357,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10751:
-                    max = 47; // Family
+                    max = 41; // Family
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 14:
@@ -377,8 +377,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
-                    max = 2; // Reality
-                    answer = random.nextInt(max - 1) + 1;
+                    answer = 1;
                     break;
                 case 878:
                     max = 14; // Sci Fi
@@ -448,8 +447,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 10764:
-                    max = 56; // Reality
-                    answer = random.nextInt(max - 1) + 1;
+                    answer = 1;
                     break;
                 case 878:
                     max = 14; // Sci Fi
@@ -464,7 +462,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
-                    answer = 5;
+                    answer = 5; // default is 5 for Family
                     break;
             }
         }
@@ -483,12 +481,15 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 1:
+                    max = 7;
+                    answer = random.nextInt(max - 1) + 1;
+                    break;
                 case 14:
                     max = 15; // Biography
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 27:
-                    max = 5; // Biography
+                    max = 5;
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 35:
@@ -513,8 +514,7 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 4:
                 case 37:
-                    max = 2; // Musical
-                    answer = random.nextInt(max - 1) + 1;
+                    answer = 1;
                     break;
                 case 10764:
                     max = 14; // Reality
@@ -526,15 +526,18 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
-                    answer = 5;
+                    answer = 5; // default is 5 for Family
                     break;
             }
         } else if (chosenStreaming.equals("prime") && chosenType.equals("series")) {
             switch (chosenGenre) {
                 case 28:
                 case 10764:
-                case 878:
                     max = 12; // Action
+                    answer = random.nextInt(max - 1) + 1;
+                    break;
+                case 878:
+                    max = 5;
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 case 12:
@@ -573,8 +576,7 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 10749:
                 case 4:
-                    max = 1; // Fantasy
-                    answer = random.nextInt(0) + 1;
+                    answer = 1;
                     break;
                 case 53:
                     max = 6; // Thriller
@@ -585,7 +587,7 @@ public class Swipe extends AppCompatActivity {
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
-                    answer = 5;
+                    answer = 5; // default is 5 for Family
                     break;
             }
         } else if (chosenStreaming.equals("disney") && chosenType.equals("series")) {
@@ -627,24 +629,30 @@ public class Swipe extends AppCompatActivity {
                     break;
                 case 27:
                 case 4:
-                    max = 1; // Horror
-                    answer = random.nextInt(0) + 1;
+                    answer = 1;
                     break;
                 case 10764:
                     max = 6; // Reality
                     answer = random.nextInt(max - 1) + 1;
+                    break;
+                case 10749: Toast.makeText(this, "There is no available selection for Romance on " + chosenStreaming + ". Please make another selection.", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, LobbyHost.class);
+                    startActivity(intent);
+                    break;
+                case 37:
+                    Toast.makeText(this, "There is no available selection for Western on " + chosenStreaming + ". Please make another selection.", Toast.LENGTH_SHORT).show();
+                    intent = new Intent(this, LobbyHost.class);
+                    startActivity(intent);
                     break;
                 case 53:
                     max = 2; // Thriller
                     answer = random.nextInt(max - 1) + 1;
                     break;
                 default:
-                    answer = 5;
+                    answer = 5; // default is 5 for Family
                     break;
-
             }
         }
-
         return answer;
     }
 
@@ -692,6 +700,7 @@ public class Swipe extends AppCompatActivity {
                             externalLink = deletedModel.getStreamingInfo().prime.canada.link;
                             break;
                     }
+
                     Query movieIdQuery = movieDb.child("services").child(chosenStreaming).orderByKey().startAt(movieId).endAt(movieId);
                     movieIdQuery.addValueEventListener(new ValueEventListener() {
                         @Override
