@@ -177,7 +177,7 @@ public class LobbyHost extends AppCompatActivity {
                     case "Romance":
                         chosenGenre = 10749;
                         break;
-                    case "Science Fiction":
+                    case "SciFi":
                         chosenGenre = 878;
                         break;
                     case "Thriller":

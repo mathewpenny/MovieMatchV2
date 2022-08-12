@@ -49,9 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textColor="#CBA85B"
-            android:textSize="36sp"
-            android:fontFamily="@font/bangers"
+            android:textColor="@color/black"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
         <FrameLayout

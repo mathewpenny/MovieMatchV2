@@ -11,8 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolder> {
@@ -39,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UsersViewHolde
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
         User userInfo = usersList.get(position);
 
-        Glide.with(context).load(userInfo.getUserImage()).into(holder.profilePic);
+   //     Glide.with(context).load(userInfo.getUserImage()).into(holder.profilePic);
         holder.userName.setText(usersList.get(position).getUserName());
         holder.userPhone.setText(usersList.get(position).getUserPhone());
 
