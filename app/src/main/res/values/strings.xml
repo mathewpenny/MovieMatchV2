@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Movie Match</string>
 
     <!--Required Strings for Facebook sign in -->
@@ -8,6 +8,7 @@
 
     <string name="hyperlink_privacy" translatable="false">By checking this I agree to the <a href="https://app.termly.io/dashboard/website/066e09ba-feb6-4fe2-a987-cc7d394f90e4/privacy-policy">Privacy Policy</a>
       </string>
+
     <!-- Spinner Strings -->
     <string-array name="streamingPlatform">
         <item>Choose Platform</item>
@@ -47,5 +48,64 @@
     <!--Strings for Navigation Drawer -->
     <string name="nav_open" translatable="false">Open</string>
     <string name="nav_close" translatable="false">Close</string>
+
+
+    <!-- Strings for Preferences and Settings -->
+    <string name="remind_to_take_a_break" tools:ignore="MissingTranslation" >Remind me to take a break</string>
+    <string name="key_upload_quality" tools:ignore="MissingTranslation">key_upload_quality</string>
+    <string name="remind_me" tools:ignore="MissingTranslation">Remind me to take a break</string>
+    <string name="remind_me_for_bed_time" tools:ignore="MissingTranslation">remind_me_for_bed_time</string>
+    <string name="remind_for_bed_time" tools:ignore="MissingTranslation">Remind me for bed time</string>
+    <string name="limit_data_usage" tools:ignore="MissingTranslation">prefs_limit_data_usage</string>
+    <string name="stream_video" tools:ignore="MissingTranslation">Only stream HD video on Wi-Fi</string>
+    <string name="limit_mobile_usage" tools:ignore="MissingTranslation">Limit mobile data usage</string>
+    <string name="double_tap_to_seek" tools:ignore="MissingTranslation">Double-tap to seek</string>
+    <string name="pref_seek_val" tools:ignore="MissingTranslation">pref_seek_val</string>
+    <string name="seconds" tools:ignore="MissingTranslation">seconds</string>
+    <string name="uploads" tools:ignore="MissingTranslation">Uploads</string>
+    <string name="pref_uploads" tools:ignore="MissingTranslation">pref_uploads</string>
+    <string name="specify_network_prefs" tools:ignore="MissingTranslation">Specify network preferences for uploads</string>
+    <string name="prefs_restricted_mode" tools:ignore="MissingTranslation">prefs_restricted_mode</string>
+    <string name="restricated_mode" tools:ignore="MissingTranslation">Restricted Mode can help to hide videos with potentially mature content.No filter is 100% accurate, but it should help you to avoid most of this type of content.</string>
+    <string name="restricated_mode_description" tools:ignore="MissingTranslation">Restricted Mode</string>
+    <string name="prefs_enable_stats" tools:ignore="MissingTranslation">prefs_enable_stats</string>
+    <string name="enable_stats" tools:ignore="MissingTranslation">Enable stats for nerds</string>
+
+    <string-array name="pref_upload_quality_entries">
+        <item>360p</item>
+        <item>480p</item>
+        <item>720p</item>
+        <item>1080p</item>
+        <item>Original</item>
+    </string-array>
+
+    <string-array name="pref_remind_me_to_take_a_break">
+        <item>1 hours</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>5 hours</item>
+        <item>10 hours</item>
+    </string-array>
+
+    <string-array name="pref_seek_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="pref_duration">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="pref_uploads">
+        <item>Only when on Wi-Fi</item>
+        <item>On any network</item>
+    </string-array>
 
 </resources>

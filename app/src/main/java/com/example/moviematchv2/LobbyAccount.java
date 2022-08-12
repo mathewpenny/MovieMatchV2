@@ -3,7 +3,6 @@ package com.example.moviematchv2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LobbyAccount extends AppCompatActivity {
 
-    private ImageButton updateBtn, deleteBtn, reviewBtn, logoutBtn;
+    private ImageButton updateBtn, deleteBtn, logoutBtn, settingsBtn;
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
     private FirebaseAuth mAuth;
@@ -39,9 +38,11 @@ public class LobbyAccount extends AppCompatActivity {
             gsc = GoogleSignIn.getClient(this, gso);
             mAuth = FirebaseAuth.getInstance();
 
-            logoutBtn = (ImageButton) findViewById(R.id.logoutButton);
-            updateBtn = (ImageButton) findViewById(R.id.updateButton);
-            deleteBtn = (ImageButton) findViewById(R.id.deleteButton);
+            logoutBtn = findViewById(R.id.logoutButton);
+            updateBtn =  findViewById(R.id.updateButton);
+            deleteBtn = findViewById(R.id.deleteButton);
+            settingsBtn = findViewById(R.id.settingsButton);
+
 
             drawerLayout = findViewById(R.id.drawer_view2);
             actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -54,20 +55,20 @@ public class LobbyAccount extends AppCompatActivity {
             navigationView = findViewById(R.id.drawer_view);
             navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
                 int id = item.getItemId();
-                if(id == R.id.WelcomePage) {
+                if(id == R.id.welcomePage) {
                     intent = new Intent(getApplicationContext(), WelcomePage.class);
                     startActivity(intent);
                     finish();
                 }
-                else if (id == R.id.AccountLobby) {
+                else if (id == R.id.accountLobby) {
                     intent = new Intent(getApplicationContext(), Login.class);
                     startActivity(intent);
                     finish();
-                }else if(id == R.id.Instructions){
+                }else if(id == R.id.instructions){
                     intent = new Intent(getApplicationContext(), FAQ.class);
                     startActivity(intent);
                     finish();
-                }else if(id == R.id.Logout){
+                }else if(id == R.id.logout){
                     // Firebase Sign Out
                     mAuth.signOut();
                     // Google Sign out
@@ -81,36 +82,33 @@ public class LobbyAccount extends AppCompatActivity {
                 return false;
             });
 
-            updateBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(LobbyAccount.this, UpdateAccount.class);
-                    startActivity(intent);
-                    finish();
-                }
+            updateBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(LobbyAccount.this, UpdateAccount.class);
+                startActivity(intent);
+                finish();
             });
 
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            deleteBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(LobbyAccount.this, DeleteAccount.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-            logoutBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Firebase Sign Out
-                    mAuth.signOut();
-                    // Google Sign out
-                    gsc.signOut();
-                    // Facebook Sign Out
-                    LoginManager.getInstance().logOut();
-                    Intent intent = new Intent(LobbyAccount.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
+            });
+
+            logoutBtn.setOnClickListener(view -> {
+                // Firebase Sign Out
+                mAuth.signOut();
+                // Google Sign out
+                gsc.signOut();
+                // Facebook Sign Out
+                LoginManager.getInstance().logOut();
+                Intent intent = new Intent(LobbyAccount.this, Login.class);
+                startActivity(intent);
+                finish();
+            });
+
+            settingsBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(LobbyAccount.this, Settings.class);
+                startActivity(intent);
             });
         }
 

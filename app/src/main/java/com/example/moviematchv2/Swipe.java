@@ -116,19 +116,19 @@ public class Swipe extends AppCompatActivity {
         navigationView = findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
-            if(id == R.id.WelcomePage) {
+            if(id == R.id.welcomePage) {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.AccountLobby) {
+            } else if (id == R.id.accountLobby) {
                 intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Instructions) {
+            } else if (id == R.id.instructions) {
                 intent = new Intent(getApplicationContext(), FAQ.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Logout) {
+            } else if (id == R.id.logout) {
                 // Firebase Sign Out
                 mAuth.signOut();
                 // Google Sign out

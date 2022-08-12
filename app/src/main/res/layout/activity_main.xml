@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/popcorn"
-    android:alpha=".7"
+    android:background="@drawable/filmreelbg"
     tools:context=".MainActivity">
 
     <ImageView
@@ -29,7 +28,7 @@
         android:fontFamily="@font/bangers"
         android:text="Movie Match!"
         android:gravity="center"
-        android:textColor="#FFEB3B"
+        android:textColor="#CBA85B"
         android:textSize="70sp"
         android:transitionName="logo_text"
         app:layout_constraintEnd_toEndOf="parent"

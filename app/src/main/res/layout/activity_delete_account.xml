@@ -29,8 +29,8 @@
             android:layout_marginTop="15dp"
             android:layout_gravity="center"
             android:fontFamily="@font/bangers"
-            android:text="delete account?"
-            android:textColor="#CDC300"
+            android:text="Delete Account?"
+            android:textColor="#CBA85B"
             android:textSize="24sp" />
 
 

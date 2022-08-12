@@ -66,19 +66,19 @@ public class LobbyHost extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
             int id = item.getItemId();
 
-            if(id == R.id.WelcomePage) {
+            if(id == R.id.welcomePage) {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.AccountLobby) {
+            } else if (id == R.id.accountLobby) {
                 intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Instructions) {
+            } else if (id == R.id.instructions) {
                 intent = new Intent(getApplicationContext(), FAQ.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Logout) {
+            } else if (id == R.id.logout) {
                 // Firebase Sign Out
                 mAuth.signOut();
                 // Google Sign out

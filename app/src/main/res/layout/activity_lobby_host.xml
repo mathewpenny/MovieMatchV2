@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/swipebg"
     android:id="@id/drawer_view2">
 
     <LinearLayout
@@ -13,32 +14,74 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="130dp"
             android:src="@drawable/logo"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/bangers"
+            android:text="Choose a Platform"
+            android:textColor="#CBA85B"
+            android:textSize="22sp"/>
 
         <Spinner
             android:id="@+id/streamingSpinner"
             android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:entries="@array/streamingPlatform" />
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:entries="@array/streamingPlatform"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/bangers"
+            android:text="Choose a Type"
+            android:textColor="#CBA85B"
+            android:textSize="22sp"/>
 
         <Spinner
             android:id="@+id/typeSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
             android:entries="@array/type"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/bangers"
+            android:text="Choose a Genre"
+            android:textColor="#CBA85B"
+            android:textSize="22sp"/>
 
         <Spinner
             android:id="@+id/genreSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
             android:entries="@array/genre"/>
 
 

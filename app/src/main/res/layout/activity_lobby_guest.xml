@@ -70,8 +70,8 @@
             android:textStyle="bold"
             android:layout_gravity="center"
             android:text="Movie Title Here"
-            android:textColor="@color/white"
-            android:textAllCaps="true"/>
+            android:textColor="#CBA85B"
+            android:fontFamily="@font/bangers"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewMatches"
