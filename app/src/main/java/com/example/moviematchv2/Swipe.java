@@ -200,7 +200,7 @@ public class Swipe extends AppCompatActivity {
                 genreDisplay.setText("Reality");
                 break;
             case 878:
-                genreDisplay.setText("Sci Fi");
+                genreDisplay.setText("SciFi");
                 break;
             case 53:
                 genreDisplay.setText("Thriller");

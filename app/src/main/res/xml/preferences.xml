@@ -71,6 +71,7 @@
             android:summary="@string/restricated_mode"
             android:title="@string/restricated_mode_description" />
 
+
     </PreferenceCategory>
 
 </PreferenceScreen>

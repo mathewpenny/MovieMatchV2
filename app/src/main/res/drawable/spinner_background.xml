@@ -5,7 +5,7 @@
 
             <shape>
                 <solid
-                    android:color="@color/black">
+                    android:color="@color/white">
                 </solid>
 
                 <corners android:radius="3dp" />
@@ -15,6 +15,9 @@
                     android:left="12dp"
                     android:right="12dp"
                     android:top="7dp" />
+                <text
+                    android:color="@color/black"/>
+
                 <stroke
                     android:width="2dp"
                     android:color="@color/black"/>
