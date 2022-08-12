@@ -26,7 +26,9 @@
         android:padding="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/white"
+        android:textColor="#CBA85B"
+        android:fontFamily="@font/bangers"
+        android:textSize="16sp"
         android:text="Finding Something to Watch"/>
 
     <TextView
@@ -37,6 +39,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:textColor="@color/white"
+        android:textSize="14sp"
         android:text="Once you have created an account, head to the Swipe section.
 Here you can choose a service (Netflix, Disney+ or Prime Video), choose a
 genre and press Start. Movies will start to appear and you can swipe left
@@ -52,7 +55,9 @@ choice!!"/>
         android:padding="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/white"
+        android:textColor="#CBA85B"
+        android:textSize="16sp"
+        android:fontFamily="@font/bangers"
         android:text="Contacting Matches"/>
 
     <TextView
@@ -75,7 +80,9 @@ to send or not."/>
         android:padding="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:textColor="@color/white"
+        android:textColor="#CBA85B"
+        android:textSize="16sp"
+        android:fontFamily="@font/bangers"
         android:text="Sharing and Playing"/>
 
     <TextView

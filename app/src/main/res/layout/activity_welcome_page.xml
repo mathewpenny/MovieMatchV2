@@ -8,16 +8,26 @@
     android:id="@+id/drawer_view"
     tools:context=".WelcomePage">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="41dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_baseline_settings_24" />
+
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="25dp"
+            android:layout_width="250dp"
+            android:layout_height="125dp"
+            android:layout_gravity="center_horizontal"
             app:srcCompat="@drawable/logo"
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="104dp" />
@@ -39,8 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:textColor="#8C8989"
-            android:textSize="24sp"
+            android:textColor="#CBA85B"
+            android:textSize="36sp"
+            android:fontFamily="@font/bangers"
             android:textStyle="bold" />
 
         <FrameLayout

@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class WelcomePage extends AppCompatActivity {
 
-    private ImageButton logoutBtn, startBtn, accountBtn;
+    private ImageButton logoutBtn, startBtn, accountBtn, settingsBtn;
     private TextView name;
     private GoogleSignInOptions gso;
     private GoogleSignInClient gsc;
@@ -42,6 +42,7 @@ public class WelcomePage extends AppCompatActivity {
     private DatabaseReference userDb;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+
 
 
     @Override
@@ -65,19 +66,19 @@ public class WelcomePage extends AppCompatActivity {
         navigationView = findViewById(R.id.drawer_view2);
         navigationView.setNavigationItemSelectedListener(item -> { //this is the item in the menu that was selected
             int id = item.getItemId();
-            if(id == R.id.WelcomePage) {
+            if(id == R.id.welcomePage) {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.AccountLobby) {
+            } else if (id == R.id.accountLobby) {
                 intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
-            } else if(id == R.id.Instructions){
+            } else if(id == R.id.instructions){
                 intent = new Intent(getApplicationContext(), FAQ.class);
                 startActivity(intent);
                 finish();
-            } else if(id == R.id.Logout){
+            } else if(id == R.id.logout){
                 // Firebase Sign Out
                 mAuth.signOut();
                 // Google Sign out
@@ -92,6 +93,7 @@ public class WelcomePage extends AppCompatActivity {
         });
 
             startBtn =  findViewById(R.id.startButton);
+            settingsBtn = findViewById(R.id.settingsButton);
             accountBtn = findViewById(R.id.accountButton);
             logoutBtn = findViewById(R.id.logoutButton);
             name = findViewById(R.id.nameText);
@@ -108,10 +110,7 @@ public class WelcomePage extends AppCompatActivity {
                 getUserName();
             }
 
-/*
-
-        // This is where the app gets hung up. Null object Reference on fullName
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+ /*       AccessToken accessToken = AccessToken.getCurrentAccessToken();
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
                 (object, response) -> {
@@ -127,8 +126,6 @@ public class WelcomePage extends AppCompatActivity {
         request.setParameters(parameters);
         request.executeAsync();
 */
-
-
             startBtn.setOnClickListener(view -> {
                 Intent intent = new Intent(getApplicationContext(), LobbyHost.class);
                 intent.putExtra("name", userName);
@@ -151,6 +148,11 @@ public class WelcomePage extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
+            });
+
+            settingsBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(WelcomePage.this, Settings.class);
+                startActivity(intent);
             });
         }
 

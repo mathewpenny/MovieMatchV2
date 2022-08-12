@@ -47,18 +47,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:paddingEnd="5dp"
+                android:textColor="#CBA85B"
+                android:textSize="26sp"
                 android:fontFamily="@font/bangers"
-                android:textSize="20dp"
-                android:textColor="#CDC300"
                 android:text="Streaming"/>
 
             <TextView
                 android:id="@+id/genreDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#CDC300"
                 android:paddingEnd="5dp"
-                android:textSize="20dp"
+                android:textColor="#CBA85B"
+                android:textSize="26sp"
                 android:fontFamily="@font/bangers"
                 android:text="Genre"/>
 

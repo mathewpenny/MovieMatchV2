@@ -45,7 +45,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     public void restoreItem(Movie movie, int position) {
         moviesList.add(position, movie);
-        // notify item added by position
         notifyItemInserted(position);
     }
 

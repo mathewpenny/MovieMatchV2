@@ -29,7 +29,8 @@
             android:textAlignment="center"
             android:fontFamily="@font/bangers"
             android:text="Login Account"
-            android:textColor="#CDC300"
+            android:textColor="#CBA85B"
+
             android:textSize="24sp" />
 
         <EditText
@@ -63,7 +64,7 @@
             android:textAlignment="center"
             android:fontFamily="@font/bangers"
             android:text="Forgot Password?"
-            android:textColor="#CDC300"
+            android:textColor="#CBA85B"
             android:textSize="24sp" />
 
         <FrameLayout

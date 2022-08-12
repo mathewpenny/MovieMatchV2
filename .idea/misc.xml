@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/drawable-v24/ic_baseline_theaters_24.xml" value="0.3625" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.2385" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.2385" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/drawable/spinner_background.xml" value="0.2385" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/font/.xml" value="0.39166666666666666" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/font/antic.xml" value="0.390625" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/font/bangers.xml" value="0.21458333333333332" />
@@ -14,7 +17,7 @@
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_delete_account.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_details.xml" value="0.264" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_facebook_sign_in.xml" value="0.3614583333333333" />
-        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_faq.xml" value="0.13621197252208048" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_faq.xml" value="0.4" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_forgot_password.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_landing_page.xml" value="0.34375" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_lobby_account.xml" value="0.4" />
@@ -23,6 +26,7 @@
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_login.xml" value="0.3578125" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_main.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_register.xml" value="0.3614583333333333" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_settings.xml" value="0.3578125" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_streaming_info.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_swipe.xml" value="0.34375" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/activity_swipe2.xml" value="0.3578125" />
@@ -34,6 +38,7 @@
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/matches_item.xml" value="0.2" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/layout/movie_item.xml" value="0.3578125" />
         <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/menu/drawer_menu.xml" value="0.27109375" />
+        <entry key="..\:/Users/mattp/AndroidStudioProjects/MovieMatchV2/app/src/main/res/xml/preferences.xml" value="0.3567708333333333" />
       </map>
     </option>
   </component>

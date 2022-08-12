@@ -1,7 +1,10 @@
 package com.example.moviematchv2;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,20 +85,20 @@ public class LobbyGuest extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            if(id == R.id.WelcomePage) {
+            if(id == R.id.welcomePage) {
                 intent = new Intent(getApplicationContext(), WelcomePage.class);
                 startActivity(intent);
                 finish();
             }
-            else if (id == R.id.AccountLobby) {
+            else if (id == R.id.accountLobby) {
                 intent = new Intent(getApplicationContext(), LobbyAccount.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Instructions) {
+            } else if (id == R.id.instructions) {
                 intent = new Intent(getApplicationContext(), FAQ.class);
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.Logout) {
+            } else if (id == R.id.logout) {
                 // Firebase Sign Out
                 mAuth.signOut();
                 // Google Sign out
@@ -106,6 +111,7 @@ public class LobbyGuest extends AppCompatActivity {
             }
             return false;
         });
+
         intent = getIntent();
 
         chosenStreaming = intent.getStringExtra("chosenStreaming"); // streaming platform for share and play button
@@ -116,6 +122,11 @@ public class LobbyGuest extends AppCompatActivity {
         externalLaunchLink = intent.getStringExtra("link");
         movieTitleRV.setText(movieTitle);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("Notification", " Notification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
 
         currentUid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         userDb = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -191,9 +202,16 @@ public class LobbyGuest extends AppCompatActivity {
                         }
                         break;
                 }
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(LobbyGuest.this, "Notification");
+                        builder.setContentTitle("Let's Start Watching!");
+                        builder.setContentText("Enjoy your film/show! Don't forget to tell your friends!");
+                        builder.setSmallIcon(R.drawable.logo);
+                        builder.setAutoCancel(true);
+                        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(LobbyGuest.this);
+                        managerCompat.notify(1, builder.build());
             });
 
-    }
+        }
 
 
         public void sendText(View view){
